@@ -11,5 +11,7 @@
   
   roles:
     - role: base
-    - role: freedomofpress.signal-desktop
-    - role: ansible-role-chrome
+    - role: chrome
+    - role: signal-desktop
+    #- role: ufw
+    #- role: ssh
