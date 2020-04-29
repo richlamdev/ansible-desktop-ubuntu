@@ -1,0 +1,21 @@
+---
+
+# Package management
+# dist-upgrade and upgrade everything
+apt_get_upgrade: True
+
+# frequency for running sysstat in minutes
+sysstat_interval: 1
+
+use_centralized_logging: True
+
+# Security patches
+## This is the mem size we assign to the /tmp directory. Default is 10% of the total memory.
+## Pass this var from your playbook if you need extra space for the /tmp directory
+tmp_dir_size: "10%"
+var_tmp_dir_size: "10%"
+
+# Configures ephemeral port ranges, any ports within this range can be used for outgoing
+# client connections.
+base_ephemeral_port_range_min: 10240
+base_ephemeral_port_range_max: 65535
