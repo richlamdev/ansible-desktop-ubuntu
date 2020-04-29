@@ -1,0 +1,15 @@
+---
+# This includes a dist-upgrade  
+- include: packages.yml
+
+- include: keepassxc.yml
+
+# time setting
+- include: system.yml
+
+# software.  See authentication for user-related
+# security config
+#- include: security.yml
+
+# disable motd-news
+#- include: motd-news.yml

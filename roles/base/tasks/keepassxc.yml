@@ -1,0 +1,21 @@
+---
+# Install KeepassXC
+
+- name: Add keepass repo
+  #apt_repository:
+    #repo: ppa:phoerious/keepassxc
+    #repo: "deb http://ppa.launchpad.net/phoerious/keepassxc/ubuntu focal main"
+    #state: present
+    #update_cache: yes
+    #validate_certs: no
+  shell: 
+    add-apt-repository ppa:phoerious/keepassxc
+  register: out
+- debug: var=out.stdout_lines
+
+- name: Install keepassxc package
+  apt:
+    name: keepassxc
+    state: latest
+    pkg:
+      - keepassxc

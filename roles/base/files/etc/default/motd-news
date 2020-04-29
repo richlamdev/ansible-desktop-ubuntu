@@ -1,0 +1,2 @@
+# disabled fetching MOTD from Ubuntu.
+ENABLED=0

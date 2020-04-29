@@ -1,0 +1,59 @@
+---
+# Install all the standard packages:
+# apt, pip, and other package managers included.
+
+# apt
+#- name: packages - apt-get update
+  #apt:
+    #update_cache: yes
+  #changed_when: False
+
+- name: packages - apt update && apt dist-upgrade *MAY TAKE A LONG TIME*
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+# keep alphabetically ordered
+- name: packages - install our standard additions to the base install
+  apt:
+    state: latest
+    pkg:
+      - build-essential
+      - curl
+      - gcc
+      - git
+      - htop
+      - iftop
+      - jq
+      - make
+      - meld
+      - net-tools
+      - nmap
+      - openssh-server
+      - p7zip
+      - python3-pip
+      - ranger
+      - rtorrent
+      - sshpass
+      - sysstat
+      - tcpdump
+      - tmux
+      - tree
+      - ufw
+      - unrar
+      - unzip
+      - vim
+      - whois
+
+# apt - cleanup
+- name: packages - apt-get autoremove
+  apt:
+    autoremove: yes
+
+# pip - install pip3 packages
+- name: packages - install our additional pip packages
+  pip:
+    state: latest
+    name:
+      - pip # self upgrade pip first
+      - glances
