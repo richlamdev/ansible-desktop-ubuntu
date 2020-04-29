@@ -1,11 +1,20 @@
----
-# tasks file for ansible-role-chrome
+# apt tasks file for chrome install
 
+- name: "apt | ensure Google linux signing key present"
+  apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
 
-- include: setup-apt.yml
-  when: ansible_pkg_mgr == 'apt'
+- name: "apt | ensure Google chrome repo present"
+  #apt_repository:
+    #repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    #filename: "google-chrome"
+    #state: present
+    #update_cache: yes
+  shell:
+    add-apt-repository "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+  register: out
+- debug: var=out.stdout_lines
 
-- include: setup-dnf.yml
-  when: ansible_pkg_mgr == 'dnf'
-
-...
+- name: "apt | ensure Google chrome present"
+  apt:
+    name: "{{ chrome_package }}"
+    state: present

@@ -14,11 +14,15 @@
     state: present
     keyring: /etc/apt/trusted.gpg.d/signal-desktop.gpg
 
-- name: Add Signal apt repo.
-  become: yes
-  apt_repository:
-    repo: "{{ signal_desktop_apt_repo }}"
-    state: present
+- name: Add Signal apt repo
+  #become: yes
+  #apt_repository:
+    #repo: "{{ signal_desktop_apt_repo }}"
+    #state: present
+  shell: 
+    add-apt-repository "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main"
+  register: out
+- debug: var=out.stdout_lines
 
 - name: Installs Signal desktop.
   become: yes
