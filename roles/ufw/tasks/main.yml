@@ -1,22 +1,25 @@
 ---
 
-- name: Install ufw tool
-  apt:
-    name: ufw
-    state: present
+- import_tasks: install.yml
+  tags:
+    - networking
+    - ufw
+    - ufw-install
 
-- name: Configure ufw defaults
-  ufw: direction={{ item.direction }} policy={{ item.policy }}
-  with_items:
-    - { direction: 'incoming', policy: 'deny' }
-    - { direction: 'outgoing', policy: 'allow' }
-  notify:
-    - restart ufw
+- import_tasks: reset.yml
+  tags:
+    - networking
+    - ufw
+    - ufw-reset
 
-- name: Enable ufw logging
-  ufw: logging=on
-  notify:
-    - restart ufw
+- import_tasks: config.yml
+  tags:
+    - networking
+    - ufw
+    - ufw-config
 
-- name: Enable ufw
-  ufw: state=enabled
+- import_tasks: service.yml
+  tags:
+    - networking
+    - ufw
+    - ufw-service
