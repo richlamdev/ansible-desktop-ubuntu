@@ -13,5 +13,5 @@
     - role: base
     - role: chrome
     - role: signal-desktop
-    #- role: ufw
+    - role: ufw
     #- role: ssh

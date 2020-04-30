@@ -1,5 +1,6 @@
 [py3-hosts]
-172.16.3.131
+#172.16.3.131
+localhost
 
 
 [py3-hosts:vars]
