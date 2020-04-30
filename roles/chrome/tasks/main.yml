@@ -4,15 +4,11 @@
   apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
 
 - name: "apt | ensure Google chrome repo present"
-  #apt_repository:
-    #repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-    #filename: "google-chrome"
-    #state: present
-    #update_cache: yes
-  shell:
-    add-apt-repository "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-  register: out
-- debug: var=out.stdout_lines
+  apt_repository:
+    repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    filename: "google-chrome"
+    state: present
+    update_cache: yes
 
 - name: "apt | ensure Google chrome present"
   apt:

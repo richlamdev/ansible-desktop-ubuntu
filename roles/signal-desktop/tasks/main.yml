@@ -1,14 +1,13 @@
 ---
 # tasks file for signal-desktop
 - name: Installs apt repo prerequisites.
-  become: yes
+  #become: yes
   apt:
-    name: "{{ item }}"
+    name: "{{ signal_desktop_apt_dependencies }}"
     state: present
-  with_items: "{{ signal_desktop_apt_dependencies }}"
 
 - name: Install Signal apt repo GPG key.
-  become: yes
+  #become: yes
   apt_key:
     data: "{{ lookup('file', 'signal-apt-key.asc') }}"
     state: present
@@ -16,16 +15,12 @@
 
 - name: Add Signal apt repo
   #become: yes
-  #apt_repository:
-    #repo: "{{ signal_desktop_apt_repo }}"
-    #state: present
-  shell: 
-    add-apt-repository "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main"
-  register: out
-- debug: var=out.stdout_lines
+  apt_repository:
+    repo: "{{ signal_desktop_apt_repo }}"
+    state: present
 
 - name: Installs Signal desktop.
-  become: yes
+  #become: yes
   apt:
     name: signal-desktop
     state: present
