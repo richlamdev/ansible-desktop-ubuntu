@@ -1,7 +1,6 @@
-[py3-hosts]
+[py3hosts]
 172.16.3.131
-#localhost
 
 
-[py3-hosts:vars]
+[py3hosts:vars]
 ansible_python_interpreter=/usr/bin/python3

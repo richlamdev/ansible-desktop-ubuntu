@@ -7,6 +7,9 @@
 # time setting
 - include: system.yml
 
+# authentication
+- include: authentication.yml
+
 # software.  See authentication for user-related
 # security config
 #- include: security.yml
