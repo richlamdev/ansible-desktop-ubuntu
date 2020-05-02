@@ -1,4 +1,5 @@
 # This file is managed by the Base Ansible role
+# See https://github.hootops.com/ansible/base
 #
 # See the sshd_config(5) manpage for details
 
@@ -12,17 +13,17 @@ Protocol 2
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_dsa_key
 #Privilege Separation is turned on for security
-UsePrivilegeSeparation yes
+#UsePrivilegeSeparation yes
 
 # Lifetime and size of ephemeral version 1 server key
 KeyRegenerationInterval 3600
 ServerKeyBits 768
 
 # Logging
-# Switch to DEBUG if running into Kerb issues, but don't forget to switch back
-SyslogFacility AUTH
+SyslogFacility AUTHPRIV
 LogLevel VERBOSE
 # LogLevel DEBUG
+Subsystem sftp internal-sftp -f AUTHPRIV -l INFO
 
 # Authentication:
 LoginGraceTime 120
@@ -74,7 +75,7 @@ TCPKeepAlive yes
 AcceptEnv LANG LC_*
 
 # Used by ansible
-Subsystem sftp /usr/lib/openssh/sftp-server
+#Subsystem sftp /usr/lib/openssh/sftp-server
 
 # Set this to 'yes' to enable PAM authentication, account processing,
 # and session processing. If this is enabled, PAM authentication will
@@ -92,8 +93,20 @@ PermitRootLogin no
 PermitUserEnvironment yes
 UseDNS no
 Ciphers aes128-ctr,aes192-ctr,aes256-ctr
+HostKeyAlgorithms ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-rsa,ssh-dss
+KexAlgorithms ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha256
+MACs hmac-sha2-512,hmac-sha2-256
 ClientAliveInterval 600
-GSSAPIAuthentication yes
-GSSAPIKeyExchange yes
-GSSAPIStrictAcceptorCheck no
-GSSAPICleanupCredentials yes
+ClientAliveCountMax 2
+
+AllowTcpForwarding no
+AllowStreamLocalForwarding no
+GatewayPorts no
+PermitTunnel no
+AddressFamily inet
+UsePrivilegeSeparation sandbox
+
+HostBasedAuthentication no
+IgnoreUserKnownHosts yes
+GSSAPIAuthentication no
+KerberosAuthentication no
