@@ -8,8 +8,6 @@
 # authentication
 - include: authentication.yml
 
-# software.  See authentication for user-related
-# security config
 - include: security.yml
 
 # disable motd-news
