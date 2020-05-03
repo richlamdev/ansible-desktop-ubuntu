@@ -45,9 +45,9 @@
       - whois
 
 # apt - cleanup
-#- name: packages - apt-get autoremove
-  #apt:
-    #autoremove: yes
+- name: packages - apt-get autoremove
+  apt:
+    autoremove: yes
 
 # pip - install pip3 packages
 - name: packages - install our additional pip packages
