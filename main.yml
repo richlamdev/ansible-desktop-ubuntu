@@ -5,7 +5,7 @@
   become: True
   become_user: root
   become_method: sudo
-  gather_facts: True
+  gather_facts: False
   #tasks:
   #- include_tasks: tasks/main.yml
   

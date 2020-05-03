@@ -1,39 +1,51 @@
 ---
 
-# Race condition possible here; ignore errors on the chmod.
-- name: security - set sticky bit on all world-writable directories (preparation)
-  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 -print 2>/dev/null
-  changed_when: False
-  register: sticky_bit_dirs
-
-- name: security - set sticky bit on all world-writable directories
-  file:
-    path: "{{ item }}"
-    mode: "a+t"
-  with_items: "{{ sticky_bit_dirs.stdout_lines }}"
-  ignore_errors: yes
-
-- name: security - sysctl changes
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    state: present
+- name: Disable IPv6 with sysctl
+  sysctl: name={{ item }} value=1 state=present reload=yes
   with_items:
-  - control: 7.1.1 Disable IP Forwarding
-    name:    net.ipv4.ip_forward
-    value:   0
-  - control: 7.1.2.1 Disable Send Packet Redirects
-    name:    net.ipv4.conf.all.send_redirects
-    value:   0
-  - control: 7.1.2.2 Disable Send Packet Redirects
-    name:    net.ipv4.conf.default.send_redirects
-    value:   0
-  - control: 7.2.1.1 Disable Source Routed Packet Acceptance
-    name:    net.ipv4.conf.all.accept_source_route
-    value:   0
-  - control: 7.2.1.2 Disable Source Routed Packet Acceptance
-    name:    net.ipv4.conf.default.accept_source_route
-    value:   0
-  - control: 7.2.5 Enable Ignore Broadcast Requests
-    name:    net.ipv4.icmp_echo_ignore_broadcasts
-    value:   1
+    - net.ipv6.conf.all.disable_ipv6
+    - net.ipv6.conf.default.disable_ipv6
+    - net.ipv6.conf.lo.disable_ipv6
+
+#- name: Debian | blacklist ipv6 in modprobe
+  #lineinfile: "dest=/etc/modprobe.d/blacklist.conf line='blacklist ipv6' create=yes"
+  #notify:
+    #- rmmodipv6
+
+# Race condition possible here; ignore errors on the chmod.
+#- name: security - set sticky bit on all world-writable directories (preparation)
+  #shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 -print 2>/dev/null
+  #changed_when: False
+  #register: sticky_bit_dirs
+#
+#- name: security - set sticky bit on all world-writable directories
+  #file:
+    #path: "{{ item }}"
+    #mode: "a+t"
+  #with_items: "{{ sticky_bit_dirs.stdout_lines }}"
+  #ignore_errors: yes
+#
+#- name: security - sysctl changes
+  #sysctl:
+    #name: "{{ item.name }}"
+    #value: "{{ item.value }}"
+    #state: present
+  #with_items:
+  #- control: 7.1.1 Disable IP Forwarding
+    #name:    net.ipv4.ip_forward
+    #value:   0
+  #- control: 7.1.2.1 Disable Send Packet Redirects
+    #name:    net.ipv4.conf.all.send_redirects
+    #value:   0
+  #- control: 7.1.2.2 Disable Send Packet Redirects
+    #name:    net.ipv4.conf.default.send_redirects
+    #value:   0
+  #- control: 7.2.1.1 Disable Source Routed Packet Acceptance
+    #name:    net.ipv4.conf.all.accept_source_route
+    #value:   0
+  #- control: 7.2.1.2 Disable Source Routed Packet Acceptance
+    #name:    net.ipv4.conf.default.accept_source_route
+    #value:   0
+  #- control: 7.2.5 Enable Ignore Broadcast Requests
+    #name:    net.ipv4.icmp_echo_ignore_broadcasts
+    #value:   1
