@@ -12,6 +12,7 @@
   roles:
     - role: base
     - role: chrome
+    - role: keepassxc
     - role: signal-desktop
     - role: ufw
     #- role: ssh
