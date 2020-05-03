@@ -10,14 +10,10 @@ Port 22
 #ListenAddress 0.0.0.0
 Protocol 2
 # HostKeys for protocol version 2
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_dsa_key
+#HostKey /etc/ssh/ssh_host_rsa_key
+#HostKey /etc/ssh/ssh_host_dsa_key
 #Privilege Separation is turned on for security
 #UsePrivilegeSeparation yes
-
-# Lifetime and size of ephemeral version 1 server key
-KeyRegenerationInterval 3600
-ServerKeyBits 768
 
 # Logging
 SyslogFacility AUTHPRIV
@@ -29,14 +25,11 @@ Subsystem sftp internal-sftp -f AUTHPRIV -l INFO
 LoginGraceTime 120
 StrictModes yes
 
-RSAAuthentication yes
-PubkeyAuthentication yes
+#PubkeyAuthentication yes
 #AuthorizedKeysFile	%h/.ssh/authorized_keys
 
 # Don't read the user's ~/.rhosts and ~/.shosts files
 IgnoreRhosts yes
-# For this to work you will also need host keys in /etc/ssh_known_hosts
-RhostsRSAAuthentication no
 # similar for protocol version 2
 HostbasedAuthentication no
 # Uncomment if you don't trust ~/.ssh/known_hosts for RhostsRSAAuthentication
@@ -104,7 +97,6 @@ AllowStreamLocalForwarding no
 GatewayPorts no
 PermitTunnel no
 AddressFamily inet
-UsePrivilegeSeparation sandbox
 
 HostBasedAuthentication no
 IgnoreUserKnownHosts yes
