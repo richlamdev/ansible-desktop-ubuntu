@@ -53,6 +53,7 @@
 - name: packages - install our additional pip packages
   pip:
     state: latest
+    executable: pip3
     name:
       - pip # self upgrade pip first
       - glances
