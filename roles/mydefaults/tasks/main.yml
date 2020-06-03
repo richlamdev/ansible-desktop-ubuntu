@@ -1,0 +1,10 @@
+---
+- name: Setup desktop environment, set $PS1 and .vimrc
+  tasks:
+  - name: Execute random comands as needed
+    script: setup.sh
+      executable: .
+    register: out 
+
+  - debug:
+      var: out.stdout_lines
