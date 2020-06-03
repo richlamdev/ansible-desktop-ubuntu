@@ -16,3 +16,4 @@
     - role: signal-desktop
     - role: brave
     - role: ufw
+    - role: mydefaults
