@@ -20,7 +20,9 @@
       - build-essential
       - curl
       - gcc
+      - gimp
       - git
+      - golang
       - htop
       - iftop
       - jq
@@ -28,12 +30,10 @@
       - meld
       - net-tools
       - nmap
-      - openssh-server
       - p7zip
       - python3-pip
       - ranger
       - rtorrent
-      - sshpass
       - sysstat
       - tcpdump
       - tmux
