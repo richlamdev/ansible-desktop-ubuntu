@@ -1,4 +1,5 @@
 [py3hosts]
+localhost
 
 
 [py3hosts:vars]
