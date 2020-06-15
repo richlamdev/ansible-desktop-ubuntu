@@ -58,6 +58,7 @@
     name:
       - pip # self upgrade pip first
       - glances
+      - bottle
 
 - name: Clone ssh-default-banners from repository
   git:
