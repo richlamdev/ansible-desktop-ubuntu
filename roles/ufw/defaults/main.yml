@@ -12,7 +12,7 @@ ufw_package: ufw
 ufw_packages:
   - "{{ ufw_package }}"
 # list of rules
-ufw_rules: [{ port: 22, rule: allow }]
+ufw_rules: [{ port: 22, rule: limit }]
 # list of profiles located in /etc/ufw/applications.d
 ufw_applications: []
 # /etc/defaut/ufw settings
