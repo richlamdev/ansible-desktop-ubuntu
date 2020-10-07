@@ -17,9 +17,11 @@
   apt:
     state: latest
     pkg:
+      - brasero
       - build-essential
       - curl
       - cifs-utils
+      - exfat-utils
       - gcc
       - gimp
       - git
