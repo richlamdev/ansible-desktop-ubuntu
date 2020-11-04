@@ -1,7 +1,7 @@
 ---
 - name: optimize - get list of snaps currently running - exclude snapd or core
   shell: |
-    sudo snap list | awk '!/Name/ && !/snapd/ && !/core/ {print $1}' | sort -r 
+    sudo snap list | awk '!/Name/ && !/snapd/ && !/core/ {print $1}' 
   register: snaps_found 
 
 #- debug:
