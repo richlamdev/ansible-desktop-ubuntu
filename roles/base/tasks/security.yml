@@ -1,17 +1,17 @@
 ---
-- name: Disable ipv6 via grub default
+- name: security - Disable ipv6 via grub default
   lineinfile:
     dest: "/etc/default/grub"
     regexp: ^GRUB_CMDLINE_LINUX_DEFAULT=
     line: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash ipv6.disable=1"
     state: present
 
-- name: Regenerate grub configuration
+- name: security - Regenerate grub configuration
   shell:
     sudo update-grub2
   register: out
 
-- debug: var=out.stdout_lines
+#- debug: var=out.stdout_lines
 
 #- name: Debian | blacklist ipv6 in modprobe
   #lineinfile: "dest=/etc/modprobe.d/blacklist.conf line='blacklist ipv6' create=yes"

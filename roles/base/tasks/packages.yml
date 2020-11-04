@@ -46,9 +46,10 @@
       - whois
 
 # apt - cleanup
-- name: packages - apt-get autoremove
+- name: packages - apt autoremove & autoclean
   apt:
     autoremove: yes
+    autoclean: yes
 
 # pip - install pip3 packages
 - name: packages - install our additional pip packages
@@ -60,19 +61,19 @@
       - glances
       - bottle
 
-- name: Clone ssh-default-banners from repository
+- name: packages - clone ssh-default-banners from repository
   git:
     repo: "https://github.com/richlamdev/ssh-default-banners.git"
     dest: "/opt/ssh-default-banners/"
     update: yes 
 
-- name: Copy misc from repository
+- name: packages - clone misc from repository
   git:
     repo: "https://github.com/richlamdev/misc.git"
     dest: "/opt/misc/"
     update: yes 
 
-- name: Copy ansible-random from repository
+- name: packages - clone ansible-random from repository
   git:
     repo: "https://github.com/richlamdev/ansible-random.git"
     dest: "/opt/ansible-random/"

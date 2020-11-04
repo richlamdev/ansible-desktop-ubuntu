@@ -1,5 +1,5 @@
 ---
-# This includes a dist-upgrade  
+# install various packages 
 - include: packages.yml
 
 # time setting
@@ -9,6 +9,10 @@
 - include: authentication.yml
 
 - include: security.yml
+
+# optimize - remove unnecessary services
+
+- includ: optimize.yml
 
 # disable motd-news
 #- include: motd-news.yml
