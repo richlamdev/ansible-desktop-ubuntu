@@ -1,0 +1,76 @@
+---
+- name: optimize - get list of snaps currently running - exclude snapd or core
+  shell: |
+    sudo snap list | awk '!/Name/ && !/snapd/ && !/core/ {print $1}' | sort -r 
+  register: snaps_found 
+
+#- debug:
+    ##var: snaps_found.stdout_lines
+    #msg: "{{ snaps_found.stdout }}"
+    #msg: "{{ snaps_found.stdout_lines }}"
+
+- name: optimize - remove snap
+  snap:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ snaps_found.stdout_lines }}"
+  when: snaps_found.stdout | length > 0
+
+- name: optimize - stop snapd process
+  systemd:
+    name: snapd
+    scope: system
+    state: stopped
+  when: snaps_found.stdout | length > 0
+
+- name: optimize - apt purge snapd package
+  apt:
+    name: snapd
+    state: absent
+    purge: yes
+  when: snaps_found.stdout | length > 0
+
+- name: optimize - apt purge avahi, whoopsie, apport, openvpn package
+  apt:
+    name: 
+      - avahi-daemon
+      - avahi-utils
+      - whoopsie
+      - apport
+      - openvpn
+    state: absent
+    purge: yes
+
+- name: optimize - apt autoclean and autoremove
+  apt:
+    autoremove: yes
+    autoclean: yes
+  when: snaps_found.stdout | length > 0
+
+- name: optimize - prevent evolution-addressbook-factory from launching
+  file:
+    path: /usr/libexec/evolution-addressbook-factory
+    owner: root
+    group: root
+    mode: 0644
+
+- name: optimize - prevent evolution-calendar-factory from launching in backgroud
+  file:
+    path: /usr/libexec/evolution-calendar-factory
+    owner: root
+    group: root
+    mode: 0644
+
+- name: optimize - prevent evolution-data-server/evolution-alarm-notify from launching in backgroud
+  file:
+    path: /usr/libexec/evolution-data-server/evolution-alarm-notify
+    owner: root
+    group: root
+    mode: 0644
+
+- name: optimize - prevent evolution-source-registry from launching in backgroud
+  file:
+    path: /usr/libexec/evolution-source-registry
+    owner: root
+    group: root
+    mode: 0644
