@@ -1,5 +1,5 @@
 [py3hosts]
-localhost
+localhost ansible_connection=local
 
 
 [py3hosts:vars]
