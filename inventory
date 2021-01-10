@@ -1,19 +1,8 @@
 [local]
-#localhost ansible_connection=local
+localhost ansible_connection=local
 
-[servers]
-192.168.60.4
-192.168.60.5
-192.168.60.6
-
-[grph]
-192.168.60.7
-
-
-# Group 'multi' with all servers
+# Group 'multi' with all hosts
 [multi:children]
-servers
-grph
 local
 
 
