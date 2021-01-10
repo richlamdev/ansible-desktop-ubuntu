@@ -1,0 +1,16 @@
+---
+## the contents of this variable are persisted to the grafana configuration file
+## in ini format.
+## any valid configuration setting is permitted. use the format:
+## <ini_section>:
+##     <setting>: <value>
+## for example:
+## default:
+##   instance_name: grafana-server
+grafana_configuration:
+  server:
+    http_addr: localhost
+    http_port: 3000
+
+# change this to `latest` to always get the most up to date version
+grafana_install_state: present
