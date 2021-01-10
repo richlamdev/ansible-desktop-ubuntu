@@ -1,0 +1,33 @@
+---
+language: generic
+
+# thanks to geerlingguy for most of this test configuration
+services: docker
+
+before_install:
+  - docker pull geerlingguy/docker-ubuntu1604-ansible
+script:
+  - container_id=`mktemp`
+  # run container in detached state
+  - docker run -d -v "`pwd`:/etc/ansible/roles/role_under_test:ro" --privileged geerlingguy/docker-ubuntu1604-ansible /lib/systemd/systemd > $container_id
+
+  # ansible syntax check
+  - docker exec "`cat $container_id`" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml --syntax-check
+
+  # run through role
+  - docker exec "`cat $container_id`" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml
+
+  # test idempotence
+  - idempotence=`mktemp`
+  - docker exec "`cat $container_id`" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml | tee -a $idempotence
+  - >
+    tail $idempotence
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # check a grafana is started and listening
+  - docker exec "`cat $container_id`" systemctl status grafana-server.service --no-pager
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

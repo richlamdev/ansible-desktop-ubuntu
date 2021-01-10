@@ -1,6 +1,27 @@
-[py3hosts]
-localhost ansible_connection=local
+[local]
+#localhost ansible_connection=local
+
+[servers]
+192.168.60.4
+192.168.60.5
+192.168.60.6
+
+[grph]
+192.168.60.7
 
 
-[py3hosts:vars]
+# Group 'multi' with all servers
+[multi:children]
+servers
+grph
+local
+
+
+[multi:vars]
+ansible_user=vagrant
+#ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+#ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_become=True
+ansible_become_method=sudo
+ansible_become_user=root
 ansible_python_interpreter=/usr/bin/python3
