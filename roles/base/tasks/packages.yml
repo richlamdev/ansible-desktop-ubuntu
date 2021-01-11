@@ -1,11 +1,5 @@
---- # Install all the standard packages:
+--- # Install baseline packages:
 # apt, pip, and other package managers included.
-
-# apt
-#- name: packages - apt-get update
-  #apt:
-    #update_cache: yes
-  #changed_when: False
 
 - name: packages - apt update && apt dist-upgrade *MAY TAKE A LONG TIME*
   apt:
@@ -48,14 +42,12 @@
       - vim
       - whois
 
-# apt - cleanup
 - name: packages - apt autoremove & autoclean
   apt:
     autoremove: yes
     autoclean: yes
 
-# pip - install pip3 packages
-- name: packages - install our additional pip packages
+- name: packages - install additional pip packages
   pip:
     state: latest
     executable: pip3

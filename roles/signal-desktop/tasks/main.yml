@@ -1,26 +1,21 @@
 ---
-# tasks file for signal-desktop
 - name: Installs apt repo prerequisites.
-  #become: yes
   apt:
     name: "{{ signal_desktop_apt_dependencies }}"
     state: present
 
 - name: Install Signal apt repo GPG key.
-  #become: yes
   apt_key:
     data: "{{ lookup('file', 'signal-apt-key.asc') }}"
     state: present
     keyring: /etc/apt/trusted.gpg.d/signal-desktop.gpg
 
 - name: Add Signal apt repo
-  #become: yes
   apt_repository:
     repo: "{{ signal_desktop_apt_repo }}"
     state: present
 
 - name: Installs Signal desktop.
-  #become: yes
   apt:
     name: signal-desktop
     state: present
