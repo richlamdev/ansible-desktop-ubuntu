@@ -3,14 +3,17 @@
     name: apt-transport-https
     state: present
     update_cache: yes
+
 - name: Install the Brave apt key
   apt_key:
     url: https://brave-browser-apt-release.s3.brave.com/brave-core.asc
     state: present
+
 - name: Add Brave apt repository
   apt_repository:
     repo: deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main
     state: present
+    update_cache: yes
 
 - name: Install from repository
   package:
