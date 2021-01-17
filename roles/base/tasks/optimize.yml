@@ -5,7 +5,7 @@
   register: snaps_found 
 
 #- debug:
-    ##var: snaps_found.stdout_lines
+    #var: snaps_found.stdout_lines
     #msg: "{{ snaps_found.stdout }}"
     #msg: "{{ snaps_found.stdout_lines }}"
 
@@ -38,8 +38,9 @@
       - whoopsie
       - apport
       - openvpn
+    update_cache: True
     state: absent
-    purge: yes
+    purge: True
 
 - name: optimize - apt autoclean and autoremove
   apt:
@@ -58,24 +59,3 @@
     - /usr/libexec/evolution-calendar-factory
     - /usr/libexec/evolution-data-server/evolution-alarm-notify
     - /usr/libexec/evolution-source-registry
-
-#- name: optimize - prevent evolution-calendar-factory from launching in backgroud
-  #file:
-    #path: /usr/libexec/evolution-calendar-factory
-    #owner: root
-    #group: root
-    #mode: 0644
-#
-#- name: optimize - prevent evolution-data-server/evolution-alarm-notify from launching in backgroud
-  #file:
-    #path: /usr/libexec/evolution-data-server/evolution-alarm-notify
-    #owner: root
-    #group: root
-    #mode: 0644
-#
-#- name: optimize - prevent evolution-source-registry from launching in backgroud
-  #file:
-    #path: /usr/libexec/evolution-source-registry
-    #owner: root
-    group: root
-    mode: 0644

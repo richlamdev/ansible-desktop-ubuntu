@@ -1,5 +1,7 @@
 [local]
-localhost ansible_connection=local
+#localhost ansible_connection=local
+172.16.247.129
+
 
 # Group 'multi' with all hosts
 [multi:children]
@@ -7,7 +9,7 @@ local
 
 
 [multi:vars]
-ansible_user=vagrant
+#ansible_user=vagrant
 #ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
 #ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ansible_become=True
