@@ -11,8 +11,8 @@
   
   roles:
     - role: base
-    #- role: chrome
-    #- role: keepassxc
-    #- role: signal-desktop
-    #- role: brave
-    #- role: ufw
+    - role: chrome
+    - role: keepassxc
+    - role: signal-desktop
+    - role: brave
+    - role: ufw
