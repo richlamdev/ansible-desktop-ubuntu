@@ -27,7 +27,7 @@
   apt:
     name: snapd
     state: absent
-    purge: yes
+    purge: True
   when: snaps_found.stdout | length > 0
 
 - name: optimize - apt purge avahi, whoopsie, apport, openvpn package
@@ -44,8 +44,8 @@
 
 - name: optimize - apt autoclean and autoremove
   apt:
-    autoremove: yes
-    autoclean: yes
+    autoremove: True
+    autoclean: True
   when: snaps_found.stdout | length > 0
 
 - name: optimize - prevent evolution from starting (running) in background
