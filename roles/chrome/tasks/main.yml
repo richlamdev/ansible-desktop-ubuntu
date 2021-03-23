@@ -1,14 +1,14 @@
-# apt tasks file for chrome install
-
 - name: "apt | ensure Google linux signing key present"
-  apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
+  apt_key: 
+    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    state: present
 
 - name: "apt | ensure Google chrome repo present"
   apt_repository:
     repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
     filename: "google-chrome"
     state: present
-    update_cache: yes
+    update_cache: True
 
 - name: "apt | ensure Google chrome present"
   apt:

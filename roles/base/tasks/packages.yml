@@ -1,9 +1,8 @@
---- # Install baseline packages:
-# apt, pip, and other package managers included.
+--- # base packages:
 
 - name: packages - apt update && apt dist-upgrade *MAY TAKE A LONG TIME*
   apt:
-    update_cache: yes
+    update_cache: True
     upgrade: dist
 
 # keep alphabetically ordered
@@ -44,8 +43,8 @@
 
 - name: packages - apt autoremove & autoclean
   apt:
-    autoremove: yes
-    autoclean: yes
+    autoremove: True
+    autoclean: True
 
 - name: packages - install additional pip packages
   pip:
@@ -60,16 +59,16 @@
   git:
     repo: "https://github.com/richlamdev/ssh-default-banners.git"
     dest: "/opt/ssh-default-banners/"
-    update: yes 
+    update: True 
 
 - name: packages - clone misc from repository
   git:
     repo: "https://github.com/richlamdev/misc.git"
     dest: "/opt/misc/"
-    update: yes 
+    update: True 
 
 - name: packages - clone ansible-random from repository
   git:
     repo: "https://github.com/richlamdev/ansible-random.git"
     dest: "/opt/ansible-random/"
-    update: yes 
+    update: True 

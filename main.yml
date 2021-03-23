@@ -5,7 +5,7 @@
   become: True
   become_user: root
   become_method: sudo
-  gather_facts: False
+  gather_facts: True
   #tasks:
   #- include_tasks: tasks/main.yml
   
@@ -16,3 +16,4 @@
     - role: signal-desktop
     - role: brave
     - role: ufw
+    - role: docker
