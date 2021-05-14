@@ -4,6 +4,7 @@
 - include: authentication.yml
 - include: security.yml
 - include: optimize.yml
+- include: powersave.yml
 
 # disable motd-news
 #- include: motd-news.yml
