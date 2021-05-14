@@ -1,0 +1,6 @@
+# ensure monitor properly sleeps
+- name: install monitor power save script
+  copy:
+    src: blank.sh
+    dest: "/usr/bin/blank.sh"
+    mode: "0755"
