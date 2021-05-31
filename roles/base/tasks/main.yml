@@ -5,6 +5,7 @@
 - include: security.yml
 - include: optimize.yml
 - include: powersave.yml
+- include: keychron.yml
 
 # disable motd-news
 #- include: motd-news.yml
