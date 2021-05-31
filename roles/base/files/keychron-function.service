@@ -1,0 +1,12 @@
+# /etc/systemd/system/keycron-function.service
+# sudo systemctl enable keycron-function.service
+
+[Unit]
+Description=enable function keys for Keychron keyboard script
+
+[Service]
+# Type=simple
+ExecStart=/usr/sbin/set_keychron_kb.sh start
+
+[Install]
+WantedBy=multi-user.target
