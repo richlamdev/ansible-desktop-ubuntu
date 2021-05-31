@@ -39,6 +39,7 @@
       - unrar
       - unzip
       - vim
+      - virtualbox
       - whois
 
 - name: packages - apt autoremove & autoclean
@@ -46,14 +47,31 @@
     autoremove: True
     autoclean: True
 
-- name: packages - install additional pip packages
-  pip:
-    state: latest
-    executable: pip3
-    name:
-      - pip # self upgrade pip first
-      - glances
-      - bottle
+- name: "packages - vagrant add hashicorp key"
+  apt_key: 
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: "packages - add vagrant repo"
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com focal main"
+    state: present
+    update_cache: True
+
+- name: "packages - install vagrant"
+  apt:
+    name: "vagrant"
+    state: present
+
+
+#- name: packages - install additional pip packages
+  #pip:
+    #state: latest
+    #executable: pip3
+    #name:
+      #- pip # self upgrade pip first
+      #- glances
+      #- bottle
 
 - name: packages - clone ssh-default-banners from repository
   git:
@@ -65,10 +83,4 @@
   git:
     repo: "https://github.com/richlamdev/misc.git"
     dest: "/opt/misc/"
-    update: True 
-
-- name: packages - clone ansible-random from repository
-  git:
-    repo: "https://github.com/richlamdev/ansible-random.git"
-    dest: "/opt/ansible-random/"
     update: True 

@@ -1,7 +1,5 @@
 [local]
-#localhost ansible_connection=local
-172.16.247.129
-
+localhost 
 
 # Group 'multi' with all hosts
 [multi:children]
