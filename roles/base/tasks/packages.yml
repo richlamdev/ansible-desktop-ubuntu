@@ -12,6 +12,8 @@
     pkg:
       - brasero
       - build-essential
+      - clamav
+      - clamav-daemon
       - curl
       - cifs-utils
       - exfat-utils
@@ -63,6 +65,11 @@
     name: "vagrant"
     state: present
 
+- name: "packages - enable clamav service"
+  systemd:
+    name: clamav-daemon
+    enabled: True
+    state: started
 
 - name: packages - install additional pip packages
   pip:
@@ -73,14 +80,3 @@
       - glances
       - bottle
 
-- name: packages - clone ssh-default-banners from repository
-  git:
-    repo: "https://github.com/richlamdev/ssh-default-banners.git"
-    dest: "/opt/ssh-default-banners/"
-    update: True 
-
-- name: packages - clone misc from repository
-  git:
-    repo: "https://github.com/richlamdev/misc.git"
-    dest: "/opt/misc/"
-    update: True 
