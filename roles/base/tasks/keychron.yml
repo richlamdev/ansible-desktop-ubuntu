@@ -10,3 +10,10 @@
     src: keychron-function.service
     dest: "/etc/systemd/system/keychron-function.service"
     mode: "0750"
+
+- name: enable keycron systemd service on startup
+  systemd:
+    name: keyboard-setup
+    scope: system
+    state: started
+    enabled: yes
