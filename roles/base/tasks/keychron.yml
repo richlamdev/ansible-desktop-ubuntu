@@ -14,6 +14,5 @@
 - name: enable keycron systemd service on startup
   systemd:
     name: keyboard-setup
-    scope: system
-    state: started
-    enabled: yes
+    enabled: True
+    state: restarted
