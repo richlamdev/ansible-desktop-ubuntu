@@ -3,11 +3,12 @@
   apt_repository:
     repo: ppa:phoerious/keepassxc
     state: present
-    update_cache: yes
-    validate_certs: no
+    update_cache: True
+    validate_certs: False
 
 - name: Install KeePassXC Package
   apt:
+    name: keepassxc
     state: latest
-    pkg:
-      - keepassxc
+    #pkg:
+      #- keepassxc

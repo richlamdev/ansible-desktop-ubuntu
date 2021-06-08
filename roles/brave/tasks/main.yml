@@ -11,9 +11,9 @@
 
 - name: Add Brave apt repository
   apt_repository:
-    repo: deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main
+    repo: "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"
     state: present
-    update_cache: yes
+    update_cache: True
 
 - name: Install from repository
   package:
