@@ -49,21 +49,21 @@
     autoremove: True
     autoclean: True
 
-- name: "packages - vagrant add hashicorp key"
-  apt_key: 
-    url: https://apt.releases.hashicorp.com/gpg
-    state: present
-
-- name: "packages - add vagrant repo"
-  apt_repository:
-    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com focal main"
-    state: present
-    update_cache: True
-
-- name: "packages - install vagrant"
-  apt:
-    name: "vagrant"
-    state: present
+#- name: "packages - vagrant add hashicorp key"
+  #apt_key: 
+    #url: https://apt.releases.hashicorp.com/gpg
+    #state: present
+#
+#- name: "packages - add vagrant repo"
+  #apt_repository:
+    #repo: "deb [arch=amd64] https://apt.releases.hashicorp.com focal main"
+    #state: present
+    #update_cache: True
+#
+#- name: "packages - install vagrant"
+  #apt:
+    #name: "vagrant"
+    #state: present
 
 - name: "packages - enable clamav service"
   systemd:

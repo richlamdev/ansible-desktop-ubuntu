@@ -11,9 +11,11 @@
   
   roles:
     - role: base
+    - role: brave
     - role: chrome
+    - role: docker
+    - role: edge
     - role: keepassxc
     - role: signal-desktop
-    - role: brave
     - role: ufw
-    - role: docker
+    - role: vagrant
