@@ -33,6 +33,7 @@
       - python3-pip
       - ranger
       - rtorrent
+      - sshfs
       - sysstat
       - tcpdump
       - tmux
