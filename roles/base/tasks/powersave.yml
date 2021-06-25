@@ -4,3 +4,16 @@
     src: blank.sh
     dest: "/usr/bin/blank.sh"
     mode: "0755"
+
+- name: do nothing when laptop lid closes
+  copy:
+    src: logind.conf
+    dest: "/etc/systemd/logind.conf"
+    mode: "644"
+
+- name: restart prometheus
+  systemd:
+    daemon_reload: true
+    name: systemd-logind.service
+    state: restarted
+
