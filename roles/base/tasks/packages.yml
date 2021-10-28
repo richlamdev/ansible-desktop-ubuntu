@@ -15,7 +15,6 @@
       - clamav
       - clamav-daemon
       - curl
-      - cifs-utils
       - exfat-utils
       - fzf
       - gcc
@@ -23,7 +22,6 @@
       - git
       - golang
       - htop
-      - iftop
       - jq
       - make
       - meld
@@ -34,7 +32,6 @@
       - ranger
       - rtorrent
       - sshfs
-      - sysstat
       - tcpdump
       - tmux
       - tree
@@ -43,6 +40,7 @@
       - unzip
       - vim
       - virtualbox
+      - vlc
       - whois
 
 - name: packages - apt autoremove & autoclean
