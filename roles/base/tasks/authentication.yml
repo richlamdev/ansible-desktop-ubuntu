@@ -3,7 +3,9 @@
   template:
     src: "sshd_config.j2"
     dest: "/etc/ssh/sshd_config"
-    mode: "0600"
+    mode: "0644"
+    owner: "root"
+    group: "root"
   notify: reload sshd
 
 - name: authentication - ssh_config
@@ -11,3 +13,5 @@
     src: "ssh_config.j2"
     dest: "/etc/ssh/ssh_config"
     mode: "0644"
+    owner: "root"
+    group: "root"

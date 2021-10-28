@@ -1,34 +1,34 @@
 ---
-- name: optimize - get list of snaps currently running - exclude snapd or core
-  shell: |
-    sudo snap list | awk '!/Name/ && !/snapd/ && !/core/ {print $1}' 
-  register: snaps_found 
-
-#- debug:
-    #var: snaps_found.stdout_lines
-    #msg: "{{ snaps_found.stdout }}"
-    #msg: "{{ snaps_found.stdout_lines }}"
-
-- name: optimize - remove snap
-  snap:
-    name: "{{ item }}"
-    state: absent
-  loop: "{{ snaps_found.stdout_lines }}"
-  when: snaps_found.stdout | length > 0
-
-- name: optimize - stop snapd process
-  systemd:
-    name: snapd
-    scope: system
-    state: stopped
-  when: snaps_found.stdout | length > 0
-
-- name: optimize - apt purge snapd package
-  apt:
-    name: snapd
-    state: absent
-    purge: True
-  when: snaps_found.stdout | length > 0
+#- name: optimize - get list of snaps currently running - exclude snapd or core
+  #shell: |
+    #sudo snap list | awk '!/Name/ && !/snapd/ && !/core/ {print $1}' 
+  #register: snaps_found 
+#
+##- debug:
+    ##var: snaps_found.stdout_lines
+    ##msg: "{{ snaps_found.stdout }}"
+    ##msg: "{{ snaps_found.stdout_lines }}"
+#
+#- name: optimize - remove snap
+  #snap:
+    #name: "{{ item }}"
+    #state: absent
+  #loop: "{{ snaps_found.stdout_lines }}"
+  #when: snaps_found.stdout | length > 0
+#
+#- name: optimize - stop snapd process
+  #systemd:
+    #name: snapd
+    #scope: system
+    #state: stopped
+  #when: snaps_found.stdout | length > 0
+#
+#- name: optimize - apt purge snapd package
+  #apt:
+    #name: snapd
+    #state: absent
+    #purge: True
+  #when: snaps_found.stdout | length > 0
 
 - name: optimize - apt purge avahi, whoopsie, apport, openvpn package
   apt:
