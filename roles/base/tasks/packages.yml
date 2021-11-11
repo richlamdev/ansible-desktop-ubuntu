@@ -30,6 +30,7 @@
       - nmap
       - p7zip
       - python3-pip
+      - qpdf
       - ranger
       - rtorrent
       - sshfs
