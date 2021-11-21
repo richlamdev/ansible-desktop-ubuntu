@@ -1,12 +1,12 @@
 ---
-- name: keepass role - add KeePassXC repo
+- name: add KeePassXC repo
   apt_repository:
     repo: ppa:phoerious/keepassxc
     state: present
     update_cache: True
     validate_certs: False
 
-- name: keepass role - install KeePassXC package
+- name: install KeePassXC package
   apt:
     name: keepassxc
     state: latest

@@ -23,7 +23,7 @@
     #state: absent
     #purge: True
 
-- name: base role - optimize | apt purge avahi, whoopsie, apport, openvpn package
+- name: optimize | apt purge avahi, whoopsie, apport, openvpn package
   apt:
     name: 
       - avahi-daemon
@@ -35,13 +35,13 @@
     state: absent
     purge: True
 
-- name: base role - optimize | apt autoclean and autoremove
+- name: optimize | apt autoclean and autoremove
   apt:
     autoremove: True
     autoclean: True
   #when: snaps_found.stdout | length > 0
 
-- name: base role - optimize | prevent evolution from starting (running) in background
+- name: optimize | prevent evolution from starting (running) in background
   file:
     path: "{{ item }}"
     owner: root

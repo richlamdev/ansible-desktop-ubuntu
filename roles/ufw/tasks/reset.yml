@@ -1,6 +1,6 @@
 ---
 
-- name: ufw role - resetting firewall
+- name: resetting firewall
   ufw:
     state: reset
   when: ufw_reset | bool
