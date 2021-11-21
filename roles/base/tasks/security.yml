@@ -1,12 +1,12 @@
 ---
-- name: security - Disable ipv6 via grub default
+- name: base role - security | Disable ipv6 via grub default
   lineinfile:
     dest: "/etc/default/grub"
     regexp: ^GRUB_CMDLINE_LINUX_DEFAULT=
     line: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash ipv6.disable=1"
     state: present
 
-- name: security - Regenerate grub configuration
+- name: base role - security | Regenerate grub configuration
   shell:
     sudo update-grub2
   register: out

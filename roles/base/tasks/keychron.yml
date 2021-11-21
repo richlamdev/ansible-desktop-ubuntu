@@ -1,17 +1,17 @@
 # enable function keys for keychron keyboard
-- name: keychron - copy keychron script to /usr/sbin
+- name: base role - keychron | copy keychron script to /usr/sbin
   copy:
     src: set_keychron_kb.sh
     dest: "/usr/sbin/set_keychron_kb.sh"
     mode: "0750"
 
-- name: keychron - set systemd file to enable keycron script on startup
+- name: base role - keychron | set systemd file to enable keycron script on startup
   copy:
     src: keychron-function.service
     dest: "/etc/systemd/system/keychron-function.service"
     mode: "0750"
 
-- name: keychron - enable keycron systemd service on startup
+- name: base role - keychron | enable keycron systemd service on startup
   systemd:
     name: keyboard-setup
     enabled: True

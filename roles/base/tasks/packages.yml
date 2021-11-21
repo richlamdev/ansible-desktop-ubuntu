@@ -1,12 +1,12 @@
 --- # base packages:
 
-- name: packages - apt update && apt dist-upgrade *MAY TAKE A LONG TIME*
+- name: base role - packages | apt update && apt dist-upgrade *MAY TAKE A LONG TIME*
   apt:
     update_cache: True
     upgrade: dist
 
 # keep alphabetically ordered
-- name: packages - install our standard additions to the base install
+- name: base role - packages | install standard additions to the base install
   apt:
     state: latest
     pkg:
@@ -45,18 +45,18 @@
       - vlc
       - whois
 
-- name: packages - apt autoremove & autoclean
+- name: base role - packages | apt autoremove & autoclean
   apt:
     autoremove: True
     autoclean: True
 
-- name: "packages - enable clamav service"
+- name: base role - packages | enable clamav service
   systemd:
     name: clamav-daemon
     enabled: True
     state: started
 
-- name: packages - install additional pip packages
+- name: base role - packages | install additional pip packages
   pip:
     state: latest
     executable: pip3
