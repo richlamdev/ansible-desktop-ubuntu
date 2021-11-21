@@ -10,5 +10,3 @@
   apt:
     name: keepassxc
     state: latest
-    #pkg:
-      #- keepassxc

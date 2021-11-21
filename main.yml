@@ -10,12 +10,13 @@
   #- include_tasks: tasks/main.yml
   
   roles:
+    - role: aws-cli
     - role: base
     - role: brave
     - role: chrome
     - role: docker
     - role: edge
+    - role: hashicorp
     - role: keepassxc
     - role: signal-desktop
     - role: ufw
-    - role: vagrant
