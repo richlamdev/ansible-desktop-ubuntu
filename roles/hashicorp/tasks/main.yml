@@ -6,7 +6,7 @@
 
 - name: "packages - add hashicorp repo"
   apt_repository:
-    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansbile_distribution_release }} main"
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     state: present
     update_cache: True
 

@@ -1,5 +1,5 @@
 ---
 # defaults file for ansible-role-edge
-ms_edge_package: microsoft-edge-beta
+ms_edge_package: microsoft-edge-stable
 ...
 
