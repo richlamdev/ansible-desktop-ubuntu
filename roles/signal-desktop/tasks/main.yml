@@ -1,21 +1,21 @@
 ---
-- name: signal-desktop role - install signal-desktop dependencies
+- name: install signal-desktop dependencies
   apt:
     name: "{{ signal_desktop_apt_dependencies }}"
     state: present
 
-- name: signal-desktop role - install signal GPG key
+- name: install signal GPG key
   apt_key:
     data: "{{ lookup('file', 'signal-apt-key.asc') }}"
     state: present
     keyring: /etc/apt/trusted.gpg.d/signal-desktop.gpg
 
-- name: signal-desktop role - add Signal repo
+- name: add Signal repo
   apt_repository:
     repo: "{{ signal_desktop_apt_repo }}"
     state: present
 
-- name: signal-desktop role - install Signal desktop
+- name: install Signal desktop
   apt:
     name: signal-desktop
     state: present

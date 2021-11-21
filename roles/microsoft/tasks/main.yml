@@ -1,23 +1,23 @@
-- name: microsoft role - Microsfot linux signing key present
+- name: Microsfot linux signing key present
   apt_key: 
     url: https://packages.microsoft.com/keys/microsoft.asc
     state: present
 
-- name: microsoft role - add Microsoft repo
+- name: add Microsoft repo
   apt_repository:
     repo: "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
     filename: "microsoft.list"
     state: present
     update_cache: True
 
-- name: microsoft role - add VS Code repo
+- name: add VS Code repo
   apt_repository:
     repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
     filename: "vscode.list"
     state: present
     update_cache: True
 
-- name: microsoft role - Install MS Edge and VS Code from repository
+- name: Install MS Edge and VS Code from repository
   apt:
     state: latest
     pkg: 

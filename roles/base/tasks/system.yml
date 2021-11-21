@@ -1,4 +1,4 @@
 ---
 # for ansible 2.2+
- - name: base role - system | set timezone
+ - name: system | set timezone
    timezone: name=America/Vancouver

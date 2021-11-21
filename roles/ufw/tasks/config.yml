@@ -1,6 +1,6 @@
 ---
 
-- name: ufw role - configuring port/protocol/network rules
+- name: configuring port/protocol/network rules
   ufw:
     comment: "{{ item.comment | default(omit) }}"
     delete: "{{ item.delete | default(omit) }}"
@@ -22,14 +22,14 @@
     route: "{{ item.route | default(omit) }}"
   with_items: "{{ ufw_rules }}"
 
-- name: ufw role - configuring application rules
+- name: configuring application rules
   ufw:
     name: "{{ item.name }}"
     rule: "{{ item.rule if item.rule is defined else 'allow' }}"
     from_ip: "{{ item.from_ip | default(omit)  }}"
   with_items: "{{ ufw_applications }}"
 
-- name: ufw role - configuring firewall
+- name: configuring firewall
   template:
     src: etc/default/ufw.j2
     dest: /etc/default/ufw
