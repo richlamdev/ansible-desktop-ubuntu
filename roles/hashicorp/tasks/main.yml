@@ -1,16 +1,16 @@
 ---
-- name: "packages - add hashicorp key"
+- name: hashicorp role - add hashicorp key
   apt_key: 
     url: https://apt.releases.hashicorp.com/gpg
     state: present
 
-- name: "packages - add hashicorp repo"
+- name: hashicorp role - add hashicorp repo
   apt_repository:
     repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     state: present
     update_cache: True
 
-- name: "packages - install terraform and vagrant"
+- name: hashicorp role - install terraform and vagrant
   apt:
     state: present
     pkg:

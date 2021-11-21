@@ -1,12 +1,12 @@
 # ensure monitor properly sleeps
-- name: install monitor power save script
+- name: powersave -install monitor power save script
   copy:
     src: blank.sh
     dest: "/usr/bin/blank.sh"
     mode: "0755"
 
 # do not restart this service, next reboot will pick up this change
-- name: do nothing when laptop lid closes
+- name: powersave - do nothing when laptop lid closes
   copy:
     src: logind.conf
     dest: "/etc/systemd/logind.conf"
