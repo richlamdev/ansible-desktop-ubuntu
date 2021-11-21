@@ -1,6 +1,6 @@
 ---
 
-- name: Installing ufw packages
+- name: ufw role - installing ufw packages
   package:
     name: "{{ item }}"
     state: present

@@ -1,6 +1,6 @@
 ---
 
-- name: Configuring service
+- name: ufw role - configuring service
   ufw:
     state: "{{ ufw_state }}"
     logging: "{{ ufw_logging }}"
