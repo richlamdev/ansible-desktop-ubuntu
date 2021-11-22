@@ -20,3 +20,4 @@
     - role: keepassxc
     - role: signal-desktop
     - role: ufw
+    - role: bash
