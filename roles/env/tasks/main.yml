@@ -3,8 +3,8 @@
   copy:
     src: "env_functions_v2.sh"
     dest: "/home/{{ local_username }}/.bashrc.d/"
-    owner: "{{ local_username}}"
-    group: "{{ local_username}}"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
     mode: "0644"
 
 - name: install env_functions.sh
