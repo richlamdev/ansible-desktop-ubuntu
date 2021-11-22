@@ -7,3 +7,5 @@
     owner: "{{ lookup('env','USER') }}"
     group: "{{ lookup('env','USER') }}"
     mode: "0644"
+    state: "directory"
+    recurse: True
