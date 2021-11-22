@@ -1,9 +1,9 @@
 ---
-#- name: optimize - remove snap packages
-  #snap:
-    #state: absent
-    #name: 
-      #- firefox
+- name: optimize - remove snap packages
+  snap:
+    state: absent
+    name: 
+      - firefox
       #- gtk-common-themes
       #- gnome-3-38-2004
       #- bare
