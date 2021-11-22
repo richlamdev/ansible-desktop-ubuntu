@@ -1,9 +1,0 @@
----
-
-- name: install env_functions.sh
-  copy:
-    src: "env_functions_v2.sh"
-    dest: "/home/{{ lookup('env','USER') }}/functions"
-    owner: "{{ lookup('env','USER') }}"
-    group: "{{ lookup('env','USER') }}"
-    mode: "0644"
