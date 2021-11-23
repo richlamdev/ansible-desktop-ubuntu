@@ -5,11 +5,13 @@
     regexp: ^GRUB_CMDLINE_LINUX_DEFAULT=
     line: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash ipv6.disable=1"
     state: present
+  register: ipv6_disabled_grub
 
 - name: security | Regenerate grub configuration
   shell:
     sudo update-grub2
   register: out
+  when: ipv6_disabled_grub.changed
 
 #- debug: var=out.stdout_lines
 

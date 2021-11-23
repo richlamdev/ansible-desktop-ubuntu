@@ -15,4 +15,4 @@
   systemd:
     name: keyboard-setup
     enabled: True
-    state: restarted
+    state: started
