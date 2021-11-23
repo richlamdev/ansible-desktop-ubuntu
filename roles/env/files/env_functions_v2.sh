@@ -212,7 +212,7 @@ frmtps_fn () {
             wrapper_fn " "${NO_CLR}${PSWDCLR}'$PWD' $ITCNT $WCCNT
 				;;
          "dtm24Y")
-            wrapper_fn ${NO_CLR}${PSTIMECLR}" '\D{%d %b %Y  %T %Z}'" $ITCNT $WCCNT
+            wrapper_fn ${NO_CLR}${PSTIMECLR}" '\D{%d%b%Y %R %Z}'" $ITCNT $WCCNT
 				;;
          *)
             ;;
