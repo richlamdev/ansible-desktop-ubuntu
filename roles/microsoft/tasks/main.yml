@@ -1,6 +1,7 @@
 - name: Microsfot linux signing key present
   apt_key: 
     url: https://packages.microsoft.com/keys/microsoft.asc
+    id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
     state: present
 
 - name: add Microsoft repo
