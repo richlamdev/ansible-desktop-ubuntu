@@ -31,11 +31,12 @@
   shell: >
     curl -sSL {{ docker_apt_gpg_key }} | sudo apt-key add -
   args:
-    warn: false
+    warn: False
   when: add_repository_key is failed
 
 - name: Add Docker repository.
   apt_repository:
     repo: "{{ docker_apt_repository }}"
+    filename: "docker.list"
     state: present
-    update_cache: true
+    update_cache: True

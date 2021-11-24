@@ -1,6 +1,0 @@
----
-
-- name: reload ufw
-  ufw:
-    state: reloaded
-  when: ufw_state == 'enabled'
