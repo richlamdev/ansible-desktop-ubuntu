@@ -1,6 +1,0 @@
----
-
-- name: resetting firewall
-  ufw:
-    state: reset
-  when: ufw_reset | bool

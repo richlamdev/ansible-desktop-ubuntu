@@ -19,5 +19,5 @@
     - role: hashicorp
     - role: keepassxc
     - role: signal-desktop
-    - role: ufw
+    - role: ansible-ufw
     - role: env

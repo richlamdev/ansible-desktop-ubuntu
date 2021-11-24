@@ -1,9 +1,4 @@
-#- name: Install the https method driver for apt
-  #apt:
-    #name: apt-transport-https
-    #state: present
-    #update_cache: yes
-
+---
 - name: Add Brave apt key
   apt_key:
     url: https://brave-browser-apt-release.s3.brave.com/brave-core.asc
@@ -13,10 +8,11 @@
 - name: Add Brave apt repository
   apt_repository:
     repo: "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"
+    filename: brave-browser.list
     state: present
     update_cache: True
 
 - name: Install from repository
-  package:
+  apt:
     name: brave-browser
     state: latest
