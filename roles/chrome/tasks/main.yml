@@ -1,6 +1,7 @@
 - name: add Google linux signing key
   apt_key: 
     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    id: EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796
     state: present
 
 - name: add Google chrome repo
