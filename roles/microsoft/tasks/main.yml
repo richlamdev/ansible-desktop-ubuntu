@@ -7,14 +7,14 @@
 - name: add Microsoft repo
   apt_repository:
     repo: "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
-    filename: "microsoft-edge.list"
+    filename: microsoft-edge
     state: present
     update_cache: True
 
 - name: add VS Code repo
   apt_repository:
     repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
-    filename: "microsoft-vscode.list"
+    filename: microsoft-vscode
     state: present
     update_cache: True
 

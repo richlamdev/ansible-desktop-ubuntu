@@ -14,7 +14,7 @@
 - name: add Signal repo
   apt_repository:
     repo: "{{ signal_desktop_apt_repo }}"
-    filename: "signal-desktop.list"
+    filename: signal-desktop
     state: present
     update_cache: True
 
