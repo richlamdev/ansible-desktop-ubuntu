@@ -7,7 +7,7 @@
 - name: add Google chrome repo
   apt_repository:
     repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-    filename: "google-chrome.list"
+    filename: google-chrome
     state: present
     update_cache: True
 

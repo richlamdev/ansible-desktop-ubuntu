@@ -8,7 +8,7 @@
 - name: Add Brave apt repository
   apt_repository:
     repo: "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"
-    filename: brave-browser.list
+    filename: brave-browser
     state: present
     update_cache: True
 
