@@ -66,3 +66,12 @@ call matchadd('ColorColumn', '\%80v', 100)
 nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
 
 "colorscheme torte	" Set colorscheme - mostly for windows
+
+
+set list
+set listchars=tab:▸\ ,trail:·
+set mouse=a
+set scrolloff=8
+set sidescrolloff=8
+set title
+set termguicolors

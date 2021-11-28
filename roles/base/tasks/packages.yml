@@ -21,6 +21,7 @@
       - gcc
       - gimp
       - git
+      - gitk
       - golang
       - htop
       - jq
