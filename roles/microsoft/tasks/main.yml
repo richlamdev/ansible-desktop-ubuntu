@@ -4,20 +4,6 @@
     id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
     state: present
 
-#- name: add Microsoft repo
-  #apt_repository:
-    #repo: "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
-    #filename: microsoft-edge
-    #state: present
-    #update_cache: True
-#
-#- name: add VS Code repo
-  #apt_repository:
-    #repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
-    #filename: microsoft-vscode
-    #state: present
-    #update_cache: True
-
 - name: add Microsoft repo
   apt_repository:
     repo: "{{ item }}"
