@@ -1,0 +1,15 @@
+---
+- name: add Yubico repo
+  apt_repository:
+    repo: ppa:yubico/stable
+    filename: yubico
+    state: present
+    update_cache: True
+    validate_certs: True
+
+- name: install Yubico-manager and personalization-gui package
+  apt:
+    state: latest
+    pkg:
+      - yubikey-manager
+      - yubikey-personalization-gui
