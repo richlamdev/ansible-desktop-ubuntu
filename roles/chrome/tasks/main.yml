@@ -1,17 +1,17 @@
-- name: add Google linux signing key
+- name: Add Google linux signing key
   apt_key: 
     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
     id: EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796
     state: present
 
-- name: add Google chrome repo
+- name: Add Google chrome repo
   apt_repository:
     repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
     filename: google-chrome
     state: present
     update_cache: True
 
-- name: install Google chrome
+- name: Install Google chrome
   apt:
     name: "{{ chrome_package }}"
     state: present

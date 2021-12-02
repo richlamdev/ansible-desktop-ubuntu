@@ -20,5 +20,6 @@
     - role: keepassxc
     - role: signal-desktop
     - role: ansible-ufw
+    - role: vivaldi
     - role: env
     #- role: yubico

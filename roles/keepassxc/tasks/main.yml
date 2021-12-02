@@ -1,5 +1,5 @@
 ---
-- name: add KeePassXC repo
+- name: Add KeePassXC repo
   apt_repository:
     repo: ppa:phoerious/keepassxc
     filename: keepassxc
@@ -7,7 +7,7 @@
     update_cache: True
     validate_certs: True
 
-- name: install KeePassXC package
+- name: Install KeePassXC package
   apt:
     name: keepassxc
     state: latest
