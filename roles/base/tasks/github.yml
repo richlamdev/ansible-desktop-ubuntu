@@ -33,3 +33,11 @@
     repo: "https://github.com/richlamdev/misc.git"
     dest: "/home/{{ local_username }}/git/misc"
     update: no
+
+- name: Change ownership of git repos
+  file:
+    path: "/home/{{ local_username }}/git"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    state: directory
+    recurse: yes

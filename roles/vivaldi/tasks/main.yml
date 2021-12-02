@@ -1,0 +1,18 @@
+---
+- name: Add Vivaldi apt key
+  apt_key:
+    url: https://repo.vivaldi.com/archive/linux_signing_key.pub
+    id: 790D2E268F67FE013B3276D3793FEB8BB69735B2
+    state: present
+
+- name: Add Vivaldi apt repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://repo.vivaldi.com/archive/deb/ stable main"
+    filename: vivaldi
+    state: present
+    update_cache: True
+
+- name: Install Vivaldi from repository
+  apt:
+    name: vivaldi-stable
+    state: latest

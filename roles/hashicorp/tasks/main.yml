@@ -1,18 +1,18 @@
 ---
-- name: add hashicorp key
+- name: Add hashicorp key
   apt_key: 
     url: https://apt.releases.hashicorp.com/gpg
     id: E8A032E094D8EB4EA189D270DA418C88A3219F7B
     state: present
 
-- name: add hashicorp repo
+- name: Add hashicorp repo
   apt_repository:
     repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     filename: hashicorp
     state: present
     update_cache: True
 
-- name: install terraform and vagrant
+- name: Install terraform and vagrant
   apt:
     state: present
     pkg:
