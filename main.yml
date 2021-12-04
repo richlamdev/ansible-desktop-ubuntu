@@ -15,7 +15,7 @@
     - role: brave
     - role: chrome
     - role: docker
-    #- role: microsoft
+    - role: microsoft
     - role: hashicorp
     - role: keepassxc
     - role: signal-desktop

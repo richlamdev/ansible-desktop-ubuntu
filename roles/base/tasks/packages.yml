@@ -10,6 +10,7 @@
   apt:
     state: latest
     pkg:
+      - ansible
       - brasero
       - build-essential
       - clamav
@@ -35,6 +36,7 @@
       - ranger
       - rtorrent
       - sshfs
+      - sshpass
       - tcpdump
       - tmux
       - tree
