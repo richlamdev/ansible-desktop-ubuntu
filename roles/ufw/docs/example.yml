@@ -1,0 +1,34 @@
+# @see https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html#examples
+---
+
+- hosts: all
+  become: true
+  roles:
+    - weareinteractive.ufw
+  vars:
+    ufw_rules:
+      # Set loggin
+      - logging: "full"
+      # Allow OpenSSH
+      - rule: allow
+        name: OpenSSH
+      # Delete OpenSSH rule
+      - rule: allow
+        name: OpenSSH
+        delete: true
+      # Allow all access to tcp port 80
+      - rule: allow
+        to_port: '80'
+        proto: tcp
+    # Manage the configuration file
+    ufw_manage_config: true
+    # Configuration object passed to the configuration file
+    ufw_config:
+      IPV6: "yes"
+      DEFAULT_INPUT_POLICY: DROP
+      DEFAULT_OUTPUT_POLICY: ACCEPT
+      DEFAULT_FORWARD_POLICY: DROP
+      DEFAULT_APPLICATION_POLICY: SKIP
+      MANAGE_BUILTINS: "no"
+      IPT_SYSCTL: /etc/ufw/sysctl.conf
+      IPT_MODULES: ""

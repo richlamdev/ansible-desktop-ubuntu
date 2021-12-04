@@ -19,8 +19,8 @@
     - role: hashicorp
     - role: keepassxc
     - role: signal-desktop
-    - role: ansible-ufw
     - role: vivaldi
     - role: opera
+    - role: ufw
     - role: env
     #- role: yubico

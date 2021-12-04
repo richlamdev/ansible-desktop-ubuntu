@@ -1,0 +1,10 @@
+---
+
+- name: reset ufw
+  ufw:
+    state: reset
+
+- name: reload ufw
+  ufw:
+    state: reloaded
+  when: ufw_enabled | bool
