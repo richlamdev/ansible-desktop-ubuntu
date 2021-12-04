@@ -1,0 +1,25 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: franklin
+  company: We Are Interactive
+  description: Installs and configures ufw
+  min_ansible_version: "2.10"
+  license: MIT
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - system
+    - firewall
+    - security
+    - network
+    - ufw

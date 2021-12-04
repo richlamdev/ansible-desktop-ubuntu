@@ -1,0 +1,4 @@
+exclude_paths:
+  - ./docs/
+skip_list:
+  - '106'
