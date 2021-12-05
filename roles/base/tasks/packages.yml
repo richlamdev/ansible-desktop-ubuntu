@@ -24,6 +24,7 @@
       - git
       - gitk
       - golang
+      - graphviz
       - htop
       - jq
       - make
