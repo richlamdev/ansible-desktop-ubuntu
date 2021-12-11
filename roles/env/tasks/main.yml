@@ -7,10 +7,18 @@
     group: "{{ local_username }}"
     mode: "0644"
 
-- name: install env_functions.sh
+- name: install .vimrc to home directory
   copy:
     src: ".vimrc"
     dest: "/home/{{ local_username }}/.vimrc"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0644"
+
+- name: install .dircolors to home directory
+  copy:
+    src: ".dircolors"
+    dest: "/home/{{ local_username }}/.dircolors"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0644"
@@ -21,7 +29,13 @@
     block: |
       source /home/"{{ local_username }}/.bashrc.d/env_functions_v2.sh"
       mixed_ps
+
       HISTSIZE=100000
       HISTFILESIZE=200000
+
+      if [ -x /usr/bin/dircolors ]; then
+          test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+          alias ls='ls --color=auto'
+      fi
     create: True
     backup: True
