@@ -9,7 +9,7 @@
   lineinfile:
     firstmatch: True
     path: "/etc/NetworkManager/NetworkManager.conf"
-    insertafter: '^[main]'
+    insertafter: '[main]'
     line: "dns=default"
 
 - name: Remove /etc/resolv.conf
@@ -19,6 +19,6 @@
 
 - name: Restart Network-Manager systemd-resolved
   systemd:
-    name: network-manager.service
+    name: NetworkManager.service
     enabled: True
     state: restarted
