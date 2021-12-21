@@ -1,3 +1,4 @@
+---
 - name: Install Microsfot linux signing key
   apt_key:
     url: https://packages.microsoft.com/keys/microsoft.asc
