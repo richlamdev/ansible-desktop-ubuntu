@@ -1,5 +1,5 @@
 [local]
-localhost
+#localhost
 
 # Group 'multi' with all hosts
 [multi:children]
