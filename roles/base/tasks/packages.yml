@@ -48,6 +48,7 @@
       - virtualbox
       - vlc
       - whois
+      - xclip
       - xtitle
 
 - name: packages | apt autoremove & autoclean
