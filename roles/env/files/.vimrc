@@ -34,7 +34,6 @@ if has("autocmd")              " Jump to last position when reopening a file
 endif
 " }}}
 
-
 " File settings {{{
 set autowrite              " Automatically save before commands like :next and :make
 set nobackup               " do not keep a backup file, use versions instead
@@ -142,19 +141,9 @@ nnoremap n nzzzv
 nnoremap N Nzzzv
 " }}}
 
-" Section folding {{{
-set foldenable
-set foldlevelstart=10
-set foldnestmax=10
-set foldmethod=syntax
-nnoremap <space> za
-" vim:foldmethod=marker:foldlevel=0
-" }}}
-
-
 " Vimspector settings {{{
 
-let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+"let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 
 "nnoremap <Leader>dd :call vimspector#Launch()<CR>
 "nnoremap <Leader>de :call vimspector#Reset()<CR>
@@ -168,7 +157,6 @@ let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 "nmap <Leader>dl <Plug>VimspectorStepInto
 "nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
-
 
 " Section ALE {{{
 
@@ -186,4 +174,13 @@ let g:ale_lint_on_enter = 0
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
+" }}}
+
+" Section folding {{{
+set foldenable
+set foldlevelstart=10
+set foldnestmax=10
+set foldmethod=syntax
+nnoremap <space> za
+" vim:foldmethod=marker:foldlevel=0
 " }}}
