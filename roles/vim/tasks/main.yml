@@ -1,0 +1,23 @@
+---
+- name:
+  pip:
+    state: latest
+    executable: pip3
+    name:
+      - flake8
+      - black
+    extra_args: --user
+
+- name: create directory for ALE plugin
+  file:
+    path: "/home/{{ local_username }}/.vim/pack/git-plugins/start"
+    state: directory
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0755"
+
+- name: install ALE plugin with git
+  git:
+    repo: "https://github.com/dense-analysis/ale.git"
+    dest: "/home{{ local_username }}/.vim/pack/git-plugins/start/ale"
+
