@@ -150,3 +150,40 @@ set foldmethod=syntax
 nnoremap <space> za
 " vim:foldmethod=marker:foldlevel=0
 " }}}
+
+
+" Vimspector settings {{{
+
+let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+
+"nnoremap <Leader>dd :call vimspector#Launch()<CR>
+"nnoremap <Leader>de :call vimspector#Reset()<CR>
+"nnoremap <Leader>dc :call vimspector#Continue()<CR>
+"
+"nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
+"nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
+"
+"nmap <Leader>dk <Plug>VimspectorRestart
+"nmap <Leader>dh <Plug>VimspectorStepOut
+"nmap <Leader>dl <Plug>VimspectorStepInto
+"nmap <Leader>dj <Plug>VimspectorStepOver
+" }}}
+
+
+" Section ALE {{{
+
+let g:ale_linters = {'python': ['flake8']}
+let g:ale_fixers = {'python': ['black']}
+"let g:ale_fixers = {'*': [], 'python': ['black']}
+let g:ale_python_flake8_options = '--max-line-length 79'
+let g:ale_python_black_options = '--line-length 79'
+let g:ale_fix_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+" }}}
