@@ -158,7 +158,7 @@ nnoremap N Nzzzv
 "nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
-" Section ALE {{{
+" Section ALE - Python {{{
 
 let g:ale_linters = {'python': ['flake8']}
 let g:ale_fixers = {'python': ['black']}
@@ -174,6 +174,19 @@ let g:ale_lint_on_enter = 0
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
+" }}}
+
+" Section ALE - Yaml {{{
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+let g:indentLine_char = '⦙'
+
+"set foldlevelstart=20
+
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+let g:ale_lint_on_text_changed = 'never'
 " }}}
 
 " Section folding {{{

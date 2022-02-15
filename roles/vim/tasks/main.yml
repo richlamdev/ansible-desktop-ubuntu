@@ -1,5 +1,4 @@
 ---
-
 - name: install linter and fixer for vim
   apt:
     state: latest
@@ -15,12 +14,21 @@
     group: "{{ local_username }}"
     mode: "0755"
 
-- name: install ALE plugin with git
+- name: install ALE plugin
   git:
     repo: "https://github.com/dense-analysis/ale.git"
     dest: "/home/{{ local_username }}/.vim/pack/git-plugins/start/ale"
 
-- name: install hashivim plugin with git
+- name: install hashivim plugin
   git:
     repo: "https://github.com/hashivim/vim-terraform.git"
     dest: "/home/{{ local_username }}/.vim/pack/plugins/start/vim-terraform"
+
+- name: install indentLine plugin
+  git:
+    repo: "https://github.com/Yggdroot/indentLine.git"
+    dest: "/home/{{ local_username }}/.vim/pack/vendor/start/indentLine"
+
+- name: enable indentLine help
+  shell:
+    vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c "q"
