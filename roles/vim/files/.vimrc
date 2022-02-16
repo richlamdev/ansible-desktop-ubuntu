@@ -34,19 +34,19 @@ if has("autocmd")              " Jump to last position when reopening a file
 endif
 " }}}
 
-" File settings {{{
+" file settings {{{
 set autowrite              " Automatically save before commands like :next and :make
 set nobackup               " do not keep a backup file, use versions instead
 " }}}
 
-" File find {{{
+" file find {{{
 set path=.,**              " Relative to current file and everything under :pwd
 set wildmenu               " display matches in command-line mode
 " set wildmode=list:longest  " make wildmneu behave similar to bash completion
 set hidden                 " Hide buffers when they are abandoned
 " }}}
 
-" Colours {{{
+" colours {{{
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
 " set termguicolors
@@ -76,7 +76,8 @@ hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlig
 " Python PEP8 {{{
 
 " To add the proper PEP8 indentation, add the following to your .vimrc:
-autocmd BufNewFile,BufRead *.py
+"autocmd BufNewFile,BufRead *.py
+autocmd Filetype python
     \ set tabstop=4 |
     \ set softtabstop=4 |
     \ set shiftwidth=4 |
@@ -88,17 +89,19 @@ autocmd BufNewFile,BufRead *.py
     \ set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with |
     "\ set wrap linebreak nolist |
 
+" Ensure all types of requirements.txt files get Python syntax highlighting
+autocmd BufNewFile,BufRead requirements*.txt set ft=python
 
-" highlight a marker at column 80 - for PEP8
+" highlight a marker at column 80
 highlight ColorColumn ctermbg=red
 call matchadd('ColorColumn', '\%80v', 100)
 
 " map f9 to excute python script
-nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
+" nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
 
 " }}}
 
-" Jump configuration {{{
+" jump configuration {{{
 function! GotoJump()
   jumps
   let j = input("Please select your jump: ")
@@ -117,21 +120,24 @@ nmap <Leader>j :call GotoJump()<CR>
 
 " }}}
 
-" Window management {{{
+" window management {{{
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 6/5)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 5/6)<CR>
 nnoremap <silent> <Leader>< :exe "vert resize " . (winwidth(0) * 5/6)<CR>
 nnoremap <silent> <Leader>> :exe "vert resize " . (winwidth(0) * 6/5)<CR>
+
+" Auto-resize splits when Vim gets resized.
+autocmd VimResized * wincmd =
 " }}}
 
-" Visual moving text {{{
+" visual moving text {{{
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 inoremap <C-j> :m .+1<CR>==
 inoremap <C-k> :m .-2<CR>==
 " }}}
 
-" Search settings {{{
+" search settings {{{
 set ignorecase             " Do case insensitive matching
 set smartcase              " Do smart case matching
 set incsearch              " Show search matches while typing
@@ -141,7 +147,7 @@ nnoremap n nzzzv
 nnoremap N Nzzzv
 " }}}
 
-" Vimspector settings {{{
+" vimspector settings {{{
 
 "let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 
@@ -158,7 +164,7 @@ nnoremap N Nzzzv
 "nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
-" Section ALE {{{
+" ALE - Python {{{
 
 let g:ale_linters = {'python': ['flake8']}
 let g:ale_fixers = {'python': ['black']}
@@ -176,11 +182,44 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " }}}
 
-" Section folding {{{
-set foldenable
-set foldlevelstart=10
-set foldnestmax=10
+" ALE - Yaml {{{
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+let g:indentLine_char = '⦙'
+
+"set foldlevelstart=20
+
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+let g:ale_lint_on_text_changed = 'never'
+" }}}
+
+" statusline {{{
+
+set laststatus=2
+set statusline=
+set statusline+=\ B:%n                                  "buffernr
+set statusline+=\ %##              " add space separator
+set statusline+=\ %F               " file path and name
+set statusline+=\ %##              " add space separator
+set statusline+=\ FT:\%y           " file type in [brackets]
+set statusline+=\%=                " separator point left/right of items
+set statusline+=\ %l/%L            " line number / line total
+set statusline+=\ %##              " add space separator
+set statusline+=\ %c               " column number
+set statusline+=\ %##              " add space separator
+set statusline+=\ %p%%             " percentage through file
+set statusline+=\ %##              " add space separator
+set statusline+=\ H:%B             " value of char under cursor in hex
+" }}}
+
+" folding {{{
 set foldmethod=syntax
+set foldlevelstart=1
+set foldenable
+set foldnestmax=10
+let python_folding=1
 nnoremap <space> za
 " vim:foldmethod=marker:foldlevel=0
 " }}}
