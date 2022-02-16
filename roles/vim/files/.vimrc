@@ -49,11 +49,12 @@ set hidden                 " Hide buffers when they are abandoned
 " colours {{{
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
-" set termguicolors
+"set termguicolors
 colorscheme pablo          " Set colorscheme
+"colorscheme zellner          " Set colorscheme
 
-hi Search ctermbg=Yellow   " highlight seached word in white
-hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
+"hi Search ctermbg=Yellow   " highlight seached word in white
+"hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
 
 " test color scheme
 "function! DisplayColorSchemes()
@@ -70,6 +71,8 @@ hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlig
    "endfor
    "exec "cd " . currDir
 "endfunction
+
+" :call DisplayColorSchemes()  -to view all colors
 
 " }}}
 
@@ -197,9 +200,23 @@ let g:ale_lint_on_text_changed = 'never'
 
 " statusline {{{
 
+" To be updated for terminal colors, as opposed to gui
+
+hi VertSplit ctermbg=blue
+"hi User1 ctermfg=#ffdad8  guibg=#880c0e
+"hi User2 ctermfg=#000000  guibg=#F4905C
+"hi User3 ctermfg=#292b00  guibg=#f4f597
+"hi User4 ctermfg=#112605  guibg=#aefe7B
+"hi User5 ctermfg=#051d00  guibg=#7dcc7d
+"hi User7 ctermfg=black  ctermbg=red
+"hi User8 ctermfg=#ffffff  guibg=#5b7fbb
+"hi User9 ctermfg=#ffffff  guibg=#810085
+"hi User0 ctermfg=#ffffff  guibg=#094afe
+
 set laststatus=2
 set statusline=
-set statusline+=\ B:%n                                  "buffernr
+"set statusline+=%7*\B:%n                                  "buffernr
+set statusline+=\B:%n                                  "buffernr
 set statusline+=\ %##              " add space separator
 set statusline+=\ %F               " file path and name
 set statusline+=\ %##              " add space separator
