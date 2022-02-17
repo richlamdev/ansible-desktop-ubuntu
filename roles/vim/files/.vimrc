@@ -42,6 +42,7 @@ set nobackup               " do not keep a backup file, use versions instead
 " file find {{{
 set path=.,**              " Relative to current file and everything under :pwd
 set wildmenu               " display matches in command-line mode
+set wildignore+=.pyc,.swp  " ignore these files when opening based on glob pattern
 " set wildmode=list:longest  " make wildmneu behave similar to bash completion
 set hidden                 " Hide buffers when they are abandoned
 " }}}
@@ -217,17 +218,17 @@ set laststatus=2
 set statusline=
 "set statusline+=%7*\B:%n                                  "buffernr
 set statusline+=\B:%n                                  "buffernr
-set statusline+=\ %##              " add space separator
+set statusline+=\               " add space separator
 set statusline+=\ %F               " file path and name
-set statusline+=\ %##              " add space separator
+set statusline+=\                  " add space separator
 set statusline+=\ FT:\%y           " file type in [brackets]
 set statusline+=\%=                " separator point left/right of items
 set statusline+=\ %l/%L            " line number / line total
-set statusline+=\ %##              " add space separator
+set statusline+=\                  " add space separator
 set statusline+=\ %c               " column number
-set statusline+=\ %##              " add space separator
+set statusline+=\                  " add space separator
 set statusline+=\ %p%%             " percentage through file
-set statusline+=\ %##              " add space separator
+set statusline+=\                  " add space separator
 set statusline+=\ H:%B             " value of char under cursor in hex
 " }}}
 
