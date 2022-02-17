@@ -201,35 +201,44 @@ let g:ale_lint_on_text_changed = 'never'
 
 " statusline {{{
 
-" To be updated for terminal colors, as opposed to gui
+set fillchars+=vert:\           " change appearance of window split border
+hi VertSplit ctermfg=grey guifg=grey " change color of window split border
 
-hi VertSplit ctermbg=blue
-"hi User1 ctermfg=#ffdad8  guibg=#880c0e
-"hi User2 ctermfg=#000000  guibg=#F4905C
-"hi User3 ctermfg=#292b00  guibg=#f4f597
-"hi User4 ctermfg=#112605  guibg=#aefe7B
-"hi User5 ctermfg=#051d00  guibg=#7dcc7d
-"hi User7 ctermfg=black  ctermbg=red
-"hi User8 ctermfg=#ffffff  guibg=#5b7fbb
-"hi User9 ctermfg=#ffffff  guibg=#810085
-"hi User0 ctermfg=#ffffff  guibg=#094afe
+hi User1 ctermbg=red ctermfg=white guibg=red guifg=white
+hi User2 ctermbg=214 ctermfg=black guibg=#ffaf00 guifg=black "DarkOrange
+hi User3 ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+hi User4 ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
+hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
+hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
+hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
+hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
 
-set laststatus=2
+set laststatus=2                " always display status line
 set statusline=
-"set statusline+=%7*\B:%n                                  "buffernr
-set statusline+=\B:%n                                  "buffernr
+
+set statusline+=%1*
+set statusline+=\b:%n           " buffernr
+set statusline+=%9*             " reset color to default blue
+set statusline+=%2*
 set statusline+=\               " add space separator
-set statusline+=\ %F               " file path and name
-set statusline+=\                  " add space separator
-set statusline+=\ FT:\%y           " file type in [brackets]
-set statusline+=\%=                " separator point left/right of items
-set statusline+=\ %l/%L            " line number / line total
-set statusline+=\                  " add space separator
-set statusline+=\ %c               " column number
-set statusline+=\                  " add space separator
-set statusline+=\ %p%%             " percentage through file
-set statusline+=\                  " add space separator
-set statusline+=\ H:%B             " value of char under cursor in hex
+set statusline+=\%F             " file path and name
+set statusline+=\               " add space separator
+set statusline+=%9*             " reset color to default blue
+set statusline+=%3*
+set statusline+=\ft:\%y         " file type in [brackets]
+set statusline+=%9*             " reset color to default blue
+
+set statusline+=\%=             " separator point left/right of items
+
+set statusline+=\row:%l/%L      " line number / line total
+set statusline+=%4*
+set statusline+=\ col:%c        " column number
+set statusline+=%9*             " reset color to default blue
+set statusline+=%6*
+set statusline+=\ %p%%          " percentage through file
+set statusline+=%9*             " reset color to default blue
+set statusline+=%5*
+set statusline+=\ h:%B          " value of char under cursor in hex
 " }}}
 
 " folding {{{
