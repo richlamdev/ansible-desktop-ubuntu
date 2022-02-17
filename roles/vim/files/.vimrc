@@ -23,9 +23,9 @@ set list                       " show all whitespace a character
 set listchars=tab:▸\ ,trail:·  " set characters displayed for tab/space
 set mouse=a                    " enable mouse for all modes
 set scrolloff=1
-set sidescrolloff=5
+set sidescrolloff=5            " make vertical scrolling appear more natural
 set noerrorbells               " disable beep on errors
-" set laststatus=2
+set splitright splitbelow      " open splits to the right and below
 "set lines=45                  " set number of lines - do not use for console VIM
 "set columns=80                " set number of columns - do not use for console VIM
 
@@ -53,8 +53,8 @@ set background=dark        " Enable dark background within editing are and synta
 colorscheme pablo          " Set colorscheme
 "colorscheme zellner          " Set colorscheme
 
-"hi Search ctermbg=Yellow   " highlight seached word in white
-"hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
+hi Search ctermbg=Yellow   " highlight seached word in white
+hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
 
 " test color scheme
 "function! DisplayColorSchemes()
