@@ -218,12 +218,9 @@ set statusline=
 
 set statusline+=%1*
 set statusline+=\b:%n           " buffernr
-set statusline+=%9*             " reset color to default blue
 set statusline+=%2*
+set statusline+=\ %F            " file path and name
 set statusline+=\               " add space separator
-set statusline+=\%F             " file path and name
-set statusline+=\               " add space separator
-set statusline+=%9*             " reset color to default blue
 set statusline+=%3*
 set statusline+=\ft:\%y         " file type in [brackets]
 set statusline+=%9*             " reset color to default blue
@@ -233,10 +230,8 @@ set statusline+=\%=             " separator point left/right of items
 set statusline+=\row:%l/%L      " line number / line total
 set statusline+=%4*
 set statusline+=\ col:%c        " column number
-set statusline+=%9*             " reset color to default blue
 set statusline+=%6*
 set statusline+=\ %p%%          " percentage through file
-set statusline+=%9*             " reset color to default blue
 set statusline+=%5*
 set statusline+=\ h:%B          " value of char under cursor in hex
 " }}}
