@@ -35,6 +35,7 @@
       - python3-pip
       - qpdf
       - ranger
+      - ripgrep
       - rtorrent
       - sshfs
       - sshpass

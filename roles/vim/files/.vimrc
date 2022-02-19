@@ -40,45 +40,13 @@ set nobackup               " do not keep a backup file, use versions instead
 " }}}
 
 " file find {{{
-set path=.,**              " Relative to current file and everything under :pwd
+set path=.,**              " relative to current file and everything under :pwd
 set wildmenu               " display matches in command-line mode
 set wildignore+=.pyc,.swp  " ignore these files when opening based on glob pattern
-" set wildmode=list:longest  " make wildmneu behave similar to bash completion
-set hidden                 " Hide buffers when they are abandoned
-" }}}
-
-" colours {{{
-syntax on                  " Vim5 and later versions support syntax highlighting.
-set background=dark        " Enable dark background within editing are and syntax highlighting
-"set termguicolors
-colorscheme pablo          " Set colorscheme
-"colorscheme zellner          " Set colorscheme
-
-hi Search ctermbg=Yellow   " highlight seached word in white
-hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
-
-" test color scheme
-"function! DisplayColorSchemes()
-   "let currDir = getcwd()
-   "exec "cd $VIMRUNTIME/colors"
-   "for myCol in split(glob("*"), '\n')
-      "if myCol =~ '\.vim'
-         "let mycol = substitute(myCol, '\.vim', '', '')
-         "exec "colorscheme " . mycol
-         "exec "redraw!"
-         "echo "colorscheme = ". myCol
-         "sleep 2
-      "endif
-   "endfor
-   "exec "cd " . currDir
-"endfunction
-
-" :call DisplayColorSchemes()  -to view all colors
-
+set hidden                 " hide buffers when they are abandoned
 " }}}
 
 " Python PEP8 {{{
-
 " To add the proper PEP8 indentation, add the following to your .vimrc:
 "autocmd BufNewFile,BufRead *.py
 autocmd Filetype python
@@ -93,12 +61,12 @@ autocmd Filetype python
     \ set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with |
     "\ set wrap linebreak nolist |
 
+" highlight a marker at column 80
+highlight ColorColumn ctermbg=red |
+call matchadd('ColorColumn', '\%80v', 100)
+
 " Ensure all types of requirements.txt files get Python syntax highlighting
 autocmd BufNewFile,BufRead requirements*.txt set ft=python
-
-" highlight a marker at column 80
-highlight ColorColumn ctermbg=red
-call matchadd('ColorColumn', '\%80v', 100)
 
 " map f9 to excute python script
 " nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
@@ -106,6 +74,7 @@ call matchadd('ColorColumn', '\%80v', 100)
 " }}}
 
 " jump configuration {{{
+" https://vim.fandom.com/wiki/Jumping_to_previously_visited_locations
 function! GotoJump()
   jumps
   let j = input("Please select your jump: ")
@@ -121,7 +90,6 @@ function! GotoJump()
 endfunction
 
 nmap <Leader>j :call GotoJump()<CR>
-
 " }}}
 
 " window management {{{
@@ -142,9 +110,9 @@ inoremap <C-k> :m .-2<CR>==
 " }}}
 
 " search settings {{{
-set ignorecase             " Do case insensitive matching
-set smartcase              " Do smart case matching
-set incsearch              " Show search matches while typing
+set ignorecase             " case insensitive matching
+set smartcase              " smart case matching
+set incsearch              " show search matches while typing
 set hlsearch               " highlight all matches after search
 " keep search centered
 nnoremap n nzzzv
@@ -169,7 +137,7 @@ nnoremap N Nzzzv
 " }}}
 
 " ALE - Python {{{
-
+" https://github.com/dense-analysis/ale
 let g:ale_linters = {'python': ['flake8']}
 let g:ale_fixers = {'python': ['black']}
 "let g:ale_fixers = {'*': [], 'python': ['black']}
@@ -183,20 +151,47 @@ let g:ale_lint_on_enter = 0
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
 " }}}
 
 " ALE - Yaml {{{
-
+" https://github.com/dense-analysis/ale
+" https://github.com/Yggdroot/indentLine
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 let g:indentLine_char = '⦙'
 
 "set foldlevelstart=20
-
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
+" }}}
+
+" colours {{{
+syntax on                  " Vim5 and later versions support syntax highlighting.
+set background=dark        " Enable dark background within editing are and syntax highlighting
+colorscheme pablo          " Set colorscheme
+
+hi Search ctermbg=Yellow   " highlight seached word in white
+hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
+
+" test color scheme
+" :call DisplayColorSchemes()  -to view all colors
+
+"function! DisplayColorSchemes()
+   "let currDir = getcwd()
+   "exec "cd $VIMRUNTIME/colors"
+   "for myCol in split(glob("*"), '\n')
+      "if myCol =~ '\.vim'
+         "let mycol = substitute(myCol, '\.vim', '', '')
+         "exec "colorscheme " . mycol
+         "exec "redraw!"
+         "echo "colorscheme = ". myCol
+         "sleep 2
+      "endif
+   "endfor
+   "exec "cd " . currDir
+"endfunction
+
 " }}}
 
 " statusline {{{
@@ -217,7 +212,7 @@ set laststatus=2                " always display status line
 set statusline=
 
 set statusline+=%1*
-set statusline+=\b:%n           " buffernr
+set statusline+=\b:%n           " buffer number
 set statusline+=%2*
 set statusline+=\ %F            " file path and name
 set statusline+=\               " add space separator
