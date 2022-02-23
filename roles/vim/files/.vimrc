@@ -195,6 +195,7 @@ hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlig
 " }}}
 
 " statusline {{{
+" based on gnome-terminal, use XTerm colour palette
 
 set fillchars+=vert:\           " change appearance of window split border
 hi VertSplit ctermfg=grey guifg=grey " change color of window split border
@@ -207,6 +208,7 @@ hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
 hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
 hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
 hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
+
 
 set laststatus=2                " always display status line
 set statusline=
