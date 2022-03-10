@@ -26,6 +26,7 @@
       - golang
       - graphviz
       - htop
+      - httpie
       - jq
       - make
       - meld
