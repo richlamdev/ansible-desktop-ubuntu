@@ -121,7 +121,7 @@ nnoremap N Nzzzv
 
 " vimspector settings {{{
 
-"let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 
 "nnoremap <Leader>dd :call vimspector#Launch()<CR>
 "nnoremap <Leader>de :call vimspector#Reset()<CR>
