@@ -33,3 +33,12 @@
 - name: enable indentLine help
   shell:
     vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c "q"
+
+- name: install .vimrc to home directory
+  copy:
+    src: ".vimrc"
+    dest: "/home/{{ local_username }}/.vimrc"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0644"
+    force: True
