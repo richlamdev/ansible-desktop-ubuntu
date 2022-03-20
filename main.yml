@@ -8,21 +8,21 @@
   gather_facts: True
   #tasks:
   #- include_tasks: tasks/main.yml
-  
+
   roles:
-    #- role: base
-    #- role: aws-cli
-    #- role: brave
-    #- role: chrome
-    #- role: docker
-    #- role: microsoft
-    #- role: hashicorp
-    #- role: keepassxc
-    #- role: signal-desktop
-    #- role: vivaldi
-    #- role: opera
-    #- role: ufw
-    #- role: env
+    - role: base
+    - role: aws-cli
+    - role: brave
+    - role: chrome
+    - role: docker
+    - role: microsoft
+    - role: hashicorp
+    - role: keepassxc
+    - role: signal-desktop
+    - role: vivaldi
+    - role: opera
+    - role: ufw
+    - role: env
     - role: vim
+    - role: disable-local-dns
     #- role: yubico
-    #- role: disable-local-dns

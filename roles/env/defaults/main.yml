@@ -1,2 +1,3 @@
 ---
-local_username: "{{ lookup ('env', 'USER') }}"
+#local_username: "{{ lookup ('env', 'USER') }}"
+local_username: "{{ ansible_user }}"
