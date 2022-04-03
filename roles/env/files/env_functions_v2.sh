@@ -172,7 +172,8 @@ wrapper_fn () {
 frmtps_fn () {
 	local WCCNT=$#
 	local ITCNT=0
-	PS1=${PS1}${PSDELIMENDCLR}${PSDELIMLFTEND}${NO_CLR}`title_fn`
+	#PS1=${PS1}${PSDELIMENDCLR}${PSDELIMLFTEND}${NO_CLR}`title_fn`
+	PS1=${PS1}${PSDELIMENDCLR}${PSDELIMLFTEND}${NO_CLR}
 	
 	for optvalue in $@
    do
