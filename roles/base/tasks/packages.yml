@@ -25,6 +25,7 @@
       - gitk
       - golang
       - graphviz
+      - grip
       - htop
       - httpie
       - jq
@@ -51,7 +52,7 @@
       - vlc
       - whois
       - xclip
-      - xtitle
+      #- xtitle
 
 - name: packages | apt autoremove & autoclean
   apt:
