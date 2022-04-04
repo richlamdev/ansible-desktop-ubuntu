@@ -11,6 +11,7 @@
 
   roles:
     - role: base
+    - role: atom
     - role: aws-cli
     - role: brave
     - role: chrome

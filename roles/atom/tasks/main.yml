@@ -1,0 +1,18 @@
+---
+- name: Add Atom editor signing key
+  apt_key:
+    url: https://packagecloud.io/AtomEditor/atom/gpgkey
+    id: 0A0FAB860D48560332EFB581B75442BBDE9E3B09
+    state: present
+
+- name: Add Atom editor repo
+  apt_repository:
+    repo: "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main"
+    filename: atom
+    state: present
+    update_cache: True
+
+- name: Install Atom editor chrome
+  apt:
+    name: atom
+    state: present
