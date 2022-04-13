@@ -1,19 +1,19 @@
 ---
-- name: install env_functions.sh
+#- name: install env_functions.sh
+  #copy:
+    #src: "env_functions_v2.sh"
+    #dest: "/home/{{ local_username }}/.bashrc.d/"
+    #owner: "{{ local_username }}"
+    #group: "{{ local_username }}"
+    #mode: "0644"
+
+- name: install git_bash_ps1.sh
   copy:
-    src: "env_functions_v2.sh"
+    src: "git_bash_ps1.sh"
     dest: "/home/{{ local_username }}/.bashrc.d/"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0644"
-
-#- name: install .vimrc to home directory
-#  copy:
-#    src: ".vimrc"
-#    dest: "/home/{{ local_username }}/.vimrc"
-#    owner: "{{ local_username }}"
-#    group: "{{ local_username }}"
-#    mode: "0644"
 
 - name: install .dircolors to home directory
   copy:
@@ -27,8 +27,7 @@
   blockinfile:
     path: "/home/{{ local_username }}/.bashrc"
     block: |
-      source /home/"{{ local_username }}/.bashrc.d/env_functions_v2.sh"
-      mixed_ps
+      source "/home/{{ local_username }}/.bashrc.d/git_bash_ps1.sh"
 
       HISTSIZE=100000
       HISTFILESIZE=200000
