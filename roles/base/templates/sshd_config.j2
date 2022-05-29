@@ -147,10 +147,6 @@ KerberosAuthentication no
 
 HostKey /etc/ssh/ssh_host_ed25519_key
 
-PubkeyAuthentication yes
-ChallengeResponseAuthentication no
-PasswordAuthentication no
-
 TCPKeepAlive yes
 ClientAliveInterval 600
 ClientAliveCountMax 5
@@ -160,3 +156,9 @@ X11Forwarding no
 # Logging
 SyslogFacility AUTHPRIV
 LogLevel VERBOSE
+
+PubkeyAuthentication yes
+
+# Change below to "no" to disable password auth
+ChallengeResponseAuthentication yes
+PasswordAuthentication yes
