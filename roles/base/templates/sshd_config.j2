@@ -60,7 +60,6 @@ Include /etc/ssh/sshd_config.d/*.conf
 
 # Change to yes to enable challenge-response passwords (beware issues with
 # some PAM modules and threads)
-ChallengeResponseAuthentication no
 
 # Kerberos options
 #KerberosAuthentication no
@@ -88,11 +87,11 @@ UsePAM yes
 #AllowAgentForwarding yes
 #AllowTcpForwarding yes
 #GatewayPorts no
-X11Forwarding yes
+#X11Forwarding yes
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
-PrintMotd no
+#PrintMotd no
 #PrintLastLog yes
 #TCPKeepAlive yes
 #PermitUserEnvironment no
@@ -142,16 +141,18 @@ PermitTunnel no
 AddressFamily inet
 
 HostBasedAuthentication no
-IgnoreUserKnownHosts yes 
+IgnoreUserKnownHosts yes
 GSSAPIAuthentication no
 KerberosAuthentication no
 
 HostKey /etc/ssh/ssh_host_ed25519_key
 
-PubkeyAuthentication yes 
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+PasswordAuthentication no
 
 TCPKeepAlive yes
-ClientAliveInterval 600 
+ClientAliveInterval 600
 ClientAliveCountMax 5
 
 X11Forwarding no
