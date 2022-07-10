@@ -7,17 +7,21 @@
 
 - name: Add Microsoft repo
   apt_repository:
-    repo: "{{ item }}"
-    filename: microsoft
+    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+    #filename: edge
     state: present
     update_cache: True
-  with_items:
-  - "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
-  - "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
+
+- name: Add VS Code repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
+    #filename: vscode
+    state: present
+    update_cache: True
 
 - name: Install MS Edge and VS Code from repository
   apt:
     state: latest
-    pkg: 
+    pkg:
       - microsoft-edge-stable
       - code

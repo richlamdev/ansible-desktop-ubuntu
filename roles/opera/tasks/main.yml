@@ -8,7 +8,7 @@
 - name: Add Opera apt repository
   apt_repository:
     repo: "deb https://deb.opera.com/opera-stable/ stable non-free"
-    filename: opera
+    #filename: opera-stable
     state: present
     update_cache: True
 
