@@ -3,12 +3,23 @@
   copy:
     src: blank.sh
     dest: "/usr/bin/blank.sh"
-    mode: "0755"
+    mode: 0755
+    owner: root
+    group: root
 
 # do not restart this service, next reboot will pick up this change
 - name: powersave | do nothing when laptop lid closes
   copy:
     src: logind.conf
     dest: "/etc/systemd/logind.conf"
-    mode: "644"
+    mode: 0644
+    owner: root
+    group: root
 
+- name: enable xorg as default - just say no to wayland
+  copy:
+    src: custom.conf
+    dest: "/etc/gdm3/custom.conf"
+    mode: 0644
+    owner: root
+    group: root

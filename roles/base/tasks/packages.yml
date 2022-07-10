@@ -16,7 +16,7 @@
       - clamav
       - clamav-daemon
       - curl
-      - exfat-utils
+      #- exfat-utils
       - firefox
       - fzf
       - gcc
