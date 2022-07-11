@@ -1,4 +1,10 @@
 ---
+- name: Install KeepassXC signing key
+  apt_key:
+    url: https://keepassxc.org/keepassxc_master_signing_key.asc
+    id: BF5A669F2272CF4324C1FDA8CFB4C2166397D0D2
+    state: present
+
 - name: Add KeePassXC repo
   apt_repository:
     repo: ppa:phoerious/keepassxc
