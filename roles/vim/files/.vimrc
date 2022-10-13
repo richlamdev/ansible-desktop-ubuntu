@@ -17,12 +17,12 @@ set history=1500               " keep 1500 lines of command line history
 set ruler                      " show the cursor position all the time
 set nowrap                     " NO WRAPPING OF THE LINES! (except for Python, see below)
 set encoding=utf-8             " UTF8 Support
-set bs=indent,eol,start        " allow backspacing over everything in insert mode
+set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set nu                         " set numbered lines for columns
 set list                       " show all whitespace a character
 set listchars=tab:▸\ ,trail:·  " set characters displayed for tab/space
 set mouse=a                    " enable mouse for all modes
-set scrolloff=1
+set scrolloff=1                " set number of context lines visible above & below cursor
 set sidescrolloff=5            " make vertical scrolling appear more natural
 set noerrorbells               " disable beep on errors
 set splitright splitbelow      " open splits to the right and below
@@ -136,6 +136,26 @@ let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 "nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
+" Shell {{{
+autocmd FileType sh
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set smarttab |
+" }}}
+
+" Markdown {{{
+autocmd FileType markdown
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set smarttab |
+" }}}
+
 " ALE - Python {{{
 " https://github.com/dense-analysis/ale
 let g:ale_linters = {'python': ['flake8']}
@@ -156,7 +176,14 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " ALE - Yaml {{{
 " https://github.com/dense-analysis/ale
 " https://github.com/Yggdroot/indentLine
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType yaml
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set smarttab |
+
 let g:indentLine_char = '⦙'
 
 "set foldlevelstart=20
