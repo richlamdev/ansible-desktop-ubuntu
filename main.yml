@@ -11,18 +11,18 @@
 
   roles:
     - base
-    - atom
     - aws-cli
     - brave
-    - chrome
-    - docker
-    - microsoft
-    - hashicorp
-    - keepassxc
-    - signal-desktop
-    - vivaldi
-    - opera
-    - ufw
+    #- chrome
+    #- docker
+    #- microsoft
+    #- gh_cli
+    #- hashicorp
+    #- keepassxc
+    #- signal-desktop
+    #- vivaldi
+    #- opera
+    #- ufw
     - env
     - vim
     - disable-local-dns

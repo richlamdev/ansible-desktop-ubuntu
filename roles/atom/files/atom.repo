@@ -1,6 +1,0 @@
-[atom]
-name=atom
-baseurl=https://packagecloud.io/AtomEditor
-enabled=1
-gpgcheck=1
-gpgkey=https://packagecloud.io/AtomEditor/atom/gpgkey
