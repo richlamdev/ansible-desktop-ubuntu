@@ -1,13 +1,20 @@
 ---
+#- name: Add Vivaldi apt key
+#  apt_key:
+#    url: https://repo.vivaldi.com/archive/linux_signing_key.pub
+#    id: CB63144F1BA31BC39E2779A8FEB6023DC27AA466
+#    state: present
+
 - name: Add Vivaldi apt key
-  apt_key:
+  get_url:
     url: https://repo.vivaldi.com/archive/linux_signing_key.pub
-    id: CB63144F1BA31BC39E2779A8FEB6023DC27AA466
-    state: present
+    dest: /usr/share/keyrings/vivaldi-browser.asc
+    mode: '0644'
+    force: true
 
 - name: Add Vivaldi apt repository
   apt_repository:
-    repo: "deb [arch=amd64] https://repo.vivaldi.com/archive/deb/ stable main"
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/vivaldi-browser.asc] https://repo.vivaldi.com/archive/deb/ stable main"
     filename: vivaldi
     state: present
     update_cache: True
