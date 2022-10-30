@@ -32,6 +32,7 @@
       HISTSIZE=100000
       HISTFILESIZE=200000
       HISTCONTROL=ignoreboth
+      HISTFILE=/home/$USER/.bash_history
 
       alias cb='xclip -sel clip'
       complete -C '/usr/local/bin/aws_completer' aws
