@@ -5,15 +5,15 @@
     state: present
 
 - name: Install signal GPG key
-  apt_key:
-    data: "{{ lookup('file', 'signal-apt-key.asc') }}"
-    id: DBA36B5181D0C816F630E889D980A17457F6FB06
-    state: present
-    keyring: /etc/apt/trusted.gpg.d/signal-desktop.gpg
+  get_url:
+    url: "https://updates.signal.org/desktop/apt/keys.asc"
+    dest: /usr/share/keyrings/signal-desktop-keyring.asc
+    mode: 0644
+    force: true
 
 - name: Add Signal repo
   apt_repository:
-    repo: "{{ signal_desktop_apt_repo }}"
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.asc] https://updates.signal.org/desktop/apt xenial main"
     filename: signal-desktop
     state: present
     update_cache: True
