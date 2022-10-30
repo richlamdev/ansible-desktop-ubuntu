@@ -15,11 +15,11 @@
     #- brave
     #- chrome
     #- docker
-    - microsoft
+    #- microsoft
     #- gh_cli
     #- hashicorp
     #- keepassxc
-    #- signal-desktop
+    - signal-desktop
     #- vivaldi
     #- opera
     #- ufw

@@ -1,7 +1,7 @@
 ---
 # GPG full fingerprint of apt repo key, retrieved from:
 # https://updates.signal.org/desktop/apt/keys.asc
-signal_desktop_gpg_fingerprint: "DBA36B5181D0C816F630E889D980A17457F6FB06"
+#signal_desktop_gpg_fingerprint: "DBA36B5181D0C816F630E889D980A17457F6FB06"
 
 # Prerequisites for configuring HTTPS apt repo.
 signal_desktop_apt_dependencies:
@@ -10,4 +10,4 @@ signal_desktop_apt_dependencies:
 # Pinning the Xenial repo, works fine on e.g. Debian Stretch.
 # The Signal team does not maintain specific versions for other dists,
 # so intentionally not using `{{ ansible_distribution }}`
-signal_desktop_apt_repo: "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main"
+#signal_desktop_apt_repo: "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main"
