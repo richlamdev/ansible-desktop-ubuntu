@@ -8,13 +8,13 @@
 - name: Add Chrome apt repository key
   get_url:
     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    dest: /etc/apt/trusted.gpg.d/chrome-stable.asc
+    dest: /usr/share/keyrings/googlechrome-keyring.asc
     mode: "0644"
     force: true
 
 - name: Add Google chrome repo
   apt_repository:
-    repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-keyring.asc] http://dl.google.com/linux/chrome/deb/ stable main"
     filename: google-chrome
     state: present
     update_cache: True
