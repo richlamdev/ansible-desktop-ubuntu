@@ -13,11 +13,11 @@
     #- base
     #- aws-cli
     #- brave
-    #- chrome
+    - chrome
     #- docker
     #- microsoft
     #- gh_cli
-    - hashicorp
+    #- hashicorp
     #- keepassxc
     #- signal-desktop
     #- vivaldi
