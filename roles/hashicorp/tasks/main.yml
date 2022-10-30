@@ -1,13 +1,20 @@
 ---
+#- name: Add hashicorp key
+#  apt_key:
+#    url: https://apt.releases.hashicorp.com/gpg
+#    id: E8A032E094D8EB4EA189D270DA418C88A3219F7B
+#    state: present
+
 - name: Add hashicorp key
-  apt_key:
-    url: https://apt.releases.hashicorp.com/gpg
-    id: E8A032E094D8EB4EA189D270DA418C88A3219F7B
-    state: present
+  get_url:
+    url: "https://apt.releases.hashicorp.com/gpg"
+    dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
+    mode: 0644
+    force: True
 
 - name: Add hashicorp repo
   apt_repository:
-    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     filename: hashicorp
     state: present
     update_cache: True
