@@ -1,9 +1,16 @@
 ---
-- name: Add Google linux signing key
-  apt_key: 
+#- name: Add Google linux signing key
+#  apt_key: 
+#    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+#    id: EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796
+#    state: present
+
+- name: Add Chrome apt repository key
+  get_url:
     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    id: EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796
-    state: present
+    dest: /etc/apt/trusted.gpg.d/chrome-stable.asc
+    mode: "0644"
+    force: true
 
 - name: Add Google chrome repo
   apt_repository:
