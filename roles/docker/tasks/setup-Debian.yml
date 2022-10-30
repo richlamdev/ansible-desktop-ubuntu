@@ -15,18 +15,10 @@
       - lsb-release
     state: present
 
-#- name: Add Docker apt key.
-#  apt_key:
-#    url: "{{ docker_apt_gpg_key }}"
-#    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
-#    state: present
-#  register: add_repository_key
-#  ignore_errors: "{{ docker_apt_ignore_key_error }}"
-
 - name: Add Docker apt repository key.
   get_url:
     url: "{{ docker_apt_gpg_key }}"
-    dest: /etc/apt/trusted.gpg.d/docker.asc
+    dest: /usr/share/keyrings/docker.asc
     mode: '0644'
     force: true
 
@@ -43,7 +35,7 @@
 
 - name: Add Docker repository.
   apt_repository:
-    repo: "{{ docker_apt_repository }}"
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
     filename: docker
     state: present
     update_cache: True
