@@ -13,9 +13,9 @@
     #- base
     #- aws-cli
     #- brave
-    - chrome
+    #- chrome
     #- docker
-    #- microsoft
+    - microsoft
     #- gh_cli
     #- hashicorp
     #- keepassxc

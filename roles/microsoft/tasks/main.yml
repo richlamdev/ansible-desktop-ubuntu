@@ -1,28 +1,22 @@
 ---
-#- name: Install Microsfot linux signing key
-#  apt_key:
-#    url: https://packages.microsoft.com/keys/microsoft.asc
-#    id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
-#    state: present
-
 - name: Install Microsfot linux signing key
   get_url:
     url: "https://packages.microsoft.com/keys/microsoft.asc"
-    dest: /etc/apt/trusted.gpg.d/microsoft.asc
+    dest: /usr/share/keyrings/microsoft.asc
     mode: 0644
     force: true
 
-- name: Add Microsoft repo
+- name: Add Microsoft Edge repository
   apt_repository:
-    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
-    #filename: edge
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/edge stable main"
+    filename: edge
     state: present
     update_cache: True
 
-- name: Add VS Code repository
+- name: Add Microsoft VS Code repository
   apt_repository:
-    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main"
-    #filename: vscode
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
+    filename: vscode
     state: present
     update_cache: True
 
