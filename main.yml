@@ -10,20 +10,20 @@
   #- include_tasks: tasks/main.yml
 
   roles:
-    - base
-    - aws-cli
-    - brave
-    - chrome
+    #- base
+    #- aws-cli
+    #- brave
+    #- chrome
     #- docker
     #- microsoft
-    #- gh_cli
+    - gh_cli
     #- hashicorp
     #- keepassxc
     #- signal-desktop
     #- vivaldi
     #- opera
     #- ufw
-    - env
-    - vim
-    - disable-local-dns
+    #- env
+    #- vim
+    #- disable-local-dns
     #- yubico

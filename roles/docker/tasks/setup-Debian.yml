@@ -15,13 +15,20 @@
       - lsb-release
     state: present
 
-- name: Add Docker apt key.
-  apt_key:
+#- name: Add Docker apt key.
+#  apt_key:
+#    url: "{{ docker_apt_gpg_key }}"
+#    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+#    state: present
+#  register: add_repository_key
+#  ignore_errors: "{{ docker_apt_ignore_key_error }}"
+
+- name: Add Docker apt repository key.
+  get_url:
     url: "{{ docker_apt_gpg_key }}"
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
-    state: present
-  register: add_repository_key
-  ignore_errors: "{{ docker_apt_ignore_key_error }}"
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: '0644'
+    force: true
 
 - name: Ensure curl is present (on older systems without SNI).
   package: name=curl state=present

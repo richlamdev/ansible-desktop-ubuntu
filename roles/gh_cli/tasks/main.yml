@@ -1,14 +1,20 @@
 ---
+#- name: Add gh cli signing key
+#  apt_key:
+#    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+#    id: 2C6106201985B60E6C7AC87323F3D4EA75716059
+#    state: present
+
 - name: Add gh cli signing key
-  apt_key:
-    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
-    id: 2C6106201985B60E6C7AC87323F3D4EA75716059
-    state: present
+  get_url:
+    url: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
+    dest: /etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg
+    mode: 0644
+    force: true
 
 - name: Add gh cli repo
   apt_repository:
-    repo: "deb [arch=amd64] https://cli.github.com/packages stable main"
-    filename: atom
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
     state: present
     update_cache: True
 
