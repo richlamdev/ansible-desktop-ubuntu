@@ -11,6 +11,7 @@
 
   roles:
     - base
+    - ansible
     - aws-cli
     - brave
     - chrome
