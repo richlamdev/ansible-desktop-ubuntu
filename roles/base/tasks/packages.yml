@@ -10,7 +10,7 @@
   apt:
     state: latest
     pkg:
-      - ansible
+      #- ansible
       - brasero
       - build-essential
       - clamav
