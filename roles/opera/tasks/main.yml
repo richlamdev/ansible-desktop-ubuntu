@@ -15,7 +15,7 @@
 - name: Add Opera apt repository
   apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/opera-browser.asc] https://deb.opera.com/opera-stable/ stable non-free"
-    filename: opera-archive
+    filename: opera-stable
     state: present
     update_cache: True
 
