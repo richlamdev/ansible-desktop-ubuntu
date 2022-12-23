@@ -18,12 +18,13 @@ minor changes)
 4) jinja2 template:\
 ````pip3 install jinja2````
 
-## Quick Start\
 
-* This assumes a brand new installation and the execution of this Playbook is
+## Quick Start
+
+*This assumes a brand new installation and the execution of this Playbook is
 is on the target machine.  In other words, the deployment server and client are
 the same system.  Of course, this playbook can be run from a remote server, if
-preferred.
+preferred.*
 
 1. ````sudo apt update && sudo apt install git sshpass openssh-server -y````
 ** *Limit use of sshpass for early setup only, due to potential security issues.
@@ -33,7 +34,7 @@ Deploy ssh keys to target hosts after this Playbook has completed.* **
 
 3.````cd ansible-desktop-ubuntu````
 
-4. Amend inventory file as needed.
+4. Amend inventory file if needed, default target is localhost.
 
 5. Amend main.yml file for roles of software desired.
 
