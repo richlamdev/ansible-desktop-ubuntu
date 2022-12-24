@@ -28,7 +28,7 @@ preferred.*
 
 1. ````sudo apt update && sudo apt install git sshpass openssh-server -y````
 ** *Limit use of sshpass for early setup only, due to potential security issues.
-Deploy ssh keys to target hosts after this Playbook has completed.* **
+Deploy ssh keys to target host(s) after this playbook has executed successfully.* **
 
 2.````git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git````
 
@@ -52,3 +52,8 @@ commenting/uncommenting roles in main.yml
 1. For further information regarding command line switches and arguments above,
 please see the (Ansible documentation)[https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html],
 alternatively read my (ansible-misc github repo)[https://github.com/richlamdev/ansible-misc.git]
+
+2. Review the base role for potential unwanted software installation.  The
+majority of the software within the base role is software available via the
+default apt repositories.  Other software are some git repos, keychron keyboard
+setup, and screen blanking short-cut key enablement.
