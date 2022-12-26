@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/firefox
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_CA]=firefox
+Name=firefox
+Comment[en_CA]=start firefox
+Comment=start firefox

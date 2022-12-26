@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=pactl set-default-sink alsa_output.usb-GuangZhou_FiiO_Electronics_Co._Ltd_FiiO_K3-00.analog-stereo
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_CA]=FIIO External Sound Card
+Name=fiio startup
+Comment[en_CA]=
+Comment=
