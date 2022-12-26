@@ -7,6 +7,7 @@
 - include: powersave.yml
 - include: keychron.yml
 - include: github.yml
+- include: autostart.yml
 
 # disable motd-news
 #- include: motd-news.yml

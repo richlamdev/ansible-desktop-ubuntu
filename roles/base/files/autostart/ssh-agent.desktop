@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/ssh-agent
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_CA]=ssh-agent
+Name=ssh-agent
+Comment[en_CA]=load ssh-agent
+Comment=load ssh-agent
