@@ -1,0 +1,8 @@
+# ensure monitor properly sleeps
+- name: enable signal-desktop autostart
+  copy:
+    src: autostart/signal-desktop.desktop
+    dest: "/home/{{ local_username }}/.config/autostart/"
+    mode: 0644
+    owner: {{ local_username }}
+    group: {{ local_username }}

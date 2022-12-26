@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/opt/Signal/signal-desktop
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_CA]=signal
+Name=signal
+Comment[en_CA]=start signal
+Comment=start signal
