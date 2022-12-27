@@ -265,7 +265,7 @@ set statusline+=\ h:%B          " value of char under cursor in hex
 
 filetype plugin on
 let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
-                      \ 'syntax': 'default', 'ext': '.md'}]
+                      \ 'syntax': 'default', 'ext': '.wiki'}]
 
 let g:indentLine_fileTypeExclude = ["vimwiki", "help", "json"] "disable identline plugin (conceallevel) for markdown
 let g:indentLine_bufTypeExclude = ["vimwiki", "help", "json"] "disable identline plugin (conceallevel) for markdown
