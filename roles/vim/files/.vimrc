@@ -32,6 +32,7 @@ set splitright splitbelow      " open splits to the right and below
 if has("autocmd")              " Jump to last position when reopening a file
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
 " }}}
 
 " file settings {{{
@@ -259,6 +260,16 @@ set statusline+=\ %p%%          " percentage through file
 set statusline+=%5*
 set statusline+=\ h:%B          " value of char under cursor in hex
 " }}}
+
+" vimwiki {{{
+
+filetype plugin on
+let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
+                      \ 'syntax': 'default', 'ext': '.md'}]
+
+let g:indentLine_fileTypeExclude = ["vimwiki", "help", "json"] "disable identline plugin (conceallevel) for markdown
+let g:indentLine_bufTypeExclude = ["vimwiki", "help", "json"] "disable identline plugin (conceallevel) for markdown
+"}}}
 
 " folding {{{
 set foldmethod=syntax
