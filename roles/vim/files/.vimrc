@@ -1,6 +1,6 @@
 "Filename & location    ~/.vimrc
 "Github                 https://github.com/richlamdev/ansible-desktop-ubuntu/
-"Notes                  This should be broken down to ~/.vim/ tree structure for better management
+"Todo                   This should be broken down to ~/.vim/ tree structure for better management
 
 " UI settings {{{
 " debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous
@@ -13,7 +13,7 @@ set ttyfast                    " Make the keyboard fast
 set showmode                   " always show what mode we're currently editing in
 set showcmd                    " Show (partial) command in status line.
 set showmatch                  " Show matching brackets.
-set history=1500               " keep 1500 lines of command line history
+set history=2500               " keep 2500 lines of command line history
 set ruler                      " show the cursor position all the time
 set nowrap                     " NO WRAPPING OF THE LINES! (except for Python, see below)
 set encoding=utf-8             " UTF8 Support
@@ -25,13 +25,14 @@ set mouse=a                    " enable mouse for all modes
 set scrolloff=1                " set number of context lines visible above & below cursor
 set sidescrolloff=5            " make vertical scrolling appear more natural
 set noerrorbells               " disable beep on errors
-set splitright splitbelow      " open splits to the right and below
 "set lines=45                  " set number of lines - do not use for console VIM
 "set columns=80                " set number of columns - do not use for console VIM
 
 if has("autocmd")              " Jump to last position when reopening a file
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
+autocmd BufWrite * %s/\s\+$//e " Remove trailing whitespace on save
 
 " }}}
 
@@ -99,8 +100,8 @@ nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 5/6)<CR>
 nnoremap <silent> <Leader>< :exe "vert resize " . (winwidth(0) * 5/6)<CR>
 nnoremap <silent> <Leader>> :exe "vert resize " . (winwidth(0) * 6/5)<CR>
 
-" Auto-resize splits when Vim gets resized.
-autocmd VimResized * wincmd =
+autocmd VimResized * wincmd = " Auto-resize splits when Vim gets resized.
+set splitright splitbelow     " open splits to the right and below
 " }}}
 
 " visual moving text {{{
@@ -111,26 +112,22 @@ inoremap <C-k> :m .-2<CR>==
 " }}}
 
 " search settings {{{
-set ignorecase             " case insensitive matching
-set smartcase              " smart case matching
-set incsearch              " show search matches while typing
-set hlsearch               " highlight all matches after search
+set ignorecase                " case insensitive matching
+set smartcase                 " smart case matching
+set incsearch                 " show search matches while typing
+set hlsearch                  " highlight all matches after search
 " keep search centered
 nnoremap n nzzzv
 nnoremap N Nzzzv
 " }}}
 
 " vimspector settings {{{
-
-let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
-
+" let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 "nnoremap <Leader>dd :call vimspector#Launch()<CR>
 "nnoremap <Leader>de :call vimspector#Reset()<CR>
 "nnoremap <Leader>dc :call vimspector#Continue()<CR>
-"
 "nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
 "nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
-"
 "nmap <Leader>dk <Plug>VimspectorRestart
 "nmap <Leader>dh <Plug>VimspectorStepOut
 "nmap <Leader>dl <Plug>VimspectorStepInto
@@ -167,8 +164,7 @@ let g:ale_python_black_options = '--line-length 79'
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
-" if you don't want linters to run on opening a file
-let g:ale_lint_on_enter = 0
+let g:ale_lint_on_enter = 0 " if you don't want linters to run on opening a file
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -176,7 +172,6 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " ALE - Yaml {{{
 " https://github.com/dense-analysis/ale
-" https://github.com/Yggdroot/indentLine
 autocmd FileType yaml
     \ set tabstop=4 |
     \ set softtabstop=4 |
@@ -185,8 +180,6 @@ autocmd FileType yaml
     \ set autoindent |
     \ set smarttab |
 
-let g:indentLine_char = '⦙'
-
 "set foldlevelstart=20
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_error = '✘'
@@ -194,12 +187,24 @@ let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
 " }}}
 
+" indentLine {{{
+" https://github.com/Yggdroot/indentLine
+let g:indentLine_char = '⦙'
+let g:indentLine_fileTypeExclude = ["vimwiki", "help", "json", "markdown"] "disable identline plugin (conceallevel) for specified filetypes
+let g:indentLine_bufTypeExclude = ["vimwiki", "help", "json", "markdown"] "disable identline plugin (conceallevel) for specified filetypes
+let g:markdown_syntax_conceal=0
+let g:vim_json_conceal=0
+
+" }}}
+
 " colours {{{
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
 colorscheme pablo          " Set colorscheme
 
-hi Search ctermbg=Yellow   " highlight seached word in white
+" set termguicolors
+
+hi Search ctermbg=Yellow   " highlight seached word in yellow
 hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
 
 " test color scheme
@@ -219,12 +224,10 @@ hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlig
    "endfor
    "exec "cd " . currDir
 "endfunction
-
 " }}}
 
 " statusline {{{
 " based on gnome-terminal, use XTerm colour palette
-
 set fillchars+=vert:\           " change appearance of window split border
 hi VertSplit ctermfg=grey guifg=grey " change color of window split border
 
@@ -236,7 +239,6 @@ hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
 hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
 hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
 hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
-
 
 set laststatus=2                " always display status line
 set statusline=
@@ -262,13 +264,11 @@ set statusline+=\ h:%B          " value of char under cursor in hex
 " }}}
 
 " vimwiki {{{
-
 filetype plugin on
+"autocmd BufNewFile,BufRead *.wiki set filetype=vimwiki
 let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
                       \ 'syntax': 'default', 'ext': '.wiki'}]
-
-let g:indentLine_fileTypeExclude = ["vimwiki", "help", "json"] "disable identline plugin (conceallevel) for markdown
-let g:indentLine_bufTypeExclude = ["vimwiki", "help", "json"] "disable identline plugin (conceallevel) for markdown
+let g:vimwiki_global_ext = 0
 "}}}
 
 " folding {{{
