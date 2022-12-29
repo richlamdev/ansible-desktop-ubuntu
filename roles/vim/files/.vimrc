@@ -195,7 +195,6 @@ let g:indentLine_fileTypeExclude = ["vimwiki", "help", "json", "markdown"] "disa
 let g:indentLine_bufTypeExclude = ["vimwiki", "help", "json", "markdown"] "disable identline plugin (conceallevel) for specified filetypes
 let g:markdown_syntax_conceal=0
 let g:vim_json_conceal=0
-
 " }}}
 
 " colours {{{
@@ -271,7 +270,7 @@ let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
                       \ 'syntax': 'default', 'ext': '.wiki',
                       \ 'links_space_char': '-'}]
 let g:vimwiki_global_ext = 0
-"}}}
+" }}}
 
 " folding {{{
 set foldmethod=syntax
