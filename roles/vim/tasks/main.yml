@@ -25,6 +25,15 @@
     repo: "https://github.com/hashivim/vim-terraform.git"
     dest: "/home/{{ local_username }}/.vim/pack/plugins/start/vim-terraform"
 
+- name: install vimwiki plugin
+  git:
+    repo: "https://github.com/vimwiki/vimwiki.git"
+    dest: "/home/{{ local_username }}/.vim/pack/plugins/start/vimwiki"
+
+- name: enable vimwiki help
+  shell:
+    vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/plugins/start/vimwiki/doc" -c quit
+
 - name: install indentLine plugin
   git:
     repo: "https://github.com/Yggdroot/indentLine.git"
@@ -32,7 +41,7 @@
 
 - name: enable indentLine help
   shell:
-    vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c "q"
+    vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c quit
 
 - name: install .vimrc to home directory
   copy:
