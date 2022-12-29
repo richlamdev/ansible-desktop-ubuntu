@@ -189,12 +189,12 @@ let g:ale_lint_on_text_changed = 'never'
 
 " indentLine {{{
 " https://github.com/Yggdroot/indentLine
-let g:indentLine_char = '⦙'
+"let g:indentLine_char = '⦙'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 let g:indentLine_fileTypeExclude = ["vimwiki", "help", "json", "markdown"] "disable identline plugin (conceallevel) for specified filetypes
 let g:indentLine_bufTypeExclude = ["vimwiki", "help", "json", "markdown"] "disable identline plugin (conceallevel) for specified filetypes
 let g:markdown_syntax_conceal=0
 let g:vim_json_conceal=0
-
 " }}}
 
 " colours {{{
@@ -265,11 +265,12 @@ set statusline+=\ h:%B          " value of char under cursor in hex
 
 " vimwiki {{{
 filetype plugin on
-"autocmd BufNewFile,BufRead *.wiki set filetype=vimwiki
+autocmd BufNewFile,BufReadPost,BufAdd *.wiki set filetype=vimwiki
 let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
-                      \ 'syntax': 'default', 'ext': '.wiki'}]
+                      \ 'syntax': 'default', 'ext': '.wiki',
+                      \ 'links_space_char': '-'}]
 let g:vimwiki_global_ext = 0
-"}}}
+" }}}
 
 " folding {{{
 set foldmethod=syntax
