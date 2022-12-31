@@ -9,7 +9,7 @@
 - name: Add Microsoft Edge repository
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/edge stable main"
-    filename: microsoft-edge-stable
+    filename: microsoft-edge
     state: present
     update_cache: True
 
