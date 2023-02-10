@@ -6,6 +6,8 @@
     #owner: "{{ local_username }}"
     #group: "{{ local_username }}"
     #mode: "0644"
+    #
+    #
 
 - name: install git_bash_ps1.sh
   copy:
@@ -15,27 +17,38 @@
     group: "{{ local_username }}"
     mode: "0644"
 
-- name: install .dircolors to home directory
+#- name: install .dircolors to home directory
+#  copy:
+#    src: ".dircolors"
+#    dest: "/home/{{ local_username }}/.dircolors"
+#    owner: "{{ local_username }}"
+#    group: "{{ local_username }}"
+#    mode: "0644"
+
+- name: deploy .bashrc / .dircolors to home directory
   copy:
-    src: ".dircolors"
-    dest: "/home/{{ local_username }}/.dircolors"
+    src: "{{ item }}"
+    dest: "/home/{{ local_username }}/"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0644"
+  loop:
+    - .bashrc
+    - .dircolors
 
-- name: update current .bashrc file
-  blockinfile:
-    path: "/home/{{ local_username }}/.bashrc"
-    block: |
-      source "/home/{{ local_username }}/.bashrc.d/git_bash_ps1.sh"
-
-      HISTSIZE=100000
-      HISTFILESIZE=200000
-      HISTCONTROL=ignoreboth
-      HISTFILE=/home/$USER/.bash_history
-
-      alias cb='xclip -sel clip'
-      alias kubectl='k'
-      complete -C '/usr/local/bin/aws_completer' aws
-    create: True
-    backup: True
+#- name: update current .bashrc file
+#  blockinfile:
+#    path: "/home/{{ local_username }}/.bashrc"
+#    block: |
+#      source "/home/{{ local_username }}/.bashrc.d/git_bash_ps1.sh"
+#
+#      HISTSIZE=100000
+#      HISTFILESIZE=200000
+#      HISTCONTROL=ignoreboth
+#      HISTFILE=/home/$USER/.bash_history
+#
+#      alias cb='xclip -sel clip'
+#      alias kubectl='k'
+#      complete -C '/usr/local/bin/aws_completer' aws
+#    create: True
+#    backup: True
