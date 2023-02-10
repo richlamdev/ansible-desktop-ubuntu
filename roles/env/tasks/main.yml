@@ -35,6 +35,7 @@
       HISTFILE=/home/$USER/.bash_history
 
       alias cb='xclip -sel clip'
+      alias kubectl='k'
       complete -C '/usr/local/bin/aws_completer' aws
     create: True
     backup: True
