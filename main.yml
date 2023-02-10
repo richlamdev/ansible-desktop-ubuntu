@@ -19,6 +19,7 @@
     - gh_cli
     - hashicorp
     - keepassxc
+    - kubectl
     - signal-desktop
     - vivaldi
     - opera

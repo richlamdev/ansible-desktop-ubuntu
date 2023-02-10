@@ -1,10 +1,4 @@
 ---
-#- name: Add hashicorp key
-#  apt_key:
-#    url: https://apt.releases.hashicorp.com/gpg
-#    id: E8A032E094D8EB4EA189D270DA418C88A3219F7B
-#    state: present
-
 - name: Add hashicorp key
   get_url:
     url: "https://apt.releases.hashicorp.com/gpg"
