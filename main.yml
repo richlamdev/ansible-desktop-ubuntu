@@ -15,14 +15,14 @@
     - brave
     - chrome
     - docker
-    - microsoft
     - gh_cli
-    - hashicorp
     - keepassxc
     - kubectl
+    - hashicorp
+    - microsoft
+    - opera
     - signal-desktop
     - vivaldi
-    - opera
     - ufw
     - env
     - vim
