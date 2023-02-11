@@ -272,6 +272,11 @@ let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
 let g:vimwiki_global_ext = 0
 " }}}
 
+" netrw {{{
+inoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
+nnoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
+" }}}
+
 " folding {{{
 set foldmethod=syntax
 set foldlevelstart=1

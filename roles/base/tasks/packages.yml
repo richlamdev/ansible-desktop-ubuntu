@@ -10,14 +10,12 @@
   apt:
     state: latest
     pkg:
-      #- ansible
       - brasero
       - build-essential
       - clamav
       - clamav-daemon
       - curl
       #- exfat-utils
-      - firefox
       - fzf
       - gcc
       - gimp
@@ -25,7 +23,6 @@
       - gitk
       - golang
       - graphviz
-      - grip
       - htop
       - httpie
       - jq
@@ -52,7 +49,6 @@
       - vlc
       - whois
       - xclip
-      #- xtitle
 
 - name: packages | apt autoremove & autoclean
   apt:

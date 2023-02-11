@@ -26,5 +26,5 @@
     - ufw
     - env
     - vim
-    - disable-local-dns
+    #- disable-local-dns # move to base
     #- yubico
