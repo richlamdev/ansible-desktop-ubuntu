@@ -275,6 +275,11 @@ let g:vimwiki_global_ext = 0
 " netrw {{{
 inoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
 nnoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
+
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+" let g:netrw_browse_split = 4
+
 " }}}
 
 " folding {{{
