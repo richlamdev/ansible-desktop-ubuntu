@@ -1,5 +1,6 @@
 # Ansible Playbook for configuring Ubuntu Desktop
 
+
 ## Introduction
 
 This is a collection of roles I use for my Ubuntu desktop deployment.
@@ -15,7 +16,7 @@ minor changes)
 3) ansible\
 ````pip3 install ansible````
 
-4) jinja2 template:\
+4) jinja2 template\
 ````pip3 install jinja2````
 
 
@@ -38,22 +39,22 @@ Deploy ssh keys to target host(s) after this playbook has executed successfully.
 
 5. Amend main.yml file for roles of software desired.
 
-    * Many of the third party packages are broken into separate roles, this was
+* Many of the third party packages are broken into separate roles, this was
 setup this way to allow convenient inclusion/exclusion of roles as needed by
 commenting/uncommenting roles in main.yml
 
 6. ansible-playbook main.yml -bkKu <username>
   * enter SSH password
-  * enter SUDO password. (assumes the username entered is a part of the sudo user group)
+  * enter SUDO password. (assumes the user is a part of the sudo user group)
 
 
 ## Notes, General Information & Considerations
 
 1. For further information regarding command line switches and arguments above,
-please see the (Ansible documentation)[https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html],
-alternatively read my (ansible-misc github repo)[https://github.com/richlamdev/ansible-misc.git]
+please see the [Ansible documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html),
+alternatively read my [ansible-misc github repo](https://github.com/richlamdev/ansible-misc.git)
 
-2. Review the base role for potential unwanted software installation.  The
-majority of the software within the base role is software available via the
+2. Review the base role for potential unwanted software installation/configuration.
+The majority of the software within the base role is software available via the
 default apt repositories.  Other software are some git repos, keychron keyboard
 setup, and screen blanking short-cut key enablement.
