@@ -72,7 +72,6 @@ autocmd BufNewFile,BufRead requirements*.txt set ft=python
 
 " map f9 to excute python script
 " nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
-
 " }}}
 
 " jump configuration {{{
@@ -279,7 +278,10 @@ nnoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 " let g:netrw_browse_split = 4
+" }}}
 
+" system clipboard {{{
+vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
 " }}}
 
 " folding {{{
