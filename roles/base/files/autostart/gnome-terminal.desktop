@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=gnome-terminal
+Exec=gnome-terminal --geometry=90x55
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
