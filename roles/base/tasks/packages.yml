@@ -44,7 +44,7 @@
       - ufw
       - unrar
       - unzip
-      - vim
+      - vim-gtk3
       - virtualbox
       - vlc
       - whois
