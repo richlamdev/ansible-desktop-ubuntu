@@ -125,7 +125,10 @@ source "/home/rlam/.bashrc.d/git_bash_ps1.sh"
 HISTFILE=/home/$USER/.bash_history
 
 alias cb='xclip -sel clip'
+
+source <(kubectl completion bash)
 alias k='kubectl'
 complete -o default -F __start_kubectl k
+
 complete -C '/usr/local/bin/aws_completer' aws
 
