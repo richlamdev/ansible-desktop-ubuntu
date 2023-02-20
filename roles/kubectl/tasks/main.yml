@@ -3,6 +3,7 @@
   apt:
     name:
       - apt-transport-https
+      - bash-completion
       - ca-certificates
       - curl
     state: present
@@ -26,3 +27,12 @@
     name:
       - kubectl
     state: latest
+
+- name: Check if Kubectl auto-complete is enabled
+  stat:
+    path: /etc/bash_completion.d/kubectl
+  register: kubectl_auto
+
+- name: Enable Kubectl auto-complete for all users
+  shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+  when: kubectl_auto.stat.exists == False
