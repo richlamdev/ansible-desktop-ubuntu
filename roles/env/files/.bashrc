@@ -126,5 +126,6 @@ HISTFILE=/home/$USER/.bash_history
 
 alias cb='xclip -sel clip'
 alias k='kubectl'
+complete -o default -F __start_kubectl k
 complete -C '/usr/local/bin/aws_completer' aws
 
