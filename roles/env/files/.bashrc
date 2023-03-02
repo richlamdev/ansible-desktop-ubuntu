@@ -132,3 +132,5 @@ complete -o default -F __start_kubectl k
 
 complete -C '/usr/local/bin/aws_completer' aws
 
+# search and open with vim
+se() { du -a ~/backup/ | awk '{print $2}' | fzf --print0 | xargs -0 -o -r vim ; }
