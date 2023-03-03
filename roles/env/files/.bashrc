@@ -133,4 +133,11 @@ complete -o default -F __start_kubectl k
 complete -C '/usr/local/bin/aws_completer' aws
 
 # search and open with vim
-se() { du -a ~/backup/ | awk '{print $2}' | fzf --print0 | xargs -0 -o -r vim ; }
+#sv() { du -a ~/backup/ | awk '{print $2}' | fzf --print0 | xargs -0 -o -r vim ; }
+#sd() { cd $(du -h ~/backup/*/ | awk '{print $2}' | fzf --print0) }
+
+
+export FZF_DEFAULT_OPTS='--height 80% --layout=reverse --border'
+
+alias sd="cd ~ && cd \$(find * -type d 2>/dev/null | fzf)"
+alias sv="cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim"
