@@ -132,6 +132,14 @@ complete -o default -F __start_kubectl k
 
 complete -C '/usr/local/bin/aws_completer' aws
 
+if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
+  source /usr/share/doc/fzf/examples/key-bindings.bash
+fi
+
+if [ -f /usr/share/bash-completion/completions/fzf ]; then
+  source /usr/share/bash-completion/completions/fzf
+fi
+
 
 export FZF_DEFAULT_OPTS='--height 80% --layout=reverse --border'
 
