@@ -14,7 +14,7 @@
     - aws-cli
     - brave
     - chrome
-    - docker
+#    - docker
     - gh_cli
     - keepassxc
     - kubectl
@@ -27,4 +27,5 @@
     - env
     - vim
     - disable-local-dns
+    - ansible-role-docker
     #- yubico
