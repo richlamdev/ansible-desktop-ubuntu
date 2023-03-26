@@ -1,7 +1,6 @@
 ---
 - name: Playbook desktop start
   hosts: all
-  #user:
   become: True
   become_user: root
   become_method: sudo
@@ -14,11 +13,12 @@
     - aws-cli
     - brave
     - chrome
-#    - docker
+    - docker
     - gh_cli
+    - hashicorp
     - keepassxc
     - kubectl
-    - hashicorp
+    - lens
     - microsoft
     - opera
     - signal-desktop
@@ -26,6 +26,5 @@
     - ufw
     - env
     - vim
-    - disable-local-dns
-    - ansible-role-docker
+    - disable-local-dns # execute this last, due to avoid momentary updating of dns setting
     #- yubico
