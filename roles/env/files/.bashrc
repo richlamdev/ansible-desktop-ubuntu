@@ -146,7 +146,8 @@ if [ -f /usr/share/bash-completion/completions/fzf ]; then
   source /usr/share/bash-completion/completions/fzf
 fi
 
-export FZF_DEFAULT_OPTS='--height 80% --layout=reverse --border'
+#export FZF_DEFAULT_OPTS='--height 80% --layout=reverse --border'
+export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
 #alias sd="cd ~ && cd \$(find * -type d 2>/dev/null | fzf)"
 #alias sv="cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim"
 sd() { cd ~ && cd $(find * -type d 2>/dev/null | fzf) ; }
