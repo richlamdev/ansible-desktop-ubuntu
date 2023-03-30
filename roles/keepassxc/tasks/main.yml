@@ -1,11 +1,4 @@
 ---
-#- name: Install KeepassXC signing key
-#  get_url:
-#    url: "https://keepassxc.org/keepassxc_master_signing_key.asc"
-#    dest: /usr/share/keyrings/keepassxc_master_signing_key.asc
-#    mode: 0644
-#    force: True
-
 # Use the fingerprint and matching key from: https://launchpad.net/~phoerious/+archive/ubuntu/keepassxc
 - name: Install KeepassXC signing key
   get_url:
@@ -25,3 +18,11 @@
   apt:
     name: keepassxc
     state: latest
+
+- name: Update KeePassXC preferences
+  copy:
+    src: "keepassxc.ini"
+    dest: "/home/{{ local_username }}/.config/keepassxc/"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0664"
