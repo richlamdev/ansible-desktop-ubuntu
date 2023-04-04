@@ -28,6 +28,7 @@ the same system.  Of course, this playbook can be run from a remote server, if
 preferred.*
 
 1.```sudo apt update && sudo apt install git sshpass openssh-server -y```
+
 ** *Limit use of sshpass for early setup only, due to potential security issues.
 Deploy ssh keys to target host(s) after this playbook has executed successfully.* **
 
@@ -44,7 +45,8 @@ Deploy ssh keys to target host(s) after this playbook has executed successfully.
 setup this way to allow convenient inclusion/exclusion of roles as needed by
 commenting/uncommenting roles in main.yml
 
-6. ansible-playbook main.yml -bkKu <username>
+6. To run the playbook against the host(s) use the following command:
+```ansible-playbook main.yml -bkKu <username>```
   * enter SSH password
   * enter SUDO password. (assumes the user is a part of the sudo user group)
   After ssh key(s) are deployed to target hosts, amend the executable command
