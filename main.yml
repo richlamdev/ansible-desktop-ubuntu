@@ -22,7 +22,7 @@
     - microsoft
     - opera
     - signal-desktop
-    - vivaldi
+    #- vivaldi  # likely to remove, very buggy browser!
     - ufw
     - env
     - vim
