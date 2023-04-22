@@ -43,6 +43,16 @@
   shell:
     vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c quit
 
+- name: install Github CodePilot Plugin
+  git:
+    repo: "https://github.com/github/copilot.vim.git"
+    dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
+
+- name: install gruvbox colorscheme
+  git:
+    repo: "https://github.com/morhetz/gruvbox.git"
+    dest: "/home/{{ local_username }}/.vim/pack/colors/start/"
+
 - name: install .vimrc to home directory
   copy:
     src: ".vimrc"
