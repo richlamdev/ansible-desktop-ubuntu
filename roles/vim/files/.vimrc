@@ -273,8 +273,8 @@ let g:vimwiki_global_ext = 0
 " }}}
 
 " netrw {{{
-inoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
-nnoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
+inoremap <c-v> <Esc>:Lex<cr>:vertical resize 30<cr>
+nnoremap <c-v> <Esc>:Lex<cr>:vertical resize 30<cr>
 
 " https://www.akhatib.com/making-netrw-clean-and-minimally-disruptive-then-stop-using-it/
 let g:netrw_banner = 0
