@@ -199,7 +199,8 @@ let g:vim_json_conceal=0
 " colours {{{
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
-colorscheme pablo          " Set colorscheme
+"colorscheme pablo          " Set colorscheme
+colorscheme gruvbox          " Set colorscheme
 
 " set termguicolors
 
