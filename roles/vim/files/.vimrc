@@ -200,7 +200,9 @@ let g:vim_json_conceal=0
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
 "colorscheme pablo          " Set colorscheme
-colorscheme gruvbox          " Set colorscheme
+"colorscheme gruvbox          " Set colorscheme
+colorscheme molokai          " Set colorscheme
+let g:molokai_original = 1
 
 " set termguicolors
 
@@ -228,8 +230,8 @@ hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlig
 
 " statusline {{{
 " based on gnome-terminal, use XTerm colour palette
-set fillchars+=vert:\           " change appearance of window split border
-hi VertSplit ctermfg=grey guifg=grey " change color of window split border
+"set fillchars+=vert:\ " change appearance of window split border
+hi VertSplit ctermfg=white guifg=white " change color of window split border
 
 hi User1 ctermbg=red ctermfg=white guibg=red guifg=white
 hi User2 ctermbg=214 ctermfg=black guibg=#ffaf00 guifg=black "DarkOrange
