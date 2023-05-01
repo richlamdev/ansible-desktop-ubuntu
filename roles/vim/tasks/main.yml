@@ -51,7 +51,12 @@
 - name: install gruvbox colorscheme
   git:
     repo: "https://github.com/morhetz/gruvbox.git"
-    dest: "/home/{{ local_username }}/.vim/pack/colors/start/"
+    dest: "/home/{{ local_username }}/.vim/pack/colors/start/gruvbox"
+
+- name: install molokai colorscheme
+  git:
+    repo: "https://github.com/tomasr/molokai"
+    dest: "/home/{{ local_username }}/.vim/pack/colors/start/molokai"
 
 - name: install .vimrc to home directory
   copy:
