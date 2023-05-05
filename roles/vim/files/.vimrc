@@ -201,8 +201,9 @@ syntax on                  " Vim5 and later versions support syntax highlighting
 set background=dark        " Enable dark background within editing are and syntax highlighting
 "colorscheme pablo          " Set colorscheme
 "colorscheme gruvbox          " Set colorscheme
-colorscheme molokai          " Set colorscheme
-let g:molokai_original = 1
+"colorscheme molokai          " Set colorscheme
+"let g:molokai_original = 1
+colorscheme monokai          " Set colorscheme
 
 " set termguicolors
 

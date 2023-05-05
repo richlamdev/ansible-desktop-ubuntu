@@ -58,6 +58,11 @@
     repo: "https://github.com/tomasr/molokai"
     dest: "/home/{{ local_username }}/.vim/pack/colors/start/molokai"
 
+- name: install monokai colorscheme
+  git:
+    repo: "https://github.com/sickill/vim-monokai.git"
+    dest: "/home/{{ local_username }}/.vim/pack/colors/start/monokai"
+
 - name: install .vimrc to home directory
   copy:
     src: ".vimrc"
