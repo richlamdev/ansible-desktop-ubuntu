@@ -10,8 +10,9 @@
   apt:
     state: latest
     pkg:
-      - brasero
+      #- brasero
       - build-essential
+      - chromium-browser
       - clamav
       - clamav-daemon
       - curl
@@ -32,7 +33,7 @@
       - nmap
       - p7zip
       - python3-pip
-      - qpdf
+      #- qpdf
       - ranger
       - ripgrep
       - rtorrent
