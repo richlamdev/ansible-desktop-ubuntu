@@ -48,6 +48,11 @@
     repo: "https://github.com/github/copilot.vim.git"
     dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
 
+- name: install Codeium Plugin
+  git:
+    repo: "https://github.com/Exafunction/codeium.vim"
+    dest: "/home/{{ local_username }}/.vim/pack/Exafunction/start/codeium.vim"
+
 - name: install gruvbox colorscheme
   git:
     repo: "https://github.com/morhetz/gruvbox.git"
