@@ -138,17 +138,30 @@ complete -o default -F __start_kubectl k
 complete -C '/usr/local/bin/aws_completer' aws
 
 # fzf bindings & settings
-if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
-  source /usr/share/doc/fzf/examples/key-bindings.bash
-fi
-
-if [ -f /usr/share/bash-completion/completions/fzf ]; then
-  source /usr/share/bash-completion/completions/fzf
-fi
+#if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
+#  source /usr/share/doc/fzf/examples/key-bindings.bash
+#fi
+#
+#if [ -f /usr/share/bash-completion/completions/fzf ]; then
+#  source /usr/share/bash-completion/completions/fzf
+#fi
 
 #export FZF_DEFAULT_OPTS='--height 80% --layout=reverse --border'
 export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
+
+# Print tree structure in the preview window
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+# Preview file content using bat (https://github.com/sharkdp/bat)
+export FZF_CTRL_T_OPTS="
+  --preview 'batcat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+
 #alias sd="cd ~ && cd \$(find * -type d 2>/dev/null | fzf)"
 #alias sv="cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim"
 sd() { cd ~ && cd $(find * -type d 2>/dev/null | fzf) ; }
 sv() { cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim ; }
+
+complete -C /usr/bin/terraform terraform
+
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

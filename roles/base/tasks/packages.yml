@@ -10,6 +10,7 @@
   apt:
     state: latest
     pkg:
+      - bat
       #- brasero
       - build-essential
       - chromium-browser
@@ -17,7 +18,7 @@
       - clamav-daemon
       - curl
       #- exfat-utils
-      - fzf
+      #- fzf # installed via github
       - gcc
       - gimp
       - git
@@ -45,7 +46,7 @@
       - ufw
       - unrar
       - unzip
-      - vim-gtk3
+      #- vim-gtk3 # install by github and compile
       - virtualbox
       - vlc
       - whois
@@ -70,3 +71,9 @@
       - pip # self upgrade pip first
       - glances
       - bottle
+
+- name: install fzf
+  git:
+    repo: "https://github.com/junegunn/fzf.git"
+    dest: "/home/{{ local_username }}/.fzf"
+    depth: "1"
