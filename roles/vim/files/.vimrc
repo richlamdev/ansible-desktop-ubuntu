@@ -294,6 +294,13 @@ let g:netrw_liststyle = 4
 " system clipboard {{{
 vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
 " }}}
+"
+" fzf {{{
+set runtimepath+=~/.fzf
+set runtimepath+=~/.vim/bundle/fzf.vim
+
+let g:fzf_preview_window = ['right,60%', 'ctrl-/']
+" }}}
 
 " folding {{{
 set foldmethod=syntax
