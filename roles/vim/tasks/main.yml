@@ -43,25 +43,20 @@
   shell:
     vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c quit
 
-- name: install Github CodePilot Plugin
-  git:
-    repo: "https://github.com/github/copilot.vim.git"
-    dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
+#- name: install Github CodePilot Plugin
+#  git:
+#    repo: "https://github.com/github/copilot.vim.git"
+#    dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
 
-- name: install Codeium Plugin
+- name: install fzf plugin
+  git:
+    repo: "https://github.com/junegunn/fzf.vim.git"
+    dest: "/home/{{ local_username }}/.vim/bundle/fzf.vim"
+
+- name: install Codeium plugin
   git:
     repo: "https://github.com/Exafunction/codeium.vim"
     dest: "/home/{{ local_username }}/.vim/pack/Exafunction/start/codeium.vim"
-
-- name: install gruvbox colorscheme
-  git:
-    repo: "https://github.com/morhetz/gruvbox.git"
-    dest: "/home/{{ local_username }}/.vim/pack/colors/start/gruvbox"
-
-- name: install molokai colorscheme
-  git:
-    repo: "https://github.com/tomasr/molokai"
-    dest: "/home/{{ local_username }}/.vim/pack/colors/start/molokai"
 
 - name: install monokai colorscheme
   git:
