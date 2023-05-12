@@ -301,6 +301,9 @@ set runtimepath+=~/.vim/bundle/fzf.vim
 
 let g:fzf_preview_window = ['right,60%', 'ctrl-/']
 nnoremap <c-p> :Files<cr>
+nnoremap <Leader>b :Buffers<cr>
+nnoremap <Leader>s :BLines<cr>
+nnoremap <Leader>w :Windows<cr>
 " }}}
 
 " folding {{{
