@@ -56,7 +56,7 @@
 - name: install vim-commentary plugin
   git:
     repo: "https://github.com/tpope/vim-commentary.git"
-    dest: "/home/{{ local_username }}/.vim/pack/tpope/start"
+    dest: "/home/{{ local_username }}/.vim/pack/tpope/start/commentary"
 
 - name: install vim-commentary plugin help
   shell:
