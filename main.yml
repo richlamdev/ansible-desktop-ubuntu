@@ -14,6 +14,7 @@
     - brave
     - chrome
     - docker
+    - env
     - gh_cli
     - hashicorp
     - keepassxc
@@ -22,9 +23,7 @@
     - microsoft
     - opera
     - signal-desktop
-    #- vivaldi  # likely to remove, very buggy browser!
     - ufw
-    - env
     - vim
     - disable-local-dns # execute this last, due to avoid momentary updating of dns setting
     #- yubico
