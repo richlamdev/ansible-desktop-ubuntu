@@ -1,14 +1,16 @@
 [local]
-#localhost
-192.168.60.6
+localhost
 
 # Group 'multi' with all hosts
 [multi:children]
 local
 
 [multi:vars]
+# todo, reference ansible_user in lieu of local_user in all the roles
+ansible_user=ansible.env.SUDO_USER
+ansible_python_interpreter=/usr/bin/python3
+
+# set privilege escalation via main.yml in root of repository
 #ansible_become=True
 #ansible_become_method=sudo
 #ansible_become_user=root
-#ansible_user=ansible.env.USER
-ansible_python_interpreter=/usr/bin/python3
