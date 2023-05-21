@@ -72,11 +72,11 @@
       - glances
       - bottle
 
-- name: install fzf
-  git:
-    repo: "https://github.com/junegunn/fzf.git"
-    dest: "/home/{{ local_username }}/.fzf"
-    depth: "1"
+# - name: install fzf
+#   git:
+#     repo: "https://github.com/junegunn/fzf.git"
+#     dest: "/home/{{ local_username }}/.fzf"
+#     depth: "1"
 
-- name: run fzf install
-  shell: "/home/{{ local_username }}/.fzf/install"
+# - name: run fzf install
+#   shell: "/home/{{ local_username }}/.fzf/install --key-bindings --completion --no-update-rc"

@@ -1,5 +1,6 @@
 ---
 - name: install linters and fixer for vim
+  become: true
   apt:
     state: latest
     pkg:

@@ -1,4 +1,5 @@
 ---
+
 #- name: install env_functions.sh
   #copy:
     #src: "env_functions_v2.sh"
@@ -35,6 +36,17 @@
   loop:
     - .bashrc
     - .dircolors
+
+- name: install fzf
+  #become: false
+  git:
+    repo: "https://github.com/junegunn/fzf.git"
+    dest: "/home/{{ local_username }}/.fzf"
+    depth: "1"
+
+- name: run fzf install
+  #become: false
+  shell: "/home/{{ local_username }}/.fzf/install --key-bindings --completion --no-update-rc"
 
 #- name: update current .bashrc file
 #  blockinfile:
