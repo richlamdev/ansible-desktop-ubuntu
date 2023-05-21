@@ -1,0 +1,35 @@
+---
+- name: "Playbook to test various variables"
+  hosts: all
+  gather_facts: True
+ # vars_files example
+  #vars_files:
+    #- "./tf_ansible_vars/ansible_vars.yml"
+  tasks:
+    - name: group_names
+      debug:
+        msg: "{{ group_names }}"
+
+    - name: ansible_hostname
+      debug:
+        msg: "{{ ansible_hostname }}"
+
+    - name: ansible_user
+      debug:
+        msg: "{{ ansible_user }}"
+
+    - name: playbook_dir
+      debug:
+        msg: "{{ playbook_dir }}"
+
+    - name: ansible_default_ipv4[address]
+      debug:
+        msg: "{{ ansible_default_ipv4['address'] }}"
+
+    - name: ansible_env.USER
+      debug:
+        var: ansible_env.USER
+
+    - name: ansible_env.SUDO_USER
+      debug:
+        var: ansible_env.SUDO_USER

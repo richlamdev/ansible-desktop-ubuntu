@@ -7,7 +7,8 @@
 local
 
 [multi:vars]
-ansible_become=True
-ansible_become_method=sudo
-ansible_become_user=root
+#ansible_become=True
+#ansible_become_method=sudo
+#ansible_become_user=root
+#ansible_user=ansible.env.USER
 ansible_python_interpreter=/usr/bin/python3

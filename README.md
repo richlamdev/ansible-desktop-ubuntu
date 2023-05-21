@@ -1,5 +1,7 @@
 # Ansible Playbook for configuring Ubuntu Desktop
 
+## **At present the permissions / escalated privileges are a mess!  To be fixed soon.**
+
 
 ## Introduction
 
