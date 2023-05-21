@@ -9,25 +9,23 @@
   #- include_tasks: tasks/main.yml
 
   roles:
-    # - base
-    # - aws-cli
-    # - brave
-    # - chrome
-    # - docker
-    # - gh_cli
-    # - hashicorp
-    # - keepassxc
-    # - kubectl
-    # - lens
-    # - microsoft
-    # - opera
-    # - signal-desktop
-    # - ufw
+    - base
+    - aws-cli
+    - brave
+    - chrome
+    - docker
+    - gh_cli
+    - hashicorp
+    - keepassxc
+    - kubectl
+    - lens
+    - microsoft
+    - opera
+    - signal-desktop
+    - ufw
     - role: vim
       become: false
     - role: env
       become: false
-      #become_method: sudo
-      #become_user: "{{ local_username }}"
-    #- disable-local-dns # execute this last, due to avoid momentary updating of dns setting
+    - disable-local-dns # execute this last, due to avoid momentary updating of dns setting
     #- yubico

@@ -10,7 +10,8 @@
 
 - name: Install Kubernetes apt key
   get_url:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg.asc
+    #url: https://packages.cloud.google.com/apt/doc/apt-key.gpg.asc
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
     dest: /usr/share/keyrings/kubernetes-archive-keyring.asc
     mode: 0644
     force: true
