@@ -1,8 +1,5 @@
 # Ansible Playbook for configuring Ubuntu Desktop
 
-## **At present the permissions / escalated privileges are a mess!  To be fixed soon.**
-
-
 ## Introduction
 
 This is a collection of roles I use for my Ubuntu desktop deployment.
@@ -27,13 +24,13 @@ minor changes)
 *This assumes a brand new installation and the execution of this Playbook is
 is on the target machine.  In other words, the deployment server and client are
 the same system.  Of course, this playbook can be run from a remote server, if
-preferred.*
+preferred.  This also assume the user indicated below by <username> is the has
+sudo privilege.*
 
 1.```sudo apt update && sudo apt install git sshpass openssh-server -y```
 
 ** *Limit use of sshpass for early setup only, due to potential security issues.
 Deploy ssh keys to target host(s) after this playbook has executed successfully.* **
-
 
 2.```git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git```
 
@@ -45,7 +42,7 @@ Deploy ssh keys to target host(s) after this playbook has executed successfully.
 
 * Many of the third party packages are broken into separate roles, this was
 setup this way to allow convenient inclusion/exclusion of roles as needed by
-commenting/uncommenting roles in main.yml
+commenting/uncommenting roles in main.yml at the root level of the repo.
 
 6. To run the playbook against the host(s) use the following command:
 
@@ -55,6 +52,10 @@ commenting/uncommenting roles in main.yml
   After ssh key(s) are deployed to target hosts, amend the executable command
   to be:
 ```ansible-playbook main.yml -bKu <username> --private-key <ssh-key>```
+
+7. Where privilege escalation is not required, the packages or configuration is
+installed on the target host(s) in the context of <username> indicated via the
+above command.
 
 Note: Be aware the the /role/base/tasks/authentical.yml updates the
 /etc/ssh/sshd_config that enables SSH password authentication; consequently,
