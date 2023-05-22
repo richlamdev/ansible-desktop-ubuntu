@@ -1,10 +1,4 @@
 ---
-#- name: Add gh cli signing key
-#  apt_key:
-#    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
-#    id: 2C6106201985B60E6C7AC87323F3D4EA75716059
-#    state: present
-
 - name: Add gh cli signing key
   get_url:
     url: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"

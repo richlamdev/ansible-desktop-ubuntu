@@ -1,4 +1,0 @@
----
-#local_username: "{{ lookup ('env', 'USER') }}"
-local_username: "{{ ansible_env.SUDO_USER }}"
-#local_username: "{{ ansible_user }}"
