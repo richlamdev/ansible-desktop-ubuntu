@@ -11,7 +11,7 @@
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-keyring.asc] http://dl.google.com/linux/chrome/deb/ stable main"
     filename: google-chrome
     state: present
-    update_cache: True
+    update_cache: true
 
 - name: Install Google chrome
   apt:
