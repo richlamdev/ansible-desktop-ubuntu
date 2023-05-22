@@ -10,19 +10,19 @@
 
   roles:
     # - base
-    # - aws-cli
-    # - brave
-    # - chrome
-    # - docker
-    # - gh_cli
-    # - hashicorp
-    # - keepassxc
-    # - kubectl
-    # - lens
-    # - microsoft
-    # - opera
-    # - signal-desktop
-    # - ufw
+    - aws-cli
+    - brave
+    - chrome
+    - docker
+    - gh_cli
+    - hashicorp
+    - keepassxc
+    - kubectl
+    - lens
+    - microsoft
+    - opera
+    - signal-desktop
+    - ufw
     - role: vim
       become: false # configure vim in context of normal user or <username that connects to host, instead of root
     - role: env
