@@ -1,6 +1,6 @@
 [local]
-#localhost
-192.168.60.6
+localhost
+#192.168.60.6
 
 # Group 'multi' with all hosts
 [multi:children]

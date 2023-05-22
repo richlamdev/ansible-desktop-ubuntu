@@ -9,7 +9,7 @@
   #- include_tasks: tasks/main.yml
 
   roles:
-    # - base
+    - base
     - aws-cli
     - brave
     - chrome

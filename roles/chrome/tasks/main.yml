@@ -4,7 +4,7 @@
     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
     dest: /usr/share/keyrings/googlechrome-keyring.asc
     mode: "0644"
-    force: true
+    force: false
 
 - name: Add Google chrome repo
   apt_repository:
