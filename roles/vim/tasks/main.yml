@@ -8,13 +8,13 @@
       - flake8
       - yamllint
 
-- name: create directory for ALE plugin
-  file:
-    path: "/home/{{ local_username }}/.vim/pack/git-plugins/start"
-    state: directory
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
-    mode: "0755"
+#- name: create directory for ALE plugin
+  #file:
+    #path: "/home/{{ local_username }}/.vim/pack/git-plugins/start"
+    #state: directory
+    #owner: "{{ local_username }}"
+    #group: "{{ local_username }}"
+    #mode: "0755"
 
 - name: install ALE plugin
   git:

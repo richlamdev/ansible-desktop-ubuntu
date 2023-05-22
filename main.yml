@@ -9,23 +9,23 @@
   #- include_tasks: tasks/main.yml
 
   roles:
-    - base
-    - aws-cli
-    - brave
-    - chrome
-    - docker
-    - gh_cli
-    - hashicorp
-    - keepassxc
-    - kubectl
-    - lens
-    - microsoft
-    - opera
-    - signal-desktop
-    - ufw
-    - role: vim
-      become: false # configure vim in context of normal user or <username that connects to host, instead of root
+    # - base
+    # - aws-cli
+    # - brave
+    # - chrome
+    # - docker
+    # - gh_cli
+    # - hashicorp
+    # - keepassxc
+    # - kubectl
+    # - lens
+    # - microsoft
+    # - opera
+    # - signal-desktop
+    # - ufw
+    #- role: vim
+      #become: false # configure vim in context of normal user or <username that connects to host, instead of root
     - role: env
       become: false # configure vim in context of normal user or <username that connects to host, instead of root
-    - disable-local-dns # execute this last, due to avoid momentary updating of dns setting
+    #- disable-local-dns # execute this last, due to avoid momentary updating of dns setting
     #- yubico

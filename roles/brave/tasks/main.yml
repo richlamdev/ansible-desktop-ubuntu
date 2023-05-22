@@ -1,10 +1,4 @@
 ---
-#- name: Add Brave apt key
-#  apt_key:
-#    url: https://brave-browser-apt-release.s3.brave.com/brave-core.asc
-#    id: D8BAD4DE7EE17AF52A834B2D0BB75829C2D4E821
-#    state: present
-
 - name: Add Brave apt repository key
   get_url:
     url: https://brave-browser-apt-release.s3.brave.com/brave-core.asc
