@@ -1,24 +1,24 @@
 ---
-- name: Install Signal-Desktop dependencies
+- name: install signal-desktop dependencies
   apt:
     name: "{{ signal_desktop_apt_dependencies }}"
     state: present
 
-- name: Install signal GPG key
+- name: install signal gpg key
   get_url:
     url: "https://updates.signal.org/desktop/apt/keys.asc"
     dest: /usr/share/keyrings/signal-desktop-keyring.asc
     mode: 0644
     force: true
 
-- name: Add Signal repo
+- name: add signal repo
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.asc] https://updates.signal.org/desktop/apt xenial main"
     filename: signal-desktop
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install Signal desktop
+- name: install signal desktop
   apt:
     name: signal-desktop
     state: present

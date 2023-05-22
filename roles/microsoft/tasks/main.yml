@@ -1,26 +1,26 @@
 ---
-- name: Install Microsfot linux signing key
+- name: install Microsoft Linux signing key
   get_url:
     url: "https://packages.microsoft.com/keys/microsoft.asc"
     dest: /usr/share/keyrings/microsoft.asc
     mode: 0644
     force: true
 
-- name: Add Microsoft Edge repository
+- name: add Microsoft Edge repository
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/edge stable main"
     filename: microsoft-edge
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Add Microsoft VS Code repository
+- name: add Microsoft VS Code repository
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
     filename: vscode
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install MS Edge and VS Code from repository
+- name: install Microsoft Edge and VS Code from repository
   apt:
     state: latest
     pkg:

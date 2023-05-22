@@ -1,6 +1,6 @@
 ---
 
-- name: Configuring service
+- name: configuring service
   template:
     src: "{{ ufw_config_file | basename }}.j2"
     dest: "{{ ufw_config_file }}"

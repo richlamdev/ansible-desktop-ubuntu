@@ -1,6 +1,6 @@
 ---
 
-- name: Applying rules
+- name: applying rules
   ufw:
     comment: "{{ item.comment | default(omit) }}"
     default: "{{ item.default | default(omit) }}"

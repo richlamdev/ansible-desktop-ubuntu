@@ -1,25 +1,25 @@
 ---
-- name: Add Opera apt key
+- name: add opera apt key
   apt_key:
     url: https://deb.opera.com/archive.key
     id: 9FBDE02F55F254D700821CCCDD3C368A8DE1B7A0
     state: present
 
-- name: Add Opera apt key
+- name: add opera apt key
   get_url:
     url: https://deb.opera.com/archive.key
     dest: /usr/share/keyrings/opera-browser.asc
     mode: 0644
-    force: True
+    force: true
 
-- name: Add Opera apt repository
+- name: add opera apt repository
   apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/opera-browser.asc] https://deb.opera.com/opera-stable/ stable non-free"
     filename: opera-stable
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install Opera from repository
+- name: install opera from repository
   apt:
     name: opera-stable
     state: latest

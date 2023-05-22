@@ -1,5 +1,5 @@
 ---
 
-- name: Configuring service state
+- name: configuring service state
   ufw:
     state: "{{ 'enabled' if ufw_enabled else 'disabled' }}"
