@@ -1,3 +1,4 @@
+---
 # enable function keys for keychron keyboard
 - name: keychron | copy keychron script to /usr/sbin
   copy:
@@ -14,5 +15,5 @@
 - name: keychron | enable keycron systemd service on startup
   systemd:
     name: keyboard-setup
-    enabled: True
+    enabled: true
     state: started

@@ -1,4 +1,4 @@
-
+---
 - name: Disable MOTD News
   copy: src=etc/default/motd-news dest=/etc/default/motd-news mode=0444
   when: ansible_lsb.major_release|int >= 18

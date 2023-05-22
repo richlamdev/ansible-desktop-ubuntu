@@ -1,3 +1,4 @@
+---
 - name: enable signal-desktop autostart
   copy:
     src: autostart/signal-desktop.desktop

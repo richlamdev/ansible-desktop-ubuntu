@@ -1,3 +1,4 @@
+---
 # SSH server and client config changes
 - name: authentication | sshd_config
   template:
