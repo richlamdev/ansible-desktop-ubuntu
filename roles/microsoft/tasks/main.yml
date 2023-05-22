@@ -4,7 +4,7 @@
     url: "https://packages.microsoft.com/keys/microsoft.asc"
     dest: /usr/share/keyrings/microsoft.asc
     mode: 0644
-    force: true
+    force: false
 
 - name: add Microsoft Edge repository
   apt_repository:
