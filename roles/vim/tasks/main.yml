@@ -31,18 +31,30 @@
     repo: "https://github.com/vimwiki/vimwiki.git"
     dest: "/home/{{ local_username }}/.vim/pack/plugins/start/vimwiki"
 
+- name: check if vimwiki plugin help is installed
+  stat:
+    path: "/home/{{ local_username }}/.vim/pack/plugins/start/vimwiki/doc/tags"
+  register: vimwiki_help
+
 - name: enable vimwiki help
   shell:
     vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/plugins/start/vimwiki/doc" -c quit
+  when: not vimwiki_help.stat.exists
 
 - name: install indentLine plugin
   git:
     repo: "https://github.com/Yggdroot/indentLine.git"
     dest: "/home/{{ local_username }}/.vim/pack/vendor/start/indentLine"
 
+- name: check if indentLine plugin help is installed
+  stat:
+    path: "/home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc/tags"
+  register: indentLine_help
+
 - name: enable indentLine help
   shell:
     vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c quit
+  when: not indentLine_help.stat.exists
 
 #- name: install Github CodePilot Plugin
 #  git:
@@ -59,9 +71,15 @@
     repo: "https://github.com/tpope/vim-commentary.git"
     dest: "/home/{{ local_username }}/.vim/pack/tpope/start/commentary"
 
+- name: check if vim-commentary help plugin is installed
+  stat:
+    path: "/home/{{ local_username }}/.vim/pack/tpope/start/commentary/doc/tags"
+  register: vim_commentary_help
+
 - name: install vim-commentary plugin help
   shell:
     vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/tpope/start/commentary/doc" -c quit
+  when: not vim_commentary_help.stat.exists
 
 - name: install Codeium plugin
   git:
