@@ -1,19 +1,19 @@
 ---
-- name: Install lens GPG key
+- name: install lens gpg key
   get_url:
     url: "https://downloads.k8slens.dev/keys/gpg"
     dest: /usr/share/keyrings/lens-archive-keyring.asc
     mode: 0644
     force: true
 
-- name: Add lens repo
+- name: add lens repo
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/lens-archive-keyring.asc] https://downloads.k8slens.dev/apt/debian stable main"
     filename: lens
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install lens
+- name: install lens
   apt:
     state: present
     pkg:
