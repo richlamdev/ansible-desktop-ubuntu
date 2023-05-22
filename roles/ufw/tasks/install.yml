@@ -1,6 +1,6 @@
 ---
 
-- name: Installing packages
+- name: installing packages
   package:
     name: "{{ item }}"
     state: present

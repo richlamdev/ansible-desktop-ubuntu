@@ -1,24 +1,24 @@
 ---
-- name: Disable systemd-resolved
+- name: disable systemd-resolved
   systemd:
     name: systemd-resolved.service
-    enabled: False
+    enabled: false
     state: stopped
 
-- name: Add dns=default to /etc/NetworkManager/NetworkManager.conf
+- name: add dns=default to /etc/NetworkManager/NetworkManager.conf
   lineinfile:
-    firstmatch: True
+    firstmatch: true
     path: "/etc/NetworkManager/NetworkManager.conf"
     insertafter: '[main]'
     line: "dns=default"
 
-- name: Remove /etc/resolv.conf
+- name: remove /etc/resolv.conf
   file:
     path: /etc/resolv.conf
     state: absent
 
-- name: Restart Network-Manager systemd-resolved
+- name: restart network-manager systemd-resolved
   systemd:
     name: NetworkManager.service
-    enabled: True
+    enabled: true
     state: restarted
