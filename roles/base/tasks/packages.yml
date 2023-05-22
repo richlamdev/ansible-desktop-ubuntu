@@ -1,8 +1,7 @@
---- # base packages:
-
+---
 - name: packages | apt update && apt dist-upgrade *MAY TAKE A LONG TIME*
   apt:
-    update_cache: True
+    update_cache: true
     upgrade: dist
 
 # keep alphabetically ordered
@@ -54,13 +53,13 @@
 
 - name: packages | apt autoremove & autoclean
   apt:
-    autoremove: True
-    autoclean: True
+    autoremove: true
+    autoclean: true
 
 - name: packages | enable clamav service
   systemd:
     name: clamav-daemon
-    enabled: True
+    enabled: true
     state: started
 
 - name: packages | install additional pip packages
@@ -71,12 +70,3 @@
       - pip # self upgrade pip first
       - glances
       - bottle
-
-# - name: install fzf
-#   git:
-#     repo: "https://github.com/junegunn/fzf.git"
-#     dest: "/home/{{ local_username }}/.fzf"
-#     depth: "1"
-
-# - name: run fzf install
-#   shell: "/home/{{ local_username }}/.fzf/install --key-bindings --completion --no-update-rc"

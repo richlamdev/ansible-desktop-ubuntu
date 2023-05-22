@@ -1,44 +1,20 @@
 ---
-#- name: optimize - remove snap packages
-  #snap:
-    #state: absent
-    #name: 
-      #- firefox
-      #- gtk-common-themes
-      #- gnome-3-38-2004
-      #- bare
-      #- snap-store
-      #- core20
-      #- core
-#
-#- name: optimize - stop snapd process
-  #systemd:
-    #name: snapd
-    #scope: system
-    #state: stopped
-#
-#- name: optimize - apt purge snapd package
-  #apt:
-    #name: snapd
-    #state: absent
-    #purge: True
-
 - name: optimize | apt purge avahi, whoopsie, apport, openvpn package
   apt:
-    name: 
+    name:
       - avahi-daemon
       - avahi-utils
       - whoopsie
       - apport
       - openvpn
-    update_cache: True
+    update_cache: true
     state: absent
-    purge: True
+    purge: true
 
 - name: optimize | apt autoclean and autoremove
   apt:
-    autoremove: True
-    autoclean: True
+    autoremove: true
+    autoclean: true
   #when: snaps_found.stdout | length > 0
 
 - name: optimize | prevent evolution from starting (running) in background

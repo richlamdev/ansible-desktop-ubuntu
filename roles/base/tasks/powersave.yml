@@ -1,3 +1,4 @@
+---
 # ensure monitor properly sleeps
 - name: powersave | install monitor power save script
   copy:
