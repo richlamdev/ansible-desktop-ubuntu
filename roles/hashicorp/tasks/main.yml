@@ -1,19 +1,19 @@
 ---
-- name: Add hashicorp key
+- name: add hashicorp key
   get_url:
     url: "https://apt.releases.hashicorp.com/gpg"
     dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
     mode: 0644
-    force: True
+    force: true
 
-- name: Add hashicorp repo
+- name: add hashicorp repo
   apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     filename: hashicorp
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install terraform, vagrant, and vault
+- name: install terraform, vagrant, and vault
   apt:
     state: present
     pkg:

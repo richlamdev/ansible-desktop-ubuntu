@@ -1,5 +1,5 @@
 ---
-- name: Install docker dependencies
+- name: install docker dependencies
   apt:
     state: present
     pkg:
@@ -7,21 +7,21 @@
       - curl
       - gnupg
 
-- name: Install docker GPG key
+- name: install docker GPG key
   get_url:
     url: "https://download.docker.com/linux/ubuntu/gpg"
     dest: /usr/share/keyrings/docker.asc
     mode: 0644
     force: true
 
-- name: Add docker repo
+- name: add docker repo
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
     filename: docker
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install docker
+- name: install docker
   apt:
     state: present
     pkg:

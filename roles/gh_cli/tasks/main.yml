@@ -1,19 +1,19 @@
 ---
-- name: Add gh cli signing key
+- name: add gh cli signing key
   get_url:
     url: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
     dest: /usr/share/keyrings/githubcli-archive-keyring.gpg
     mode: 0644
     force: true
 
-- name: Add gh cli repo
+- name: add gh cli repo
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
     filename: github_cli
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install gh cli
+- name: install gh cli
   apt:
     name: gh
     state: present
