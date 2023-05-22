@@ -7,7 +7,6 @@
 local
 
 [multi:vars]
-# todo, reference ansible_user in lieu of local_user in all the roles
 local_username="{{ ansible_env.SUDO_USER }}"
 ansible_python_interpreter=/usr/bin/python3
 
