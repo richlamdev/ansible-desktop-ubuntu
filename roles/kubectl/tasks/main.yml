@@ -1,5 +1,5 @@
 ---
-- name: Ensure dependencies are installed.
+- name: ensure dependencies are installed.
   apt:
     name:
       - apt-transport-https
@@ -8,22 +8,21 @@
       - curl
     state: present
 
-- name: Install Kubernetes apt key
+- name: install kubernetes apt key
   get_url:
-    #url: https://packages.cloud.google.com/apt/doc/apt-key.gpg.asc
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
     dest: /usr/share/keyrings/kubernetes-archive-keyring.asc
     mode: 0644
     force: true
 
-- name: Add Kubernetes repo
+- name: add kubernetes repo
   apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.asc] https://apt.kubernetes.io/ kubernetes-xenial main"
     filename: kubectl
     state: present
-    update_cache: True
+    update_cache: true
 
-- name: Install Kubectl
+- name: install kubectl
   apt:
     name:
       - kubectl
