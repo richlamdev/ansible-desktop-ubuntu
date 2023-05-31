@@ -1,20 +1,22 @@
 ---
-- name: install linters and fixer for vim
-  become: true
-  apt:
+# - name: install linters and fixer for vim
+#   become: true
+#   apt:
+#     state: latest
+#     pkg:
+#       - black
+#       - flake8
+#       - yamllint
+
+- name: install python black, flake8, yamllint with pip
+  pip:
     state: latest
-    pkg:
+    extra_args: --user
+    executable: pip3
+    name:
       - black
       - flake8
       - yamllint
-
-#- name: create directory for ALE plugin
-  #file:
-    #path: "/home/{{ local_username }}/.vim/pack/git-plugins/start"
-    #state: directory
-    #owner: "{{ local_username }}"
-    #group: "{{ local_username }}"
-    #mode: "0755"
 
 - name: install ALE plugin
   git:
