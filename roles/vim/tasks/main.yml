@@ -18,6 +18,16 @@
       - flake8
       - yamllint
 
+- name: install yammlint confg to home .config directory
+# relax some of the yammlint rules with this config
+  copy:
+    src: "config"
+    dest: "/home/{{ local_username }}/.config/yamllint/config"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0644"
+    force: true
+
 - name: install ALE plugin
   git:
     repo: "https://github.com/dense-analysis/ale.git"

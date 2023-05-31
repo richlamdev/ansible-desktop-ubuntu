@@ -155,7 +155,7 @@ autocmd FileType markdown
 
 " ALE - Python {{{
 " https://github.com/dense-analysis/ale
-let g:ale_linters = {'python': ['flake8']}
+let g:ale_linters = {'python': ['flake8'], 'yaml': ['yamllint']}
 let g:ale_fixers = {'python': ['black']}
 "let g:ale_fixers = {'*': [], 'python': ['black']}
 let g:ale_python_flake8_options = '--max-line-length 79'
@@ -172,14 +172,14 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " ALE - Yaml {{{
 " https://github.com/dense-analysis/ale
 autocmd FileType yaml
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
     \ set expandtab |
     \ set autoindent |
     \ set smarttab |
 
-"set foldlevelstart=20
+set foldlevelstart=20
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
