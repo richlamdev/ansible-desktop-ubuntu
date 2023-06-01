@@ -67,6 +67,6 @@
     state: latest
     executable: pip3
     name:
-      - pip # self upgrade pip first
+      #- pip # self upgrade pip first
       - glances
       - bottle
