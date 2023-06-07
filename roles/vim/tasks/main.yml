@@ -18,6 +18,15 @@
       - flake8
       - yamllint
 
+- name: create config yamllint directory
+  file:
+    state: directory
+    path: /home/{{ local_username }}/.config/yamllint
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0775"
+    force: true
+
 - name: install yammlint confg to home .config directory
 # relax some of the yammlint rules with this config
   copy:
