@@ -90,7 +90,7 @@ function! GotoJump()
   endif
 endfunction
 
-nmap <Leader>j :call GotoJump()<CR>
+"nmap <Leader>j :call GotoJump()<CR>
 " }}}
 
 " window management {{{
@@ -299,11 +299,13 @@ vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
 set runtimepath+=~/.fzf
 set runtimepath+=~/.vim/bundle/fzf.vim
 
-let g:fzf_preview_window = ['right,60%', 'ctrl-/']
-nnoremap <c-p> :Files<cr>
+let g:fzf_preview_window = ['right,70%', 'ctrl-/']
+"nnoremap <c-p> :Files<cr>
+nnoremap <Leader>f :Files<cr>
 nnoremap <Leader>b :Buffers<cr>
 nnoremap <Leader>s :BLines<cr>
 nnoremap <Leader>w :Windows<cr>
+nnoremap <Leader>j :Jumps<cr>
 " }}}
 
 " folding {{{
