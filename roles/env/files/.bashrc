@@ -146,7 +146,8 @@ complete -C '/usr/local/bin/aws_completer' aws
 #  source /usr/share/bash-completion/completions/fzf
 #fi
 
-#export FZF_DEFAULT_OPTS='--height 80% --layout=reverse --border'
+
+export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
 
 # Preview file content using bat (https://github.com/sharkdp/bat)
