@@ -37,6 +37,7 @@
       - ranger
       - ripgrep
       - rtorrent
+      - silversearcher-ag
       - sshfs
       - sshpass
       - tcpdump
