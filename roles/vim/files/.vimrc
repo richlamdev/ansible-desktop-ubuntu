@@ -306,6 +306,8 @@ nnoremap <Leader>b :Buffers<cr>
 nnoremap <Leader>s :BLines<cr>
 nnoremap <Leader>w :Windows<cr>
 nnoremap <Leader>j :Jumps<cr>
+nnoremap <Leader>r :Rg<cr>
+nnoremap <Leader>a :Ag<cr>
 " }}}
 
 " folding {{{
