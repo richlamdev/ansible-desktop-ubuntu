@@ -309,6 +309,7 @@ nnoremap <Leader>j :Jumps<cr>
 nnoremap <Leader>r :Rg<cr>
 nnoremap <Leader>a :Ag<cr>
 nnoremap <Leader>m :Marks<cr>
+nnoremap <Leader>c :Changes<cr>
 " }}}
 
 " folding {{{
