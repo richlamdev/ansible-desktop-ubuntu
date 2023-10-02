@@ -7,12 +7,6 @@
     #group: "{{ local_username }}"
     #mode: "0644"
     #
-- name: Set directory path and username based on OS (Debian/Ubuntu)
-  set_fact:
-    home_dir: "{{ ansible_env['PWD'] }}"
-    local_username: "{{ ansible_env['USER'] }}"
-  when:
-    - "ansible_facts['os_family'] == 'Debian'"
 
 - name: install git_bash_ps1.sh
   copy:
@@ -20,7 +14,7 @@
     dest: "/{{ home_dir }}/.bashrc.d/"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
-    mode: "0644"
+    mode: "0640"
 
 - name: deploy .bashrc / .dircolors to home directory
   copy:
@@ -28,7 +22,7 @@
     dest: "/{{ home_dir }}/"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
-    mode: "0644"
+    mode: "0640"
   loop:
     - .bashrc
     - .dircolors

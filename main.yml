@@ -23,15 +23,9 @@
     - opera
     - signal-desktop
     - ufw
-    - vim
-    - env
+    - role: vim
+      become: false
+    - role: env
+      become: false
     - disable-local-dns
-    - yubico
-
-# To be removed.
-    #- role: vim
-      # become: false # configure vim in context of normal user or <username that connects to host, instead of root
-    #- role: env
-      #become: false # configure vim in context of normal user or <username that connects to host, instead of root
-    # - disable-local-dns # execute this last, due to avoid momentary updating of dns setting
-    #- yubico
+    # - yubico
