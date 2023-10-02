@@ -11,14 +11,17 @@
     path: "/etc/NetworkManager/NetworkManager.conf"
     insertafter: '[main]'
     line: "dns=default"
+  register: dns_default_status
 
 - name: remove /etc/resolv.conf
   file:
     path: /etc/resolv.conf
     state: absent
+  when: dns_default_status.changed == 'true'
 
 - name: restart network-manager systemd-resolved
   systemd:
     name: NetworkManager.service
     enabled: true
     state: restarted
+  when: dns_default_status.changed == 'true'
