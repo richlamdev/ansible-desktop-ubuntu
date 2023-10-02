@@ -2,15 +2,22 @@
 #- name: install env_functions.sh
   #copy:
     #src: "env_functions_v2.sh"
-    #dest: "/home/{{ local_username }}/.bashrc.d/"
+    #dest: "/{{ home_dir }}/.bashrc.d/"
     #owner: "{{ local_username }}"
     #group: "{{ local_username }}"
     #mode: "0644"
+    #
+- name: Set directory path and username based on OS (Debian/Ubuntu)
+  set_fact:
+    home_dir: "{{ ansible_env['PWD'] }}"
+    local_username: "{{ ansible_env['USER'] }}"
+  when:
+    - "ansible_facts['os_family'] == 'Debian'"
 
 - name: install git_bash_ps1.sh
   copy:
     src: "git_bash_ps1.sh"
-    dest: "/home/{{ local_username }}/.bashrc.d/"
+    dest: "/{{ home_dir }}/.bashrc.d/"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0644"
@@ -18,7 +25,7 @@
 - name: deploy .bashrc / .dircolors to home directory
   copy:
     src: "{{ item }}"
-    dest: "/home/{{ local_username }}/"
+    dest: "/{{ home_dir }}/"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0644"
@@ -29,11 +36,11 @@
 - name: install fzf
   git:
     repo: "https://github.com/junegunn/fzf.git"
-    dest: "/home/{{ local_username }}/.fzf"
+    dest: "/{{ home_dir }}/.fzf"
     depth: "1"
 
 - name: check if fzf install script has been executed
-  shell: "/home/{{ local_username }}/.fzf/bin/fzf --version"
+  shell: "/{{ home_dir }}/.fzf/bin/fzf --version"
   register: fzf_installed
   failed_when: false
   changed_when: false
@@ -43,5 +50,5 @@
     #msg: "{{ fzf_installed }}"
 
 - name: run fzf install
-  shell: "/home/{{ local_username }}/.fzf/install --key-bindings --completion --no-update-rc"
+  shell: "/{{ home_dir }}/.fzf/install --key-bindings --completion --no-update-rc"
   when: fzf_installed.rc != 0
