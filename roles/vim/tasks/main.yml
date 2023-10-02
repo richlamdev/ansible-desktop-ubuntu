@@ -12,26 +12,26 @@
   when:
     - ansible_facts['os_family'] == 'Debian'
 
-
 - name: Set directory paths based on OS (Debian/Ubuntu)
   set_fact:
     home_dir: "{{ ansible_env['PWD'] }}"
     local_username: "{{ ansible_env['USER'] }}"
   when:
-    - "ansible_facts['os_family'] == 'Debian'"
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: Set directory paths based on OS (Darwin/MacOS)
   set_fact:
     home_dir: "{{ ansible_env['PWD'] }}"
-    local_username: "{{ ansible_env['USER'] }}"
+    local_username: "{{ ansible_user }}"
   when:
-    - "ansible_facts['os_family'] == 'Darwin'"
+    - ansible_facts['os_family'] == 'Darwin'
 
-# - name: ansible_user
-#   debug:
-#     msg:
-#       - "{{ home_dir }}"
-#       - "{{ local_username }}"
+# to be removed; left in for testing purposes
+- name: ansible_user
+  debug:
+    msg:
+      - "{{ home_dir }}"
+      - "{{ local_username }}"
 
 - name: create config yamllint directory
   file:
@@ -42,7 +42,7 @@
     mode: "0775"
     force: true
   when:
-    - "ansible_facts['os_family'] == 'Debian'"
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: install yammlint config to home .config directory
 # relax some of the yammlint rules with this config
@@ -54,7 +54,7 @@
     mode: "0644"
     force: true
   when:
-    - "ansible_facts['os_family'] == 'Debian'"
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: install ALE plugin
   git:
@@ -79,7 +79,9 @@
 - name: enable vimwiki help
   shell:
     vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/plugins/start/vimwiki/doc" -c quit
-  when: not vimwiki_help.stat.exists
+  when:
+    - not vimwiki_help.stat.exists
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: install indentLine plugin
   git:
@@ -91,10 +93,13 @@
     path: "{{ home_dir }}/.vim/pack/vendor/start/indentLine/doc/tags"
   register: indentLine_help
 
+# this command does not appear to work for MacOS/ZSH, to be investigated
 - name: enable indentLine help
   shell:
     vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/vendor/start/indentLine/doc" -c quit
-  when: not indentLine_help.stat.exists
+  when:
+    - not indentLine_help.stat.exists
+    - ansible_facts['os_family'] == 'Debian'
 
 #- name: install Github CodePilot Plugin
 #  git:
@@ -116,10 +121,13 @@
     path: "{{ home_dir }}/.vim/pack/tpope/start/commentary/doc/tags"
   register: vim_commentary_help
 
+# this command does not appear to work for MacOS/ZSH, to be investigated
 - name: install vim-commentary plugin help
   shell:
     vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/tpope/start/commentary/doc" -c quit
-  when: not vim_commentary_help.stat.exists
+  when:
+    - not vim_commentary_help.stat.exists
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: install Codeium plugin
   git:
@@ -131,11 +139,12 @@
     repo: "https://github.com/sickill/vim-monokai.git"
     dest: "{{ home_dir }}/.vim/pack/colors/start/monokai"
 
+# temporarily disregard group, due to group names disparity for MacOS
 - name: install .vimrc to home directory
   copy:
     src: ".vimrc"
     dest: "{{ home_dir }}/.vimrc"
     owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    #group: "{{ local_username }}"
     mode: "0644"
     force: true
