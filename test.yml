@@ -1,7 +1,10 @@
 ---
 - name: "Playbook to test various variables"
   hosts: all
-  gather_facts: True
+  #become: false
+  become: true
+  become_method: sudo
+  gather_facts: true
  # vars_files example
   #vars_files:
     #- "./tf_ansible_vars/ansible_vars.yml"
@@ -21,6 +24,18 @@
     - name: playbook_dir
       debug:
         msg: "{{ playbook_dir }}"
+
+    - name: ansible_env.HOME
+      debug:
+        msg: "{{ ansible_env.HOME }}"
+
+    - name: ansible_os_family
+      debug:
+        msg: "{{ ansible_os_family }}"
+
+    - name: ansible_env.PWD
+      debug:
+        msg: "{{ ansible_env.PWD }}"
 
     - name: ansible_default_ipv4[address]
       debug:

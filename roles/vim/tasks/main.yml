@@ -1,13 +1,4 @@
 ---
-# - name: install linters and fixer for vim
-#   become: true
-#   apt:
-#     state: latest
-#     pkg:
-#       - black
-#       - flake8
-#       - yamllint
-
 - name: install python black, flake8, yamllint with pip
   pip:
     state: latest
@@ -17,21 +8,44 @@
       - black
       - flake8
       - yamllint
+  when:
+    - ansible_facts['os_family'] == 'Debian'
+
+
+- name: Set directory paths based on OS (Debian/Ubuntu)
+  set_fact:
+    home_dir: "{{ ansible_env['PWD'] }}"
+    local_username: "{{ ansible_env['USER'] }}"
+  when:
+    - "ansible_facts['os_family'] == 'Debian'"
+
+- name: Set directory paths based on OS (Darwin/MacOS)
+  set_fact:
+    home_dir: "{{ ansible_env['PWD'] }}"
+    local_username: "{{ ansible_env['USER'] }}"
+  when:
+    - "ansible_facts['os_family'] == 'Darwin'"
+
+# - name: ansible_user
+#   debug:
+#     msg:
+#       - "{{ local_username }}"
+#       - "{{ home_dir }}"
 
 - name: create config yamllint directory
   file:
     state: directory
-    path: /home/{{ local_username }}/.config/yamllint
+    path: "{{ home_dir }}/.config/yamllint"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0775"
     force: true
 
-- name: install yammlint confg to home .config directory
+- name: install yammlint config to home .config directory
 # relax some of the yammlint rules with this config
   copy:
     src: "config"
-    dest: "/home/{{ local_username }}/.config/yamllint/config"
+    dest: "{{ home_dir }}/.config/yamllint/config"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0644"
@@ -40,41 +54,41 @@
 - name: install ALE plugin
   git:
     repo: "https://github.com/dense-analysis/ale.git"
-    dest: "/home/{{ local_username }}/.vim/pack/git-plugins/start/ale"
+    dest: "{{ home_dir }}/.vim/pack/git-plugins/start/ale"
 
 - name: install hashivim plugin
   git:
     repo: "https://github.com/hashivim/vim-terraform.git"
-    dest: "/home/{{ local_username }}/.vim/pack/plugins/start/vim-terraform"
+    dest: "{{ home_dir }}/.vim/pack/plugins/start/vim-terraform"
 
 - name: install vimwiki plugin
   git:
     repo: "https://github.com/vimwiki/vimwiki.git"
-    dest: "/home/{{ local_username }}/.vim/pack/plugins/start/vimwiki"
+    dest: "{{ home_dir }}/.vim/pack/plugins/start/vimwiki"
 
 - name: check if vimwiki plugin help is installed
   stat:
-    path: "/home/{{ local_username }}/.vim/pack/plugins/start/vimwiki/doc/tags"
+    path: "{{ home_dir }}/.vim/pack/plugins/start/vimwiki/doc/tags"
   register: vimwiki_help
 
 - name: enable vimwiki help
   shell:
-    vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/plugins/start/vimwiki/doc" -c quit
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/plugins/start/vimwiki/doc" -c quit
   when: not vimwiki_help.stat.exists
 
 - name: install indentLine plugin
   git:
     repo: "https://github.com/Yggdroot/indentLine.git"
-    dest: "/home/{{ local_username }}/.vim/pack/vendor/start/indentLine"
+    dest: "{{ home_dir }}/.vim/pack/vendor/start/indentLine"
 
 - name: check if indentLine plugin help is installed
   stat:
-    path: "/home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc/tags"
+    path: "{{ home_dir }}/.vim/pack/vendor/start/indentLine/doc/tags"
   register: indentLine_help
 
 - name: enable indentLine help
   shell:
-    vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/vendor/start/indentLine/doc" -c quit
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/vendor/start/indentLine/doc" -c quit
   when: not indentLine_help.stat.exists
 
 #- name: install Github CodePilot Plugin
@@ -85,37 +99,37 @@
 - name: install fzf plugin
   git:
     repo: "https://github.com/junegunn/fzf.vim.git"
-    dest: "/home/{{ local_username }}/.vim/bundle/fzf.vim"
+    dest: "{{ home_dir }}/.vim/bundle/fzf.vim"
 
 - name: install vim-commentary plugin
   git:
     repo: "https://github.com/tpope/vim-commentary.git"
-    dest: "/home/{{ local_username }}/.vim/pack/tpope/start/commentary"
+    dest: "{{ home_dir }}/.vim/pack/tpope/start/commentary"
 
 - name: check if vim-commentary help plugin is installed
   stat:
-    path: "/home/{{ local_username }}/.vim/pack/tpope/start/commentary/doc/tags"
+    path: "{{ home_dir }}/.vim/pack/tpope/start/commentary/doc/tags"
   register: vim_commentary_help
 
 - name: install vim-commentary plugin help
   shell:
-    vim -u NONE -c "helptags  /home/{{ local_username }}/.vim/pack/tpope/start/commentary/doc" -c quit
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/tpope/start/commentary/doc" -c quit
   when: not vim_commentary_help.stat.exists
 
 - name: install Codeium plugin
   git:
     repo: "https://github.com/Exafunction/codeium.vim"
-    dest: "/home/{{ local_username }}/.vim/pack/Exafunction/start/codeium.vim"
+    dest: "{{ home_dir }}/.vim/pack/Exafunction/start/codeium.vim"
 
 - name: install monokai colorscheme
   git:
     repo: "https://github.com/sickill/vim-monokai.git"
-    dest: "/home/{{ local_username }}/.vim/pack/colors/start/monokai"
+    dest: "{{ home_dir }}/.vim/pack/colors/start/monokai"
 
 - name: install .vimrc to home directory
   copy:
     src: ".vimrc"
-    dest: "/home/{{ local_username }}/.vimrc"
+    dest: "{{ home_dir }}/.vimrc"
     owner: "{{ local_username }}"
     group: "{{ local_username }}"
     mode: "0644"
