@@ -18,7 +18,7 @@
     - ansible_facts['os_family'] == 'Debian'
 
 # to be removed; left in for testing purposes
-- name: ansible_user
+- name: home_dir and local_username vars
   debug:
     msg:
       - "{{ home_dir }}"
