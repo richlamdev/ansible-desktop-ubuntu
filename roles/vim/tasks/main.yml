@@ -133,6 +133,8 @@
   git:
     repo: "https://github.com/Exafunction/codeium.vim"
     dest: "{{ home_dir }}/.vim/pack/Exafunction/start/codeium.vim"
+  when:
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: install monokai colorscheme
   git:
