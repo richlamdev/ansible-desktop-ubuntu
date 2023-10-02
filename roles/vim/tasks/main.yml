@@ -1,4 +1,5 @@
 ---
+# black,flake8 and yamllint are installed with brew on MacOS
 - name: install python black, flake8, yamllint with pip
   pip:
     state: latest
@@ -29,8 +30,8 @@
 # - name: ansible_user
 #   debug:
 #     msg:
-#       - "{{ local_username }}"
 #       - "{{ home_dir }}"
+#       - "{{ local_username }}"
 
 - name: create config yamllint directory
   file:
@@ -40,6 +41,8 @@
     group: "{{ local_username }}"
     mode: "0775"
     force: true
+  when:
+    - "ansible_facts['os_family'] == 'Debian'"
 
 - name: install yammlint config to home .config directory
 # relax some of the yammlint rules with this config
@@ -50,6 +53,8 @@
     group: "{{ local_username }}"
     mode: "0644"
     force: true
+  when:
+    - "ansible_facts['os_family'] == 'Debian'"
 
 - name: install ALE plugin
   git:
