@@ -74,25 +74,6 @@ autocmd BufNewFile,BufRead requirements*.txt set ft=python
 " nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
 " }}}
 
-" jump configuration {{{
-" https://vim.fandom.com/wiki/Jumping_to_previously_visited_locations
-function! GotoJump()
-  jumps
-  let j = input("Please select your jump: ")
-  if j != ''
-    let pattern = '\v\c^\+'
-    if j =~ pattern
-      let j = substitute(j, pattern, '', 'g')
-      execute "normal " . j . "\<c-i>"
-    else
-      execute "normal " . j . "\<c-o>"
-    endif
-  endif
-endfunction
-
-"nmap <Leader>j :call GotoJump()<CR>
-" }}}
-
 " window management {{{
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 6/5)<CR>
 nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 5/6)<CR>
@@ -294,10 +275,13 @@ let g:netrw_liststyle = 4
 " system clipboard {{{
 vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
 " }}}
-"
+
 " fzf {{{
 set runtimepath+=~/.fzf
 set runtimepath+=~/.vim/bundle/fzf.vim
+
+" for MacOS, if you need CTRL-A and CTRL-D for quickfix population
+" let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:deselect-all --layout=reverse --height 90% --border'
 
 let g:fzf_preview_window = ['right,70%', 'ctrl-/']
 "nnoremap <c-p> :Files<cr>
@@ -310,6 +294,12 @@ nnoremap <Leader>r :Rg<cr>
 nnoremap <Leader>a :Ag<cr>
 nnoremap <Leader>m :Marks<cr>
 nnoremap <Leader>c :Changes<cr>
+" }}}
+
+" vimgrep {{{
+" Add this line to your ~/.vimrc or _vimrc file
+nnoremap <leader>v :vim /
+
 " }}}
 
 " folding {{{
