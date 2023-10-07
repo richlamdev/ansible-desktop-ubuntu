@@ -44,20 +44,21 @@ Deploy ssh keys to target host(s) after this playbook has executed successfully.
 setup this way to allow convenient inclusion/exclusion of roles as needed by
 commenting/uncommenting roles in main.yml at the root level of the repo.
 
-6. To run the playbook against the host(s) use the following command:
+6. To run the playbook against target host(s) use the following command:
 
 ```ansible-playbook main.yml -bkKu <username>```
   * enter SSH password
-  * enter SUDO password. (assumes the user is a part of the sudo user group)
-  After ssh key(s) are deployed to target hosts, amend the executable command
-  to be:
+  * enter SUDO password. (assumes user is a member of the sudo user group)
+  After ssh key(s) are deployed to target hosts, amend the execution command
+  to:
+
 ```ansible-playbook main.yml -bKu <username> --private-key <ssh-key>```
 
 7. Where privilege escalation is not required, the packages or configuration is
 installed on the target host(s) in the context of <username> indicated via the
 above command.
 
-Note: Be aware the the /role/base/tasks/authentical.yml updates the
+Note: Be aware the /role/base/tasks/authentical.yml updates the
 /etc/ssh/sshd_config that enables SSH password authentication; consequently,
 making the ssh key access requirement moot.
 
