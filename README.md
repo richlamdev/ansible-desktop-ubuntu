@@ -13,10 +13,10 @@ This is a collection of roles I use for my Ubuntu desktop/laptop deployment.
 minor changes)
 
 3) ansible\
-```pip3 install ansible```
+`pip3 install ansible`
 
 4) jinja2 template\
-```pip3 install jinja2```
+`pip3 install jinja2`
 
 
 ## Instructions
@@ -28,20 +28,31 @@ remote server, if preferred.  This also assume the user indicated below by
 
 1. Install required software for this playbook.
 
-```sudo apt update && sudo apt install git openssh-server -y```
+`sudo apt update && sudo apt install git openssh-server -y`
 
 2. Clone ansible-desktop-ubuntu repo.
 
-```git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git```
+`git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git`
 
-3. Generate SSH keys for localhost.
+3. Generate SSH key pair for localhost.
 
-```cd ansible-desktop-ubuntu/scripts```
+`cd ansible-desktop-ubuntu/scripts`
 
-`gen_ssh_keys.sh`
+The following script will generate a new SSH key pair for localhost and copy
+the public key to ~/.ssh/authorized_keys.  This will allow authentication
+via SSH.
 
-** *Limit use of sshpass for early setup only, due to potential security issues.
-Deploy ssh keys to target host(s) after this playbook has executed successfully.* **
+`./gen_ssh_keys.sh`
+
+Alternatively, if password authentication is preferred, install sshpass.
+
+`sudo apt install sshpass`
+
+** *Limit use of sshpass for setup only, due to potential security issues. * **
+
+Note: Be aware the /role/base/tasks/authentical.yml updates the
+/etc/ssh/sshd_config that disables SSH password authentication; consequently,
+making the SSH key authentication required.
 
 4. Amend inventory file if needed, default target is localhost.
 
@@ -51,23 +62,19 @@ Deploy ssh keys to target host(s) after this playbook has executed successfully.
 setup this way to allow convenient inclusion/exclusion of roles as needed by
 commenting/uncommenting roles in main.yml at the root level of the repo.
 
-6. To run the playbook against target host(s) use the following command:
+6. To run the playbook use the following command:
 
-```ansible-playbook main.yml -bkKu <username>```
+`ansible-playbook main.yml -bKu <username> --private-key ~/.ssh/<ssh-key>`
+  * enter SUDO password. (assumes user is a member of the sudo user group)
+
+If using SSH password authentication, use the following command:
+
+`ansible-playbook main.yml -bkKu <username>`
   * enter SSH password
   * enter SUDO password. (assumes user is a member of the sudo user group)
-  After ssh key(s) are deployed to target hosts, amend the execution command
-  to:
-
-```ansible-playbook main.yml -bKu <username> --private-key <ssh-key>```
 
 7. Where privilege escalation is not required, the packages or configuration is
-installed on the target host(s) in the context of <username> indicated via the
-above command.
-
-Note: Be aware the /role/base/tasks/authentical.yml updates the
-/etc/ssh/sshd_config that enables SSH password authentication; consequently,
-making the ssh key access requirement moot.
+installed on the target host(s) in the context of <username> indicated.
 
 
 ## Notes, General Information & Considerations
