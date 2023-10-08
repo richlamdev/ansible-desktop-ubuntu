@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cp ../roles/env/files/.vimrc ~
+cp ../roles/vim/files/.vimrc ~
