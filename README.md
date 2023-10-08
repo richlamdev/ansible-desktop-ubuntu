@@ -26,26 +26,21 @@ is the target machine (localhost).  Of course, this playbook can be run from a
 remote server, if preferred.  This also assume the user indicated below by
 <username> is the has sudo privilege.*
 
-1. Install required software for this playbook.
-
+1. Install required software for this playbook.\
 `sudo apt update && sudo apt install git openssh-server -y`
 
-2. Clone ansible-desktop-ubuntu repo.
-
+2. Clone ansible-desktop-ubuntu repo.\
 `git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git`
 
-3. Generate SSH key pair for localhost.
-
+3. Generate SSH key pair for localhost.\
 `cd ansible-desktop-ubuntu/scripts`
 
 The following script will generate a new SSH key pair for localhost and copy
 the public key to ~/.ssh/authorized_keys.  This will allow authentication
-via SSH.
-
+via SSH key.\
 `./gen_ssh_keys.sh`
 
-Alternatively, if password authentication is preferred, install sshpass.
-
+Alternatively, if password authentication is preferred, install sshpass.\
 `sudo apt install sshpass`
 
 ** *Limit use of sshpass for setup only, due to potential security issues. * **
@@ -62,19 +57,20 @@ making the SSH key authentication required.
 setup this way to allow convenient inclusion/exclusion of roles as needed by
 commenting/uncommenting roles in main.yml at the root level of the repo.
 
-6. To run the playbook use the following command:
-
+6. To run the playbook use the following command:\
 `ansible-playbook main.yml -bKu <username> --private-key ~/.ssh/<ssh-key>`
   * enter SUDO password. (assumes user is a member of the sudo user group)
 
-If using SSH password authentication, use the following command:
-
+If using SSH password authentication, use the following command:\
 `ansible-playbook main.yml -bkKu <username>`
   * enter SSH password
   * enter SUDO password. (assumes user is a member of the sudo user group)
 
 7. Where privilege escalation is not required, the packages or configuration is
 installed on the target host(s) in the context of <username> indicated.
+
+
+## Role Information
 
 
 ## Notes, General Information & Considerations
