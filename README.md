@@ -19,22 +19,29 @@ minor changes)
 ```pip3 install jinja2```
 
 
-## Quick Start
+## Instructions
 
 *This assumes a brand new installation and the execution of this playbook is
-is on the target machine.  In other words, the deployment server and client are
-the same system.  Of course, this playbook can be run from a remote server, if
-preferred.  This also assume the user indicated below by <username> is the has
-sudo privilege.*
+is the target machine (localhost).  Of course, this playbook can be run from a
+remote server, if preferred.  This also assume the user indicated below by
+<username> is the has sudo privilege.*
 
-1.```sudo apt update && sudo apt install git sshpass openssh-server -y```
+1. Install required software for this playbook.
+
+```sudo apt update && sudo apt install git openssh-server -y```
+
+2. Clone ansible-desktop-ubuntu repo.
+
+```git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git```
+
+3. Generate SSH keys for localhost.
+
+```cd ansible-desktop-ubuntu/scripts```
+
+`gen_ssh_keys.sh`
 
 ** *Limit use of sshpass for early setup only, due to potential security issues.
 Deploy ssh keys to target host(s) after this playbook has executed successfully.* **
-
-2.```git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git```
-
-3.```cd ansible-desktop-ubuntu```
 
 4. Amend inventory file if needed, default target is localhost.
 
