@@ -1,0 +1,12 @@
+---
+- name: "Playbook to gather facts"
+  hosts: all
+  #become: false
+  become: true
+  become_method: sudo
+  gather_facts: true
+
+  tasks:
+    - name: gather facts
+      debug:
+        var: ansible_facts
