@@ -16,7 +16,6 @@
       - clamav
       - clamav-daemon
       - curl
-      #- exfat-utils
       #- fzf # installed via github
       - gcc
       - gimp
@@ -39,7 +38,6 @@
       - rtorrent
       - silversearcher-ag
       - sshfs
-      - sshpass
       - tcpdump
       - tmux
       - tree
