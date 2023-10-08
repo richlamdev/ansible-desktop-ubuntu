@@ -2,14 +2,14 @@
 
 ## Introduction
 
-This is a collection of roles I use for my Ubuntu desktop deployment.
+This is a collection of roles I use for my Ubuntu desktop/laptop deployment.
 
 
 ## Requirements
 
-1) Basic knowledge of Ansible.
+1) Basic knowledge of Ansible
 
-2) Ubuntu (or alternative apt based Linux Distro would likely work, may require
+2) Ubuntu (alternative apt based Linux Distro may work, will likely require
 minor changes)
 
 3) ansible\
@@ -21,7 +21,7 @@ minor changes)
 
 ## Quick Start
 
-*This assumes a brand new installation and the execution of this Playbook is
+*This assumes a brand new installation and the execution of this playbook is
 is on the target machine.  In other words, the deployment server and client are
 the same system.  Of course, this playbook can be run from a remote server, if
 preferred.  This also assume the user indicated below by <username> is the has
@@ -40,7 +40,7 @@ Deploy ssh keys to target host(s) after this playbook has executed successfully.
 
 5. Amend main.yml file for roles of software desired.
 
-* Many of the third party packages are broken into separate roles, this was
+* The majority of third party packages are separated into roles, this was
 setup this way to allow convenient inclusion/exclusion of roles as needed by
 commenting/uncommenting roles in main.yml at the root level of the repo.
 
