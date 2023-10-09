@@ -1,0 +1,7 @@
+---
+- name: restart network manager
+  systemd:
+    name: NetworkManager.service
+    enabled: true
+    state: restarted
+  #when: dns_default_status.changed == 'true'
