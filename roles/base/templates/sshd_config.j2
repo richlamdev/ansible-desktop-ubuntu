@@ -126,7 +126,7 @@ Subsystem	sftp	/usr/lib/openssh/sftp-server
 Port 22
 Protocol 2
 PermitRootLogin no
-PermitUserEnvironment yes 
+PermitUserEnvironment yes
 UseDNS no
 
 Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
@@ -159,6 +159,6 @@ LogLevel VERBOSE
 
 PubkeyAuthentication yes
 
-# Change below to "no" to disable password auth
-ChallengeResponseAuthentication yes
-PasswordAuthentication yes
+# Change below to "yes" to enable password auth
+ChallengeResponseAuthentication no
+PasswordAuthentication no
