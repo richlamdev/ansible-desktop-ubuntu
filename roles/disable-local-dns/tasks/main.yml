@@ -12,6 +12,7 @@
     insertafter: '[main]'
     line: "dns=default"
   register: dns_default_status
+  notify: restart network manager
 
 - name: remove /etc/resolv.conf
   file:
@@ -19,9 +20,11 @@
     state: absent
   when: dns_default_status.changed == 'true'
 
-- name: restart network-manager systemd-resolved
-  systemd:
-    name: NetworkManager.service
-    enabled: true
-    state: restarted
-  when: dns_default_status.changed == 'true'
+
+# use handler instead
+# - name: restart network-manager systemd-resolved
+#   systemd:
+#     name: NetworkManager.service
+#     enabled: true
+#     state: restarted
+#   when: dns_default_status.changed == 'true'
