@@ -61,7 +61,8 @@ commenting/uncommenting roles in main.yml at the root level of the repo.
 `ansible-playbook main.yml -bKu <username> --private-key ~/.ssh/<ssh-key>`
   * enter SUDO password. (assumes user is a member of the sudo user group)
 
-If using SSH password authentication, use the following command:\
+To run the playbook using SSH password authentication, use the following
+command:\
 `ansible-playbook main.yml -bkKu <username>`
   * enter SSH password
   * enter SUDO password. (assumes user is a member of the sudo user group)
@@ -71,6 +72,40 @@ installed on the target host(s) in the context of <username> indicated.
 
 
 ## Role Information
+
+The majority of roles are self explantory in terms of what they install.
+
+The following roles are have some additional information:
+
+* base
+  * packages.yml - contains a list of packages to install via apt
+  * keychron.yml - enables keychron keyboard shortcuts
+  * autostart.yml - enables autostart of applications
+  * authentication.yml - configures ssh server and client.
+                         disables passowrd authentication
+* env
+  * setups personal preferences for bash shell
+  * installs fzf via git
+
+* vim
+  * installs customization only, does not install vim
+    * compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
+  * installs codium
+  * installs indentLine
+  * installs vimwiki
+  * installs monokai
+  * installs .vimrc
+
+
+## Scripts
+
+1. gen_ssh_keys.sh - generates a new SSH key pair for localhost and copies
+the public key to ~/.ssh/authorized_keys.
+
+2. desktop-setup.sh - restore dconf settings.  (instructions within this file
+to save dconf settings)
+
+3. check_ssh_auth.sh - checks for SSH authentication methods
 
 
 ## Notes, General Information & Considerations
