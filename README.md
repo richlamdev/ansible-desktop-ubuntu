@@ -68,7 +68,7 @@ command:\
   * enter SUDO password. (assumes user is a member of the sudo user group)
 
 7. Where privilege escalation is not required, the packages or configuration is
-installed on the target host(s) in the context of <username> indicated.
+installed on the target host(s) in the context of \<username\> indicated.
 
 
 ## Role Information
@@ -83,6 +83,11 @@ The following roles are have some additional information:
   * autostart.yml - enables autostart of applications
   * authentication.yml - configures ssh server and client.
                          disables passowrd authentication
+* disable-local-dns
+  * disables local dns on the target host
+    (against this is a personal preference, as my network DNS server handles
+    DNS lookup and filtering)
+
 * env
   * setups personal preferences for bash shell
   * installs fzf via git
