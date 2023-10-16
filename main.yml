@@ -23,6 +23,7 @@
     - microsoft
     - opera
     - signal-desktop
+    - sublime-text
     - ufw
     - role: vim
       become: false
