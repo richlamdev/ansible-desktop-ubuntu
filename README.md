@@ -21,10 +21,10 @@ minor changes)
 
 ## Instructions
 
-*This assumes a brand new installation and the execution of this playbook is
-is the target machine (localhost).  Of course, this playbook can be run from a
-remote server, if preferred.  This also assume the user indicated below by
-<username> is the has sudo privilege.*
+*This assumes a new/fresh installation and the execution of this playbook is
+is the target machine (localhost).  Of course, this playbook can be executed
+from a remote server, if preferred.  This also assume the user indicated
+below by <username> is the has sudo privilege.*
 
 1. Install required software for this playbook.\
 `sudo apt update && sudo apt install git openssh-server -y`
@@ -75,7 +75,7 @@ installed on the target host(s) in the context of \<username\> indicated.
 
 The majority of roles are self explantory in terms of what they install.
 
-The following roles are have some additional information:
+Additional information for the following roles:
 
 * base
   * packages.yml - contains a list of packages to install via apt
@@ -90,16 +90,25 @@ The following roles are have some additional information:
 
 * env
   * setups personal preferences for bash shell
-  * installs fzf via git
+  * installs fzf via git (to upgrade remove ~/.fzf folder and re-run ansible)
 
 * vim
   * installs customization only, does not install vim
     * compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
   * installs codium
+  * installs fzf.vim
   * installs indentLine
-  * installs vimwiki
   * installs monokai
+  * installs vimwiki
   * installs .vimrc
+
+
+## Idempotentcy
+
+The majority of this playbook is idempotent.  However, it's not perfect, as
+software upgrades are not handled automatically.  To upgrade fzf (command line),
+remove the ~/.fzf folder and re-run ansible.   Likewise for vim plugins.
+Find the folders for vim plugins, and remove them and re-run ansible.
 
 
 ## Scripts
