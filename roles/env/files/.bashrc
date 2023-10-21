@@ -171,8 +171,11 @@ export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 #alias sv="cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim"
 sd() { cd ~ && cd $(find * -type d 2>/dev/null | fzf) ; }
 sv() { cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim ; }
+
+# this function obtained from:
+# https://thevaluable.dev/practical-guide-fzf-example/
 se() {
-    selection=$(find -type d | fzf --multi --height=80% --border=sharp \
+    selection=$(find ~ -type d | fzf --multi --height=80% --border=sharp \
         --preview='tree -C {}' --preview-window='45%,border-sharp' \
         --prompt='Dirs > ' \
         --bind='del:execute(rm -ri {+})' \
