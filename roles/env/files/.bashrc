@@ -171,8 +171,40 @@ export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 #alias sv="cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim"
 sd() { cd ~ && cd $(find * -type d 2>/dev/null | fzf) ; }
 sv() { cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim ; }
+se() {
+    selection=$(find -type d | fzf --multi --height=80% --border=sharp \
+        --preview='tree -C {}' --preview-window='45%,border-sharp' \
+        --prompt='Dirs > ' \
+        --bind='del:execute(rm -ri {+})' \
+        --bind='ctrl-p:toggle-preview' \
+        --bind='ctrl-d:change-prompt(Dirs > )' \
+        --bind='ctrl-d:+reload(find -type d)' \
+        --bind='ctrl-d:+change-preview(tree -C {})' \
+        --bind='ctrl-d:+refresh-preview' \
+        --bind='ctrl-f:change-prompt(Files > )' \
+        --bind='ctrl-f:+reload(find -type f)' \
+        --bind='ctrl-f:+change-preview(cat {})' \
+        --bind='ctrl-f:+refresh-preview' \
+        --bind='ctrl-a:select-all' \
+        --bind='ctrl-x:deselect-all' \
+        --header '
+        CTRL-D to display directories | CTRL-F to display files
+        CTRL-A to select all | CTRL-x to deselect all
+        ENTER to edit | DEL to delete
+        CTRL-P to toggle preview
+        ')
+
+    if [ -d "$selection" ]; then
+        cd "$selection" || return
+    else
+        eval "$EDITOR $selection"
+    fi
+}
 
 complete -C /usr/bin/terraform terraform
 
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
+
