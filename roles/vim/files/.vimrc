@@ -114,7 +114,7 @@ nnoremap N Nzzzv
 "nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
-" Shell {{{
+" shell {{{
 autocmd FileType sh
     \ set tabstop=2 |
     \ set softtabstop=2 |
@@ -124,7 +124,7 @@ autocmd FileType sh
     \ set smarttab |
 " }}}
 
-" Markdown {{{
+" markdown {{{
 autocmd FileType markdown
     \ set tabstop=4 |
     \ set softtabstop=4 |
@@ -180,8 +180,6 @@ let g:vim_json_conceal=0
 " colours {{{
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
-"colorscheme pablo          " Set colorscheme
-"colorscheme gruvbox          " Set colorscheme
 "colorscheme molokai          " Set colorscheme
 "let g:molokai_original = 1
 colorscheme monokai          " Set colorscheme
@@ -254,6 +252,10 @@ let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
                       \ 'syntax': 'default', 'ext': '.wiki',
                       \ 'links_space_char': '-'}]
 let g:vimwiki_global_ext = 0
+
+" disable tab for vimwiki filetypes, to allow autocompletion via codeium
+autocmd filetype vimwiki silent! iunmap <buffer> <Tab>
+
 " }}}
 
 " netrw {{{
@@ -299,6 +301,12 @@ nnoremap <Leader>c :Changes<cr>
 " vimgrep {{{
 " Add this line to your ~/.vimrc or _vimrc file
 nnoremap <leader>v :vim /
+
+" }}}
+
+" nerdtree {{{
+" Add this line to your ~/.vimrc or _vimrc file
+nnoremap <f6> :NERDTreeToggle<cr>
 
 " }}}
 
