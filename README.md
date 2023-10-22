@@ -21,13 +21,13 @@ desktop/laptop deployment.
 
 ## Instructions
 
-*This assumes a new/fresh installation and the execution of this playbook is
-is the target machine (localhost).  Of course, this playbook can be executed
-from a remote server, if preferred.  This also assume the user indicated
-below by <username> is the has sudo privilege.*
+*This assumes a new/fresh installation and the execution of this playbook
+is on the target machine (localhost).  Of course, this playbook can be executed
+to a remote host, if needed.  This also assumes the user indicated
+below by \<username\> belongs to the sudo group.*
 
 1. Install required software for this playbook.\
-`sudo apt update && sudo apt install git openssh-server -y`
+`sudo apt update && sudo apt install ansible git openssh-server -y`
 
 2. Clone ansible-desktop-ubuntu repo.\
 `git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git`
@@ -47,11 +47,11 @@ Alternatively, if password authentication is preferred, install sshpass.\
 
 Note: Be aware the /role/base/tasks/authentication.yml will update the
 /etc/ssh/sshd_config, which will disable SSH password authentication; consequently,
-making the SSH key authentication required.
+making SSH key authentication required.
 
 4. Amend inventory file if needed, default target is localhost.
 
-5. Amend main.yml file for roles of software desired.
+5. Amend main.yml file for roles (software) desired.
 
 * The majority of third party packages are separated into roles, this was
 setup this way to allow convenient inclusion/exclusion of roles as needed by
@@ -82,7 +82,7 @@ Additional information for the following roles:
   * keychron.yml - enables keychron keyboard shortcuts
   * autostart.yml - enables autostart of applications
   * authentication.yml - configures ssh server and client.
-                         disables passowrd authentication
+                         disables password authentication
   * .bashrc - custom fzf functions
     * sd - switch directory via fzf
     * sv - vim edit file via fzf
@@ -104,6 +104,7 @@ Additional information for the following roles:
   * installs customization only, does not install vim
     * compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
   * installs codium
+  * installs vim-commentary
   * installs fzf.vim
   * installs indentLine
   * installs monokai
@@ -111,15 +112,15 @@ Additional information for the following roles:
   * installs personal .vimrc
 
 
-## Idempotentcy
+## Idempotency
 
 The majority of this playbook is idempotent.  Minimal use of Ansible shell or
 command is used.
 
-However, idempotency is not perfect, not all software upgrades are handled
-automatically.  To upgrade fzf (command line), remove the ~/.fzf folder
-and re-run ansible.   Likewise for vim plugins.  Locate the folders for any
-vim plugins that require an upgrade, remove them, and re-run ansible.
+However, the idempotency checks are not perfect, not all software upgrades
+are handled automatically.  To upgrade fzf (command line), remove the ~/.fzf
+folder and re-run ansible.   Likewise for vim plugins.  Locate the folders for
+any vim plugins that require an upgrade, remove them, and re-run ansible.
 
 
 ## Scripts
