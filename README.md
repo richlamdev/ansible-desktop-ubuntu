@@ -10,8 +10,7 @@ desktop/laptop deployment.
 
 1) Basic knowledge of Ansible
 
-2) Ubuntu (alternative apt based Linux Distro may work, will likely require
-minor changes)
+2) Ubuntu (other apt based Linux Distro may work, may require minor changes)
 
 3) ansible\
 `pip3 install ansible`
@@ -98,6 +97,9 @@ Additional information for the following roles:
   * setups personal preferences for bash shell
   * installs fzf via git (to upgrade remove ~/.fzf folder and re-run ansible)
 
+* ufw
+  * disables incoming ports, except port 22 (limit inbound connections port 22)
+
 * vim
   * installs customization only, does not install vim
     * compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
@@ -111,10 +113,13 @@ Additional information for the following roles:
 
 ## Idempotentcy
 
-The majority of this playbook is idempotent.  However, it's not perfect, as
-not all software upgrades are not handled automatically.  To upgrade fzf
-(command line), remove the ~/.fzf folder and re-run ansible.   Likewise for vim
-plugins.  Find the folders for vim plugins, and remove them and re-run ansible.
+The majority of this playbook is idempotent.  Minimal use of Ansible shell or
+command is used.
+
+However, idempotency is not perfect, not all software upgrades are handled
+automatically.  To upgrade fzf (command line), remove the ~/.fzf folder
+and re-run ansible.   Likewise for vim plugins.  Locate the folders for any
+vim plugins that require an upgrade, remove them, and re-run ansible.
 
 
 ## Scripts
@@ -128,7 +133,7 @@ to save dconf settings)
 3. check_ssh_auth.sh - checks for SSH authentication methods against a host
 
 
-## Notes, General Information & Considerations
+## Random Notes, General Information & Considerations
 
 1. For further information regarding command line switches and arguments above,
 please see the [Ansible documentation](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html),
@@ -140,5 +145,8 @@ available via the default apt repositories.  Other software are some git repos,
 keychron keyboard setup, and screen blanking short-cut key enablement.
 Furthermore the roles env and vim are personal preferences.
 
-3. The organization of this ansible repo has become a little messier than
+3. Proper GPG keys are added to /usr/share/keyrings/ folder, and referenced
+within repos, per deprecation of apt-key as of Ubuntu 22.04.
+
+4. The organization of this ansible repo has become a little messier than
 preferred.  TODO: Clean it up to be more organized / readable / reusable.
