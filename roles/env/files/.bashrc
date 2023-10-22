@@ -186,7 +186,7 @@ se() {
         --bind='ctrl-d:+refresh-preview' \
         --bind='ctrl-f:change-prompt(Files > )' \
         --bind='ctrl-f:+reload(find -type f)' \
-        --bind='ctrl-f:+change-preview(cat {})' \
+        --bind='ctrl-f:+change-preview(batcat --color=always {})' \
         --bind='ctrl-f:+refresh-preview' \
         --bind='ctrl-a:select-all' \
         --bind='ctrl-x:deselect-all' \
