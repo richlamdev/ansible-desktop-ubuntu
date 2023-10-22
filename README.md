@@ -2,7 +2,8 @@
 
 ## Introduction
 
-This is a collection of roles I use for my Ubuntu desktop/laptop deployment.
+This is a collection of roles and configuarions I use for my Ubuntu
+desktop/laptop deployment.
 
 
 ## Requirements
@@ -45,8 +46,8 @@ Alternatively, if password authentication is preferred, install sshpass.\
 
 ** *Limit use of sshpass for setup only, due to potential security issues. * **
 
-Note: Be aware the /role/base/tasks/authentical.yml updates the
-/etc/ssh/sshd_config that disables SSH password authentication; consequently,
+Note: Be aware the /role/base/tasks/authentication.yml will update the
+/etc/ssh/sshd_config, which will disable SSH password authentication; consequently,
 making the SSH key authentication required.
 
 4. Amend inventory file if needed, default target is localhost.
@@ -83,9 +84,14 @@ Additional information for the following roles:
   * autostart.yml - enables autostart of applications
   * authentication.yml - configures ssh server and client.
                          disables passowrd authentication
+  * .bashrc - custom fzf functions
+    * sd - switch directory via fzf
+    * sv - vim edit file via fzf
+    * se - fzf file explorer
+
 * disable-local-dns
   * disables local dns on the target host
-    (against this is a personal preference, as my network DNS server handles
+    (again this is a personal preference, as my network DNS server handles
     DNS lookup and filtering)
 
 * env
@@ -100,15 +106,15 @@ Additional information for the following roles:
   * installs indentLine
   * installs monokai
   * installs vimwiki
-  * installs .vimrc
+  * installs personal .vimrc
 
 
 ## Idempotentcy
 
 The majority of this playbook is idempotent.  However, it's not perfect, as
-software upgrades are not handled automatically.  To upgrade fzf (command line),
-remove the ~/.fzf folder and re-run ansible.   Likewise for vim plugins.
-Find the folders for vim plugins, and remove them and re-run ansible.
+not all software upgrades are not handled automatically.  To upgrade fzf
+(command line), remove the ~/.fzf folder and re-run ansible.   Likewise for vim
+plugins.  Find the folders for vim plugins, and remove them and re-run ansible.
 
 
 ## Scripts
@@ -119,7 +125,7 @@ the public key to ~/.ssh/authorized_keys.
 2. desktop-setup.sh - restore dconf settings.  (instructions within this file
 to save dconf settings)
 
-3. check_ssh_auth.sh - checks for SSH authentication methods
+3. check_ssh_auth.sh - checks for SSH authentication methods against a host
 
 
 ## Notes, General Information & Considerations
