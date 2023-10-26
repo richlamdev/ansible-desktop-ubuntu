@@ -116,14 +116,12 @@ if ! shopt -oq posix; then
   fi
 fi
 
-
+# customize prompt
 source "/home/rlam/.bashrc.d/git_bash_ps1.sh"
 
-#HISTSIZE=100000
-#HISTFILESIZE=200000
-#HISTCONTROL=ignoreboth
 HISTFILE=/home/$USER/.bash_history
 
+# set alias to copy to cliboard
 alias cb='xclip -sel clip'
 
 # minikube autocomplete
@@ -137,16 +135,10 @@ complete -o default -F __start_kubectl k
 # aws autocomplete
 complete -C '/usr/local/bin/aws_completer' aws
 
-# fzf bindings & settings
-#if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
-#  source /usr/share/doc/fzf/examples/key-bindings.bash
-#fi
-#
-#if [ -f /usr/share/bash-completion/completions/fzf ]; then
-#  source /usr/share/bash-completion/completions/fzf
-#fi
+# terraform autocomplete
+complete -C /usr/bin/terraform terraform
 
-
+# fzf
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
 
@@ -175,17 +167,23 @@ sv() { cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim ; 
 # this function obtained from:
 # https://thevaluable.dev/practical-guide-fzf-example/
 se() {
-    selection=$(find ~ -type d | fzf --multi --height=80% --border=sharp \
-        --preview='tree -C {}' --preview-window='45%,border-sharp' \
+    if [ -z "$1" ]; then
+        search_folder="$HOME"
+    else
+        search_folder="$1"
+    fi
+
+    selection=$(find "$search_folder" -type d | fzf --multi --height=80% --border=sharp \
+        --preview='tree -C {}' --preview-window='50%,border-sharp' \
         --prompt='Dirs > ' \
         --bind='del:execute(rm -ri {+})' \
         --bind='ctrl-p:toggle-preview' \
         --bind='ctrl-d:change-prompt(Dirs > )' \
-        --bind='ctrl-d:+reload(find -type d)' \
+        --bind="ctrl-d:+reload(find $search_folder -type d)" \
         --bind='ctrl-d:+change-preview(tree -C {})' \
         --bind='ctrl-d:+refresh-preview' \
         --bind='ctrl-f:change-prompt(Files > )' \
-        --bind='ctrl-f:+reload(find -type f)' \
+        --bind="ctrl-f:+reload(find $search_folder -type f)" \
         --bind='ctrl-f:+change-preview(batcat --color=always {})' \
         --bind='ctrl-f:+refresh-preview' \
         --bind='ctrl-a:select-all' \
@@ -204,10 +202,8 @@ se() {
     fi
 }
 
-complete -C /usr/bin/terraform terraform
-
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 
-
+#eval "$(starship init bash)"
