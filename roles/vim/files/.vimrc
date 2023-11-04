@@ -209,6 +209,12 @@ hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlig
 " }}}
 
 " statusline {{{
+
+function! GitBranch()
+  let branch = substitute(system('git rev-parse --abbrev-ref HEAD 2>/dev/null'), '\n', '', '')
+  return strlen(branch) ? ' '.branch.' ' : ''
+endfunction
+
 " based on gnome-terminal, use XTerm colour palette
 "set fillchars+=vert:\ " change appearance of window split border
 hi VertSplit ctermfg=white guifg=white " change color of window split border
@@ -225,15 +231,22 @@ hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
 set laststatus=2                " always display status line
 set statusline=
 
-set statusline+=%1*
+set statusline+=%1*             " set to User1 color
 set statusline+=\b:%n           " buffer number
-set statusline+=%2*
+set statusline+=%2*             " set to User2 color
 set statusline+=\ %F            " file path and name
 set statusline+=\               " add space separator
-set statusline+=%3*
+set statusline+=%3*             " set to User3 color
 set statusline+=\ft:\%y         " file type in [brackets]
 set statusline+=%9*             " reset color to default blue
 
+set statusline+=%1*
+"set statusline+=\               " add space separator
+set statusline+=\{…\}%3{codeium#GetStatusString()} " codeium status
+"set statusline+=\               " add space separator
+set statusline+=%9*             " reset color to default blue
+
+set statusline+=%{GitBranch()}
 set statusline+=\%=             " separator point left/right of items
 
 set statusline+=\row:%l/%L      " line number / line total
@@ -304,10 +317,18 @@ nnoremap <leader>v :vim /
 
 " }}}
 
+" codeium {{{
+let g:codeium_disable_bindings = 1
+imap <script><silent><nowait><expr> <Tab> codeium#Accept()
+imap <C-n> <Cmd>call codeium#CycleCompletions(1)<CR>
+imap <C-p> <Cmd>call codeium#CycleCompletions(-1)<CR>
+imap <C-x> <Cmd>call codeium#Clear()<CR>
+imap <C-a> <Cmd>call codeium#Complete()<CR>
+" }}}
+
 " nerdtree {{{
 " Add this line to your ~/.vimrc or _vimrc file
 nnoremap <f6> :NERDTreeToggle<cr>
-
 " }}}
 
 " folding {{{
