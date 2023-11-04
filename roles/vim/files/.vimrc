@@ -226,6 +226,7 @@ hi User4 ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
 hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
 hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
 hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
+hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
 hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
 
 set laststatus=2                " always display status line
@@ -241,14 +242,16 @@ set statusline+=\ft:\%y         " file type in [brackets]
 set statusline+=%9*             " reset color to default blue
 
 set statusline+=%1*
-"set statusline+=\               " add space separator
 set statusline+=\{…\}%3{codeium#GetStatusString()} " codeium status
-"set statusline+=\               " add space separator
 set statusline+=%9*             " reset color to default blue
 
+set statusline+=%8*             " set to User8 color
 set statusline+=%{GitBranch()}
+set statusline+=%9*             " reset color to default blue
+
 set statusline+=\%=             " separator point left/right of items
 
+set statusline+=%7*             " set to User7 color
 set statusline+=\row:%l/%L      " line number / line total
 set statusline+=%4*
 set statusline+=\ col:%c        " column number
