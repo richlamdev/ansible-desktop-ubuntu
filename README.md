@@ -103,13 +103,25 @@ Additional information for the following roles:
 * vim
   * installs customization only, does not install vim
     * compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
-  * installs codium
-  * installs vim-commentary
-  * installs fzf.vim
-  * installs indentLine
-  * installs monokai
-  * installs vimwiki
-  * installs personal .vimrc
+    * Note: Vim >9.0 is required for codeium plugin below, at the time of the
+    writing of this playbook, Vim 9.x was not available in the official Ubuntu
+    repos
+
+  * installs following plugins:
+    * [ALE](https://github.com/dense-analysis/ale)
+    * [codium](https://github.com/Exafunction/codeium.vim)
+    * [fzf.vim](https://github.com/junegunn/fzf.vim)
+    * [hashivim](https://github.com/hashivim/vim-terraform)
+    * [indentLine](https://github.com/Yggdroot/indentLine)
+    * [monokai colorscheme](https://github.com/sickill/vim-monokai)
+    * [vim-commentary](https://github.com/tpope/vim-commentary)
+    * [vimwiki](https://github.com/vimwiki/vimwiki)
+    * [personal .vimrc](https://github.com/richlamdev/ansible-desktop-ubuntu/blob/master/roles/vim/files/.vimrc)
+
+  * installs following, linters/formatters via pip
+    * python black
+    * flake8
+    * yamllint
 
 
 ## Idempotency
@@ -132,6 +144,7 @@ the public key to ~/.ssh/authorized_keys.
 to save dconf settings)
 
 3. check_ssh_auth.sh - checks for SSH authentication methods against a host
+Eg: `./check_ssh_auth.sh localhost`
 
 
 ## Random Notes, General Information & Considerations
