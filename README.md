@@ -119,9 +119,9 @@ Additional information for the following roles:
     * [personal .vimrc](https://github.com/richlamdev/ansible-desktop-ubuntu/blob/master/roles/vim/files/.vimrc)
 
   * installs following, linters/formatters via pip
-    * python black
-    * flake8
-    * yamllint
+    * [python black](https://github.com/psf/black)
+    * [flake8](https://github.com/PyCQA/flake8)
+    * [yamllint](https://github.com/adrienverge/yamllint)
 
 
 ## Idempotency
