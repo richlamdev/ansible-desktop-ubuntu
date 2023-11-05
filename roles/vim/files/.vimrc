@@ -235,9 +235,14 @@ set statusline=
 set statusline+=%1*                " set to User1 color
 set statusline+=\b:%n              " buffer number
 set statusline+=%2*                " set to User2 color
-set statusline+=%{expand('%:p:h')} " current working directory
+set statusline+=%{getcwd()}        " current working directory (CWD)
 set statusline+=%7*                " set to User7 color
 set statusline+=\                  " add space separator
+
+set statusline+=%{fnamemodify(expand('%:p:h'),\ ':~:.')} " current file path with respect to the CWD
+
+set statusline+=\                  " add space separator
+
 set statusline+=%t                 " filename
 set statusline+=\                  " add space separator
 set statusline+=%3*                " set to User3 color
@@ -332,6 +337,13 @@ imap <C-a> <Cmd>call codeium#Complete()<CR>
 " Add this line to your ~/.vimrc or _vimrc file
 nnoremap <f6> :NERDTreeToggle<cr>
 " }}}
+"
+" 'cd' towards the directory in which the current file is edited
+" but only change the path for the current window
+nnoremap <leader>cd :lcd %:h<CR>
+
+" Open files located in the same dir in with the current file is edited
+nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
 " folding {{{
 set foldmethod=syntax
