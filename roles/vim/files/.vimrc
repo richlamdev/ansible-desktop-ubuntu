@@ -229,36 +229,35 @@ hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
 hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
 hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
 
-set laststatus=2                " always display status line
+set laststatus=2                   " always display status line
 set statusline=
 
-set statusline+=%1*             " set to User1 color
-set statusline+=\b:%n           " buffer number
-set statusline+=%2*             " set to User2 color
-set statusline+=\ %F            " file path and name
-set statusline+=\               " add space separator
-set statusline+=%3*             " set to User3 color
-set statusline+=\ft:\%y         " file type in [brackets]
-set statusline+=%9*             " reset color to default blue
-
+set statusline+=%1*                " set to User1 color
+set statusline+=\b:%n              " buffer number
+set statusline+=%2*                " set to User2 color
+set statusline+=%{expand('%:p:h')} " current working directory
+set statusline+=%7*                " set to User7 color
+set statusline+=\                  " add space separator
+set statusline+=%t                 " filename
+set statusline+=\                  " add space separator
+set statusline+=%3*                " set to User3 color
+set statusline+=\ft:\%y            " file type in [brackets]
 set statusline+=%1*
 set statusline+=\{…\}%3{codeium#GetStatusString()} " codeium status
-set statusline+=%9*             " reset color to default blue
-
-set statusline+=%8*             " set to User8 color
+set statusline+=%8*                " set to User8 color
 set statusline+=%{GitBranch()}
-set statusline+=%9*             " reset color to default blue
+set statusline+=%9*                " reset color to default blue
 
-set statusline+=\%=             " separator point left/right of items
+set statusline+=\%=                " separator point left/right of statusline
 
-set statusline+=%7*             " set to User7 color
-set statusline+=\row:%l/%L      " line number / line total
+set statusline+=%7*                " set to User7 color
+set statusline+=\row:%l/%L         " line number / line total
 set statusline+=%4*
-set statusline+=\ col:%c        " column number
+set statusline+=\ col:%c           " column number
 set statusline+=%6*
-set statusline+=\ %p%%          " percentage through file
+set statusline+=\ %p%%             " percentage through file
 set statusline+=%5*
-set statusline+=\ h:%B          " value of char under cursor in hex
+set statusline+=\ h:%B             " value of char under cursor in hex
 " }}}
 
 " vimwiki {{{
