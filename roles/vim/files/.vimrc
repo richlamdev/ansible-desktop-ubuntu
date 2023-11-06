@@ -226,6 +226,7 @@ hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
 hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
 hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
 hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
+hi StatusLineNC cterm=italic       " non active windows are italic
 
 set laststatus=2                   " always display status line
 set statusline=
@@ -240,7 +241,7 @@ set statusline+=\                  " add space separator
 set statusline+=%3*                " set to User3 color
 set statusline+=\ft:\%y            " file type in [brackets]
 set statusline+=%1*
-set statusline+=\{…\}%3{codeium#GetStatusString()} " codeium status
+set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status
 set statusline+=%8*                " set to User8 color
 set statusline+=%{GitBranch()}
 set statusline+=%9*                " reset color to default blue
@@ -254,7 +255,7 @@ set statusline+=\ col:%c           " column number
 set statusline+=%6*
 set statusline+=\ %p%%             " percentage through file
 set statusline+=%5*
-set statusline+=\ hex:%B             " value of char under cursor in hex
+set statusline+=\ hex:%B           " value of char under cursor in hex
 " }}}
 
 " vimwiki {{{
