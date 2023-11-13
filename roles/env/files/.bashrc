@@ -138,6 +138,9 @@ complete -C '/usr/local/bin/aws_completer' aws
 # terraform autocomplete
 complete -C /usr/bin/terraform terraform
 
+# vagrant command completion (start)
+. /opt/vagrant/embedded/gems/gems/vagrant-2.4.0/contrib/bash/completion.sh
+
 # fzf
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
@@ -207,3 +210,4 @@ se() {
 
 
 #eval "$(starship init bash)"
+
