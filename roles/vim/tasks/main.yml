@@ -1,5 +1,5 @@
 ---
-- name: install python black, flake8, yamllint with pip
+- name: install python black, flake8, pre-commit, ruff, yamllint with pip
   pip:
     state: latest
     extra_args: --user
@@ -7,6 +7,8 @@
     name:
       - black
       - flake8
+      - pre-commit
+      - ruff
       - yamllint
 
 # this is not necessary; keeping this here for potential future use
