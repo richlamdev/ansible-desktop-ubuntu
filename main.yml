@@ -24,6 +24,7 @@
     - opera
     - signal-desktop
     - sublime-text
+    - trivy
     - ufw
     - role: vim
       become: false
