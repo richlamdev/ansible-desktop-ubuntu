@@ -38,6 +38,7 @@
       - rtorrent
       - silversearcher-ag
       - sshfs
+      - termshark
       - tcpdump
       - tmux
       - tree
