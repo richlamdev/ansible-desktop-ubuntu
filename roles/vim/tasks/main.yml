@@ -8,6 +8,7 @@
       - black
       - flake8
       - pre-commit
+      - pytest
       - ruff
       - yamllint
 
