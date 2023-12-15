@@ -13,7 +13,6 @@
     - aws-cli
     - brave
     - chrome
-    - disable-local-dns
     - docker
     - gh_cli
     - hashicorp
@@ -30,4 +29,5 @@
       become: false
     - role: env
       become: false
+    - disable-local-dns
     # - yubico
