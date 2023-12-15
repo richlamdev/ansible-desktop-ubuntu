@@ -92,6 +92,9 @@ Additional information for the following roles:
   * disables local dns on the target host
     (again this is a personal preference, as my network DNS server handles
     DNS lookup and filtering)
+  * this role is executed last, as a dns service restart is required; the
+    restart will take too long and cause the following playbook to fail
+    (a delay could be added, but that just adds unnecessary time)
 
 * env
   * setups personal preferences for bash shell
