@@ -13,7 +13,7 @@
     - aws-cli
     - brave
     - chrome
-    - docker
+    #- docker
     - gh_cli
     - hashicorp
     - keepassxc
