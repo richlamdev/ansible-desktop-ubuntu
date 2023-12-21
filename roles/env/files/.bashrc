@@ -162,6 +162,8 @@ export FZF_CTRL_R_OPTS="
 # Print tree structure in the preview window
 export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 
+export EDITOR=vim
+
 #alias sd="cd ~ && cd \$(find * -type d 2>/dev/null | fzf)"
 #alias sv="cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim"
 sd() { cd ~ && cd $(find * -type d 2>/dev/null | fzf) ; }
