@@ -1,0 +1,16 @@
+---
+# execute this role as normal user, to avoid affecting the host syste
+- name: install python black, flake8, pre-commit, ruff, yamllint with pip
+  pip:
+    state: latest
+    extra_args: --user
+    executable: pip3
+    name:
+      - black
+      - bottle
+      - flake8
+      - glances
+      - pre-commit
+      - pytest
+      - ruff
+      - yamllint
