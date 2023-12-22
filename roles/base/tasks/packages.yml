@@ -62,11 +62,11 @@
     enabled: true
     state: started
 
-- name: packages | install additional pip packages
-  pip:
-    state: latest
-    executable: pip3
-    name:
-      #- pip # self upgrade pip first
-      - glances
-      - bottle
+# - name: packages | install additional pip packages
+#   pip:
+#     state: latest
+#     executable: pip3
+#     name:
+#       #- pip # self upgrade pip first
+#       - glances
+#       - bottle
