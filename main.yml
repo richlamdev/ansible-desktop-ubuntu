@@ -21,6 +21,8 @@
     - lens
     - microsoft
     - opera
+    - role: pip-packages
+      become: false
     - signal-desktop
     - sublime-text
     - trivy

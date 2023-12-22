@@ -1,16 +1,16 @@
 ---
-- name: install python black, flake8, pre-commit, ruff, yamllint with pip
-  pip:
-    state: latest
-    extra_args: --user
-    executable: pip3
-    name:
-      - black
-      - flake8
-      - pre-commit
-      - pytest
-      - ruff
-      - yamllint
+# - name: install python black, flake8, pre-commit, ruff, yamllint with pip
+#   pip:
+#     state: latest
+#     extra_args: --user
+#     executable: pip3
+#     name:
+#       - black
+#       - flake8
+#       - pre-commit
+#       - pytest
+#       - ruff
+#       - yamllint
 
 # this is not necessary; keeping this here for potential future use
 - name: Set directory paths based on OS (Debian/Ubuntu)
