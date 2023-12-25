@@ -164,11 +164,6 @@ export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 
 export EDITOR=vim
 
-#alias sd="cd ~ && cd \$(find * -type d 2>/dev/null | fzf)"
-#alias sv="cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim"
-sd() { cd ~ && cd $(find * -type d 2>/dev/null | fzf) ; }
-sv() { cd ~ && find * -type f 2>/dev/null | fzf --print0 | xargs -0 -o -r vim ; }
-
 # this function obtained from:
 # https://thevaluable.dev/practical-guide-fzf-example/
 se() {
@@ -202,14 +197,14 @@ se() {
 
     if [ -d "$selection" ]; then
         cd "$selection" || return
-    else
-        eval "$EDITOR $selection"
+    elif [ -f "$selection" ]; then
+        # Change to the directory containing the file
+        cd "$(dirname "$selection")" || return
     fi
+    # alternatively edit selection via EDITOR
+    # else
+    #     eval "$EDITOR $selection"
+    # fi
 }
 
-
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-
-#eval "$(starship init bash)"
-
