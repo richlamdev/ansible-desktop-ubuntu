@@ -36,6 +36,7 @@
       - ranger
       - ripgrep
       - rtorrent
+      - shellcheck
       - silversearcher-ag
       - sshfs
       - termshark
