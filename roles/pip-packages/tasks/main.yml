@@ -6,6 +6,7 @@
     extra_args: --user
     executable: pip3
     name:
+      - bandit
       - black
       - bottle
       - flake8
