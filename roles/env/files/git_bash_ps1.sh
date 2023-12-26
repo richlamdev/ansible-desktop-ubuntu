@@ -101,7 +101,7 @@ Jobs="\j"
 MyPS1=$Blue027$Username$IPurple@$IGreen$ShortHost$Color_Off'$(git branch &>/dev/null;\
 if [ $? -eq 0 ]; then \
   echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
-  HEADREV=`git log --pretty=%h -n 1`; 
+  HEADREV=`git log --pretty=%h -n 1`;
   echo "'$BWhite'|$HEADREV" | tr -d "\n"; \
   if [ "$?" -eq "0" ]; then \
     # @4 - Clean repository - nothing to commit

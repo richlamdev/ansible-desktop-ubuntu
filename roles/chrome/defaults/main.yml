@@ -2,4 +2,3 @@
 # defaults file for ansible-role-chrome
 chrome_package: google-chrome-stable
 ...
-
