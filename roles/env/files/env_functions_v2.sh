@@ -32,8 +32,8 @@
 # Author              Date        Description                             #
 #-------------------------------------------------------------------------#
 # David ******        05/30/2007  Created/Added comments                  #
-# Richard Lam         11/21/2021  Modified mixed_ps                       # 
-#                                 Added "dtm24Y" format                   # 
+# Richard Lam         11/21/2021  Modified mixed_ps                       #
+#                                 Added "dtm24Y" format                   #
 #                                 Added colorgrid function to             #
 #                                 display all colors at prompt            #
 #                                                                         #
@@ -174,7 +174,7 @@ frmtps_fn () {
 	local ITCNT=0
 	#PS1=${PS1}${PSDELIMENDCLR}${PSDELIMLFTEND}${NO_CLR}`title_fn`
 	PS1=${PS1}${PSDELIMENDCLR}${PSDELIMLFTEND}${NO_CLR}
-	
+
 	for optvalue in $@
    do
 		((ITCNT=ITCNT+1))
@@ -201,7 +201,7 @@ frmtps_fn () {
             wrapper_fn ${NO_CLR}${PSTIMECLR}" Current Shell: \s" $ITCNT $WCCNT
 				;;
          "whsrv")
-				who_where_fn 
+				who_where_fn
             wrapper_fn " ${NO_CLR}${PSWHOCLR}${WHOAMICLR}"${NO_CLR}${PSWDCLR}@${NO_CLR}${WHATSRVCLR} $ITCNT $WCCNT
 				;;
          "dbval")
@@ -329,7 +329,7 @@ mixed_ps () {
 	export PSDBTSTCLR=$CLR_LGHTBLUE
 	export PSDBPRDCLR=$CLR_RED
 	export STACKED=NO
-	frmtps_fn whsrv dbval dtm24Y pwdir 
+	frmtps_fn whsrv dbval dtm24Y pwdir
 }
 green_ps () {
 	export PS1=
@@ -415,4 +415,3 @@ function patriot_ps (){
 	export STACKED=YES
 	frmtps_fn whsrv dbval lngdt pwdir
 }
-

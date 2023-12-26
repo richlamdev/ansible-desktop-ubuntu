@@ -147,6 +147,3 @@
 
 *   user ansible-role docgen to generate README ([455d2fe9](https://github.com/weareinteractive/ansible-ufw/commit/455d2fe98e313fd279ce59dda6822178e3a1845e))
 *   add CHANGELOG ([fd9dedf4](https://github.com/weareinteractive/ansible-ufw/commit/fd9dedf4eb9561f90b29404d025e3b7717cbb93e))
-
-
-
