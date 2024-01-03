@@ -83,9 +83,7 @@ Additional information for the following roles:
   * autostart.yml - enables autostart of applications
   * authentication.yml - configures ssh server and client.
                          disables password authentication
-  * .bashrc - custom fzf functions
-    * sd - switch directory via fzf
-    * sv - vim edit file via fzf
+  * .bashrc - custom fzf function
     * se - fzf file explorer
 
 * disable-local-dns
@@ -93,12 +91,18 @@ Additional information for the following roles:
     (again this is a personal preference, as my network DNS server handles
     DNS lookup and filtering)
   * this role is executed last, as a dns service restart is required; the
-    restart will take too long and cause the following playbook to fail
-    (a delay could be added, but that just adds unnecessary time)
+    restart will take too long and cause the following playbook role(s) to fail
+    (a delay could be added, but that adds unnecessary time to the playbook)
 
 * env
   * setups personal preferences for bash shell
   * installs fzf via git (to upgrade remove ~/.fzf folder and re-run ansible)
+
+* pip-packages
+  * primarily installs pip packages for coding/development
+    * [python black](https://github.com/psf/black)
+    * [flake8](https://github.com/PyCQA/flake8)
+    * [yamllint](https://github.com/adrienverge/yamllint)
 
 * ufw
   * disables incoming ports, except port 22 (limit inbound connections port 22)
@@ -120,11 +124,6 @@ Additional information for the following roles:
     * [vim-commentary](https://github.com/tpope/vim-commentary)
     * [vimwiki](https://github.com/vimwiki/vimwiki)
     * [personal .vimrc](https://github.com/richlamdev/ansible-desktop-ubuntu/blob/master/roles/vim/files/.vimrc)
-
-  * installs following, linters/formatters via pip
-    * [python black](https://github.com/psf/black)
-    * [flake8](https://github.com/PyCQA/flake8)
-    * [yamllint](https://github.com/adrienverge/yamllint)
 
 
 ## Idempotency
