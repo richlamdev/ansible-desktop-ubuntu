@@ -25,6 +25,8 @@ set mouse=a                    " enable mouse for all modes
 set scrolloff=1                " set number of context lines visible above & below cursor
 set sidescrolloff=5            " make vertical scrolling appear more natural
 set noerrorbells               " disable beep on errors
+set lazyredraw                 " don't redraw while executing macros
+set ttyfast                    " send more characters for redraws
 "set t_TI=^[[4?h
 "set t_TE=^[[4?l
 "set lines=45                  " set number of lines - do not use for console VIM
