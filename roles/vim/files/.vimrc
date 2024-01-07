@@ -26,11 +26,7 @@ set scrolloff=1                " set number of context lines visible above & bel
 set sidescrolloff=5            " make vertical scrolling appear more natural
 set noerrorbells               " disable beep on errors
 set lazyredraw                 " don't redraw while executing macros
-set ttyfast                    " send more characters for redraws
-"set t_TI=^[[4?h
-"set t_TE=^[[4?l
-"set lines=45                  " set number of lines - do not use for console VIM
-"set columns=80                " set number of columns - do not use for console VIM
+set smoothscroll               " smooth scrolling
 
 if has("autocmd")              " Jump to last position when reopening a file
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -64,7 +60,6 @@ autocmd Filetype python
     \ set textwidth=0 |
     \ set smarttab |
     \ set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with |
-    "\ set wrap linebreak nolist |
 
 " highlight a marker at column 80
 highlight ColorColumn ctermbg=red |
@@ -275,8 +270,8 @@ autocmd filetype vimwiki silent! iunmap <buffer> <Tab>
 " }}}
 
 " netrw {{{
-inoremap <c-v> <Esc>:Lex<cr>:vertical resize 30<cr>
-nnoremap <c-v> <Esc>:Lex<cr>:vertical resize 30<cr>
+inoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
+nnoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
 
 " https://www.akhatib.com/making-netrw-clean-and-minimally-disruptive-then-stop-using-it/
 let g:netrw_banner = 0
