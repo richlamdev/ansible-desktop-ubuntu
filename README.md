@@ -77,6 +77,12 @@ The majority of roles are self explantory in terms of what they install.
 
 Additional information for the following roles:
 
+* aws-cli
+  * installs AWS CLI v2 via zip archive from aws
+  * in order to update aws cli remove the following file and folder and rerun this playbook
+    * rm -rf /usr/local/bin/aws
+    * rm -rf /usr/local/aws-cli
+
 * base
   * packages.yml - contains a list of packages to install via apt
   * keychron.yml - enables keychron keyboard shortcuts
