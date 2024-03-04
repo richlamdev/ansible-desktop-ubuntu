@@ -10,14 +10,17 @@
 
 - name: install kubernetes apt key
   get_url:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    #url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
     dest: /usr/share/keyrings/kubernetes-archive-keyring.asc
     mode: 0644
     force: true
 
+# https://kubernetes.io/blog/2023/08/15/pkgs-k8s-io-introduction/
 - name: add kubernetes repo
   apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.asc] https://apt.kubernetes.io/ kubernetes-xenial main"
+#    repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.asc] https://apt.kubernetes.io/ kubernetes-xenial main"
+    repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /"
     filename: kubectl
     state: present
     update_cache: true
