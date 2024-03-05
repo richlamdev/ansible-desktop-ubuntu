@@ -4,7 +4,7 @@ HISTCONTROL=ignoreboth
 HISTFILE=/home/$USER/.bash_history
 
 # customize prompt
-source "/home/$USER/.bashrc.d/git_bash_ps1.sh"
+#source "/home/$USER/.bashrc.d/git_bash_ps1.sh"
 
 
 # set alias to copy to cliboard
