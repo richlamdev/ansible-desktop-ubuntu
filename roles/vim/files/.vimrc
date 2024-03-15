@@ -292,10 +292,11 @@ vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
 set runtimepath+=~/.fzf
 set runtimepath+=~/.vim/bundle/fzf.vim
 
-" for MacOS, if you need CTRL-A and CTRL-D for quickfix population
-" let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:deselect-all --layout=reverse --height 90% --border'
+" for MacOS and Ubuntu - if you need CTRL-A and CTRL-D to populate quickfix
+" list when using :Ag :Rg :Lines
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:deselect-all --layout=reverse --height 90% --border'
 
-let g:fzf_preview_window = ['right,70%', 'ctrl-/']
+let g:fzf_preview_window = ['right,50%', 'ctrl-/']
 "nnoremap <c-p> :Files<cr>
 nnoremap <Leader>f :Files<cr>
 nnoremap <Leader>b :Buffers<cr>
@@ -306,10 +307,11 @@ nnoremap <Leader>r :Rg<cr>
 nnoremap <Leader>a :Ag<cr>
 nnoremap <Leader>m :Marks<cr>
 nnoremap <Leader>c :Changes<cr>
+nnoremap <Leader>l :Lines<cr>
 " }}}
 
 " vimgrep {{{
-" Add this line to your ~/.vimrc or _vimrc file
+" slightly quicker method to execute vimgrep
 nnoremap <leader>v :vim /
 " }}}
 
@@ -332,6 +334,9 @@ nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
 " Add this line to your ~/.vimrc or _vimrc file
 nnoremap <f6> :NERDTreeToggle<cr>
+
+" tree view from current working directory
+nnoremap <Leader>t :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
 " }}}
 
 " folding {{{
