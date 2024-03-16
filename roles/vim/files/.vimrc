@@ -312,7 +312,10 @@ nnoremap <Leader>l :Lines<cr>
 
 " vimgrep {{{
 " slightly quicker method to execute vimgrep
-nnoremap <leader>v :vim /
+" nnoremap <leader>v :vim /
+"map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+nnoremap <leader>v :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+
 " }}}
 
 " codeium {{{
