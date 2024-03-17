@@ -106,8 +106,16 @@ Additional information for the following roles:
 
 * pip-packages
   * primarily installs pip packages for coding/development
-    * [python black](https://github.com/psf/black)
+    * [bandit](https://github.com/PyCQA/bandit)
+    * [boto3](https://github.com/boto/boto3)
+    * [black](https://github.com/psf/black)
+    * [bottle](https://github.com/pallets/bottle)
     * [flake8](https://github.com/PyCQA/flake8)
+    * [glances](https://github.com/nicolargo/glances)
+    * [pre-commit](https://github.com/pre-commit/pre-commit)
+    * [pytest](https://github.com/pytest-dev/pytest)
+    * [ruff](https://github.com/charliermarsh/ruff)
+    * [urllib3](https://github.com/urllib3/urllib3)
     * [yamllint](https://github.com/adrienverge/yamllint)
 
 * ufw
@@ -124,12 +132,16 @@ Additional information for the following roles:
     * [ALE](https://github.com/dense-analysis/ale)
     * [codium](https://github.com/Exafunction/codeium.vim)
     * [fzf.vim](https://github.com/junegunn/fzf.vim)
+    * [Github copilot](https://github.com/github/copilot.vim) (use codeium)
     * [hashivim](https://github.com/hashivim/vim-terraform)
     * [indentLine](https://github.com/Yggdroot/indentLine)
     * [monokai colorscheme](https://github.com/sickill/vim-monokai)
+    * [nerdtree](https://github.com/preservim/nerdtree)
     * [vim-commentary](https://github.com/tpope/vim-commentary)
+    * [vim-unimpaired](https://github.com/tpope/vim-unimpaired)
     * [vimwiki](https://github.com/vimwiki/vimwiki)
-    * [personal .vimrc](https://github.com/richlamdev/ansible-desktop-ubuntu/blob/master/roles/vim/files/.vimrc)
+    * [yammlint](https://github.com/adrienverge/yamllint)
+    * [personal/custom .vimrc](https://github.com/richlamdev/ansible-desktop-ubuntu/blob/master/roles/vim/files/.vimrc)
 
 
 ## Idempotency

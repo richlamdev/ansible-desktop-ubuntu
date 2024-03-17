@@ -15,53 +15,34 @@
 #       - "{{ local_username }}"
 
 
-- name: create config yamllint directory
-  file:
-    state: directory
-    path: "{{ home_dir }}/.config/yamllint"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
-    mode: "0770"
-    force: true
-
-- name: install yammlint config to home .config directory
-# relax some of the yammlint rules with this config
-  copy:
-    src: "config"
-    dest: "{{ home_dir }}/.config/yamllint/config"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
-    mode: "0640"
-    force: true
-
-
 - name: install ALE plugin
   git:
     repo: "https://github.com/dense-analysis/ale.git"
     dest: "{{ home_dir }}/.vim/pack/git-plugins/start/ale"
 
 
+- name: install Codeium plugin
+  git:
+    repo: "https://github.com/Exafunction/codeium.vim"
+    dest: "{{ home_dir }}/.vim/pack/Exafunction/start/codeium.vim"
+
+
+- name: install fzf plugin
+  git:
+    repo: "https://github.com/junegunn/fzf.vim.git"
+    dest: "{{ home_dir }}/.vim/bundle/fzf.vim"
+
+
+#- name: install Github CodePilot Plugin
+#  git:
+#    repo: "https://github.com/github/copilot.vim.git"
+#    dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
+
+
 - name: install hashivim plugin
   git:
     repo: "https://github.com/hashivim/vim-terraform.git"
     dest: "{{ home_dir }}/.vim/pack/plugins/start/vim-terraform"
-
-
-- name: install vimwiki plugin
-  git:
-    repo: "https://github.com/vimwiki/vimwiki.git"
-    dest: "{{ home_dir }}/.vim/pack/plugins/start/vimwiki"
-
-- name: check if vimwiki plugin help is installed
-  stat:
-    path: "{{ home_dir }}/.vim/pack/plugins/start/vimwiki/doc/tags"
-  register: vimwiki_help
-
-- name: enable vimwiki help
-  shell:
-    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/plugins/start/vimwiki/doc" -c quit
-  when:
-    - not vimwiki_help.stat.exists
 
 
 - name: install indentLine plugin
@@ -81,16 +62,27 @@
     - not indentLine_help.stat.exists
 
 
-#- name: install Github CodePilot Plugin
-#  git:
-#    repo: "https://github.com/github/copilot.vim.git"
-#    dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
-
-
-- name: install fzf plugin
+- name: install monokai colorscheme
   git:
-    repo: "https://github.com/junegunn/fzf.vim.git"
-    dest: "{{ home_dir }}/.vim/bundle/fzf.vim"
+    repo: "https://github.com/sickill/vim-monokai.git"
+    dest: "{{ home_dir }}/.vim/pack/colors/start/monokai"
+
+
+- name: install nerdtree plugin
+  git:
+    repo: "https://github.com/preservim/nerdtree.git"
+    dest: "{{ home_dir }}/.vim/pack/vendor/start/nerdtree"
+
+- name: check if nerdtree help plugin is installed
+  stat:
+    path: "{{ home_dir }}/.vim/pack/vendor/start/nerdtree/doc/tags"
+  register: vim_nerdtree_help
+
+- name: install nerdtree plugin help
+  shell:
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/vendor/start/nerdtree/doc" -c quit
+  when:
+    - not vim_nerdtree_help.stat.exists
 
 
 - name: install vim-commentary plugin
@@ -127,36 +119,44 @@
     - not vim_unimpaired_help.stat.exists
 
 
-- name: install nerdtree plugin
+- name: install vimwiki plugin
   git:
-    repo: "https://github.com/preservim/nerdtree.git"
-    dest: "{{ home_dir }}/.vim/pack/vendor/start/nerdtree"
+    repo: "https://github.com/vimwiki/vimwiki.git"
+    dest: "{{ home_dir }}/.vim/pack/plugins/start/vimwiki"
 
-- name: check if vim-unimpaired help plugin is installed
+- name: check if vimwiki plugin help is installed
   stat:
-    path: "{{ home_dir }}/.vim/pack/vendor/start/nerdtree/doc/tags"
-  register: vim_nerdtree_help
+    path: "{{ home_dir }}/.vim/pack/plugins/start/vimwiki/doc/tags"
+  register: vimwiki_help
 
-- name: install nerdtree plugin help
+- name: enable vimwiki help
   shell:
-    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/vendor/start/nerdtree/doc" -c quit
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/plugins/start/vimwiki/doc" -c quit
   when:
-    - not vim_nerdtree_help.stat.exists
+    - not vimwiki_help.stat.exists
 
 
-- name: install Codeium plugin
-  git:
-    repo: "https://github.com/Exafunction/codeium.vim"
-    dest: "{{ home_dir }}/.vim/pack/Exafunction/start/codeium.vim"
+- name: create config yamllint directory
+  file:
+    state: directory
+    path: "{{ home_dir }}/.config/yamllint"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0770"
+    force: true
+
+- name: install yammlint config to home .config directory
+# relax some of the yammlint rules with this config
+  copy:
+    src: "config"
+    dest: "{{ home_dir }}/.config/yamllint/config"
+    owner: "{{ local_username }}"
+    group: "{{ local_username }}"
+    mode: "0640"
+    force: true
 
 
-- name: install monokai colorscheme
-  git:
-    repo: "https://github.com/sickill/vim-monokai.git"
-    dest: "{{ home_dir }}/.vim/pack/colors/start/monokai"
-
-
-- name: install .vimrc to home directory
+- name: install personal/custom .vimrc to home directory
   copy:
     src: ".vimrc"
     dest: "{{ home_dir }}/.vimrc"
