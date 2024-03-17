@@ -25,26 +25,26 @@
       debug:
         msg: "{{ playbook_dir }}"
 
-    - name: ansible_env.HOME
+    - name: ansible_env['HOME']
       debug:
-        msg: "{{ ansible_env.HOME }}"
+        msg: "{{ ansible_env['HOME'] }}"
 
     - name: ansible_os_family
       debug:
         msg: "{{ ansible_os_family }}"
 
-    - name: ansible_env.PWD
+    - name: ansible_env['PWD']
       debug:
-        msg: "{{ ansible_env.PWD }}"
+        msg: "{{ ansible_env['PWD'] }}"
 
     - name: ansible_default_ipv4[address]
       debug:
         msg: "{{ ansible_default_ipv4['address'] }}"
 
-    - name: ansible_env.USER
+    - name: ansible_env['USER']
       debug:
-        var: ansible_env.USER
+        var: ansible_env['USER']
 
-    - name: ansible_env.SUDO_USER
+    - name: ansible_env['SUDO_USER']
       debug:
-        var: ansible_env.SUDO_USER
+        var: ansible_env['SUDO_USER']
