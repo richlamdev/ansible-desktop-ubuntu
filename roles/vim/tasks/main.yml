@@ -1,17 +1,4 @@
 ---
-# - name: install python black, flake8, pre-commit, ruff, yamllint with pip
-#   pip:
-#     state: latest
-#     extra_args: --user
-#     executable: pip3
-#     name:
-#       - black
-#       - flake8
-#       - pre-commit
-#       - pytest
-#       - ruff
-#       - yamllint
-
 # this is not necessary; keeping this here for potential future use
 - name: Set directory paths based on OS (Debian/Ubuntu)
   set_fact:
@@ -20,12 +7,13 @@
   when:
     - ansible_facts['os_family'] == 'Debian'
 
-# to be removed; left in for testing purposes
-- name: home_dir and local_username vars
-  debug:
-    msg:
-      - "{{ home_dir }}"
-      - "{{ local_username }}"
+# for testing purposes
+# - name: home_dir and local_username vars
+#   debug:
+#     msg:
+#       - "{{ home_dir }}"
+#       - "{{ local_username }}"
+
 
 - name: create config yamllint directory
   file:
@@ -46,15 +34,18 @@
     mode: "0640"
     force: true
 
+
 - name: install ALE plugin
   git:
     repo: "https://github.com/dense-analysis/ale.git"
     dest: "{{ home_dir }}/.vim/pack/git-plugins/start/ale"
 
+
 - name: install hashivim plugin
   git:
     repo: "https://github.com/hashivim/vim-terraform.git"
     dest: "{{ home_dir }}/.vim/pack/plugins/start/vim-terraform"
+
 
 - name: install vimwiki plugin
   git:
@@ -72,6 +63,7 @@
   when:
     - not vimwiki_help.stat.exists
 
+
 - name: install indentLine plugin
   git:
     repo: "https://github.com/Yggdroot/indentLine.git"
@@ -88,15 +80,18 @@
   when:
     - not indentLine_help.stat.exists
 
+
 #- name: install Github CodePilot Plugin
 #  git:
 #    repo: "https://github.com/github/copilot.vim.git"
 #    dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
 
+
 - name: install fzf plugin
   git:
     repo: "https://github.com/junegunn/fzf.vim.git"
     dest: "{{ home_dir }}/.vim/bundle/fzf.vim"
+
 
 - name: install vim-commentary plugin
   git:
@@ -114,15 +109,35 @@
   when:
     - not vim_commentary_help.stat.exists
 
+
+- name: install vim-unimpaired plugin
+  git:
+    repo: "https://github.com/tpope/vim-unimpaired.git"
+    dest: "{{ home_dir }}/.vim/pack/tpope/start/unimpaired"
+
+- name: check if vim-unimpaired help plugin is installed
+  stat:
+    path: "{{ home_dir }}/.vim/pack/tpope/start/unimpaired/doc/tags"
+  register: vim_unimpaired_help
+
+- name: install vim-unimpaired plugin help
+  shell:
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/tpope/start/unimpaired/doc" -c quit
+  when:
+    - not vim_unimpaired_help.stat.exists
+
+
 - name: install Codeium plugin
   git:
     repo: "https://github.com/Exafunction/codeium.vim"
     dest: "{{ home_dir }}/.vim/pack/Exafunction/start/codeium.vim"
 
+
 - name: install monokai colorscheme
   git:
     repo: "https://github.com/sickill/vim-monokai.git"
     dest: "{{ home_dir }}/.vim/pack/colors/start/monokai"
+
 
 - name: install .vimrc to home directory
   copy:
