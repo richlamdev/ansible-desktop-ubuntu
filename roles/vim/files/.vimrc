@@ -270,8 +270,8 @@ autocmd filetype vimwiki silent! iunmap <buffer> <Tab>
 " }}}
 
 " netrw {{{
-inoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
-nnoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
+"inoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
+"nnoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
 
 " https://www.akhatib.com/making-netrw-clean-and-minimally-disruptive-then-stop-using-it/
 let g:netrw_banner = 0
@@ -327,6 +327,10 @@ imap <C-x> <Cmd>call codeium#Clear()<CR>
 imap <C-a> <Cmd>call codeium#Complete()<CR>
 " }}}
 
+" nerdtree {{{
+nnoremap <c-s> :NERDTreeToggle<cr>
+" }}}
+
 " testing {{{
 " 'cd' towards the directory in which the current file is edited
 " but only change the path for the current window
@@ -335,8 +339,6 @@ nnoremap <leader>cd :lcd %:h<CR>
 " Open files located in the same dir in with the current file is edited
 nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
-" Add this line to your ~/.vimrc or _vimrc file
-nnoremap <f6> :NERDTreeToggle<cr>
 
 " tree view from current working directory
 nnoremap <Leader>t :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
