@@ -1,19 +1,11 @@
 ---
-# this is not necessary; keeping this here for potential future use
-- name: Set directory paths based on OS (Debian/Ubuntu)
-  set_fact:
-    home_dir: "{{ ansible_env['PWD'] }}"
-    local_username: "{{ ansible_user }}"
-  when:
-    - ansible_facts['os_family'] == 'Debian'
-
 # for testing purposes
-# - name: home_dir and local_username vars
+# - name: home_dir and local_user vars
 #   debug:
 #     msg:
 #       - "{{ home_dir }}"
-#       - "{{ local_username }}"
-
+#       - "{{ local_user }}"
+#       - "{{ local_user_primary_group }}"
 
 - name: install ALE plugin
   git:
@@ -36,7 +28,7 @@
 #- name: install Github CodePilot Plugin
 #  git:
 #    repo: "https://github.com/github/copilot.vim.git"
-#    dest: "/home/{{ local_username }}/.vim/pack/github/start/copilot.vim"
+#    dest: "/home/{{ local_user }}/.vim/pack/github/start/copilot.vim"
 
 
 - name: install hashivim plugin
@@ -140,8 +132,8 @@
   file:
     state: directory
     path: "{{ home_dir }}/.config/yamllint"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user }}"
     mode: "0770"
     force: true
 
@@ -150,8 +142,8 @@
   copy:
     src: "config"
     dest: "{{ home_dir }}/.config/yamllint/config"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user }}"
     mode: "0640"
     force: true
 
@@ -160,7 +152,7 @@
   copy:
     src: ".vimrc"
     dest: "{{ home_dir }}/.vimrc"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user }}"
     mode: "0640"
     force: true
