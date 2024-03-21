@@ -3,8 +3,8 @@
   #copy:
     #src: "env_functions_v2.sh"
     #dest: "/{{ home_dir }}/.bashrc.d/"
-    #owner: "{{ local_username }}"
-    #group: "{{ local_username }}"
+    #owner: "{{ local_user }}"
+    #group: "{{ local_user_primary_group }}"
     #mode: "0644"
     #
 
@@ -12,8 +12,8 @@
   copy:
     src: "{{ item }}"
     dest: "/{{ home_dir }}/.bashrc.d/"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
     mode: "0640"
   loop:
     - custom_bash.sh
@@ -23,8 +23,8 @@
   copy:
     src: "{{ item }}"
     dest: "/{{ home_dir }}/"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
     mode: "0640"
   loop:
     - .bashrc
