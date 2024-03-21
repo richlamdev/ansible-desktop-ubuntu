@@ -2,63 +2,63 @@
 - name: enable signal-desktop autostart
   copy:
     src: autostart/signal-desktop.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
 
 - name: enable firefox autostart
   copy:
     src: autostart/firefox.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
 
 - name: enable gnome-keyring-ssh autostart
   copy:
     src: autostart/gnome-keyring-ssh.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
 
 - name: enable gnome-terminal autostart
   copy:
     src: autostart/gnome-terminal.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
 
 - name: enable google-chrome-stable autostart
   copy:
     src: autostart/google-chrome-stable.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
 
 - name: enable org.keepassxc.KeePassXC autostart
   copy:
     src: autostart/org.keepassxc.KeePassXC.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
 
 - name: enable pactl autostart
   copy:
     src: autostart/pactl.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
 
 - name: enable ssh-agent autostart
   copy:
     src: autostart/ssh-agent.desktop
-    dest: "/home/{{ local_username }}/.config/autostart/"
+    dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
