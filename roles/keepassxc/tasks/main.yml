@@ -22,7 +22,7 @@
 - name: Update KeePassXC preferences
   copy:
     src: "keepassxc.ini"
-    dest: "/home/{{ local_username }}/.config/keepassxc/"
-    owner: "{{ local_username }}"
-    group: "{{ local_username }}"
+    dest: "/home/{{ local_user }}/.config/keepassxc/"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
     mode: "0664"

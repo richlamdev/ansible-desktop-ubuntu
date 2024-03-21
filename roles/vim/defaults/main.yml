@@ -1,4 +1,4 @@
 ---
-#local_username: "{{ lookup ('env', 'USER') }}"
-#local_username: "{{ ansible_env.SUDO_USER }}"
-#local_username: "{{ ansible_user }}"
+home_dir: "{{ ansible_env['PWD'] }}"
+local_user: "{{ ansible_user }}"
+local_user_primary_group: "{{ lookup('pipe', 'id -gn ' + ansible_env.SUDO_USER) }}"
