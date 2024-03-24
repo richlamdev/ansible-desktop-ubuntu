@@ -106,7 +106,7 @@ Additional information for the following roles:
   * installs fzf via git (to upgrade remove ~/.fzf folder and re-run ansible)
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * bash function `se` is for fast directory navigation at the CLI
-    refer to [fzf explorer](# https://thevaluable.dev/practical-guide-fzf-example/)
+    refer to [fzf-explorer](# https://thevaluable.dev/practical-guide-fzf-example/)
 
 * pip-packages
   * primarily installs pip packages for coding/development
@@ -134,8 +134,10 @@ Additional information for the following roles:
 
   * if codeium is not wanted, disable codeium in the status line within .vimrc
     that is deployed with this role:
-    * comment out this line\n
+    * comment out this line
+
     ```set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status```
+
       If this is not disabled before codeium.vim is uninstalled, vim will freeze
       on startup.  (you'll have to edit .vimrc with an alternative editor,and/
       or disable loading of .vimrc then comment the above line indicated)
