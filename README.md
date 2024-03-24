@@ -106,7 +106,7 @@ Additional information for the following roles:
   * installs fzf via git (to upgrade remove ~/.fzf folder and re-run ansible)
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * bash function `se` is for fast directory navigation at the CLI
-    refer to [fzf-explorer](# https://thevaluable.dev/practical-guide-fzf-example/)
+    refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
 
 * pip-packages
   * primarily installs pip packages for coding/development
