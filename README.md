@@ -24,7 +24,8 @@ desktop/laptop deployment.
 *This assumes a new/fresh installation and the execution of this playbook
 is on the target machine (localhost).  Of course, this playbook can be executed
 to a remote host, if needed.  This also assumes the user indicated
-below by \<username\> belongs to the sudo group.*
+below by \<username\> belongs to the sudo group.  Additionally, this assumes
+the user's primary group on the host and target machine(s) are the same.*
 
 1. Install required software for this playbook.\
 `sudo apt update && sudo apt install ansible git openssh-server -y`
@@ -46,8 +47,8 @@ Alternatively, if password authentication is preferred, install sshpass.\
 ** *Limit use of sshpass for setup only, due to potential security issues. * **
 
 Note: Be aware the /role/base/tasks/authentication.yml will update the
-/etc/ssh/sshd_config, which will disable SSH password authentication; consequently,
-making SSH key authentication required.
+/etc/ssh/sshd_config, which will disable SSH password authentication;
+consequently, making SSH key authentication required.
 
 4. Amend inventory file if needed, default target is localhost.
 
@@ -103,20 +104,23 @@ Additional information for the following roles:
 * env
   * setups personal preferences for bash shell
   * installs fzf via git (to upgrade remove ~/.fzf folder and re-run ansible)
+  * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
+  * bash function `se` is for fast directory navigation at the CLI
+    refer to [fzf explorer](# https://thevaluable.dev/practical-guide-fzf-example/)
 
 * pip-packages
   * primarily installs pip packages for coding/development
     * [bandit](https://github.com/PyCQA/bandit)
     * [boto3](https://github.com/boto/boto3)
-    * [black](https://github.com/psf/black)
+    * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
     * [bottle](https://github.com/pallets/bottle)
-    * [flake8](https://github.com/PyCQA/flake8)
+    * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
     * [glances](https://github.com/nicolargo/glances)
     * [pre-commit](https://github.com/pre-commit/pre-commit)
     * [pytest](https://github.com/pytest-dev/pytest)
     * [ruff](https://github.com/charliermarsh/ruff)
     * [urllib3](https://github.com/urllib3/urllib3)
-    * [yamllint](https://github.com/adrienverge/yamllint)
+    * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
 
 * ufw
   * disables incoming ports, except port 22 (limit inbound connections port 22)
@@ -128,11 +132,21 @@ Additional information for the following roles:
     writing of this playbook, Vim 9.x was not available in the official Ubuntu
     repos
 
+  * if codeium is not wanted, disable codeium in the status line within .vimrc
+    that is deployed with this role:
+    * comment out this line\n
+    ```set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status```
+      If this is not disabled before codeium.vim is uninstalled, vim will freeze
+      on startup.  (you'll have to edit .vimrc with an alternative editor,and/
+      or disable loading of .vimrc then comment the above line indicated)
+    * remove codeium.vim from $HOME/.vim/pack:
+    ```rm -rf ~/.vim/pack/Exafunction```
+
   * installs following plugins:
     * [ALE](https://github.com/dense-analysis/ale)
-    * [codium](https://github.com/Exafunction/codeium.vim)
+    * [codeium](https://github.com/Exafunction/codeium.vim)
     * [fzf.vim](https://github.com/junegunn/fzf.vim)
-    * [Github copilot](https://github.com/github/copilot.vim) (use codeium)
+    * ~~[Github copilot](https://github.com/github/copilot.vim)~~ (use codeium)
     * [hashivim](https://github.com/hashivim/vim-terraform)
     * [indentLine](https://github.com/Yggdroot/indentLine)
     * [monokai colorscheme](https://github.com/sickill/vim-monokai)
