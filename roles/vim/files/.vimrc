@@ -328,7 +328,7 @@ imap <C-a> <Cmd>call codeium#Complete()<CR>
 " }}}
 
 " nerdtree {{{
-nnoremap <c-s> :NERDTreeToggle<cr>
+nnoremap <leader>n :NERDTreeToggle<cr>
 " }}}
 
 " testing {{{
@@ -339,9 +339,13 @@ nnoremap <leader>cd :lcd %:h<CR>
 " Open files located in the same dir in with the current file is edited
 nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
-
 " tree view from current working directory
 nnoremap <Leader>t :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
+
+" open vimrc / reload vimrc
+nnoremap ,v :edit   $MYVIMRC<CR>
+nnoremap ,u :source $MYVIMRC<CR>
+
 " }}}
 
 " folding {{{
