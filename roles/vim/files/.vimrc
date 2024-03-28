@@ -342,10 +342,10 @@ nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 " tree view from current working directory
 nnoremap <Leader>t :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
 
-" open vimrc / reload vimrc
+" open vimrc
 nnoremap ,v :edit   $MYVIMRC<CR>
-nnoremap ,u :source $MYVIMRC<CR>
-
+" source vimrc and reload (ensures folding continues to work)
+nnoremap ,u :source $MYVIMRC<CR> :edit $MYVIMRC<CR>
 " }}}
 
 " folding {{{
