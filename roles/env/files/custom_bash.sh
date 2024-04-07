@@ -28,11 +28,12 @@ complete -C /usr/bin/terraform terraform
 . /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
 
 # fzf
-export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
+export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --smart-case --hidden'
 export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
 
 # Preview file content using bat (https://github.com/sharkdp/bat)
 export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target
   --preview 'batcat -n --color=always {}'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
@@ -46,7 +47,9 @@ export FZF_CTRL_R_OPTS="
   --header 'Press CTRL-Y to copy command into clipboard'"
 
 # Print tree structure in the preview window
-export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_ALT_C_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'tree -C {}'"
 
 export EDITOR=vim
 
