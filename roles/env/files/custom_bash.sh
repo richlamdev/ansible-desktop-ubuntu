@@ -1,11 +1,7 @@
 HISTSIZE=100000
-HISTFILESIZE=200000
-HISTCONTROL=ignoreboth
+HISTFILESIZE=100000
 HISTFILE=/home/$USER/.bash_history
-
-# customize prompt
-#source "/home/$USER/.bashrc.d/git_bash_ps1.sh"
-
+HISTCONTROL=ignoreboth:erasedups
 
 # set alias to copy to cliboard
 alias cb='xclip -sel clip'
