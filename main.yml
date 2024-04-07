@@ -9,26 +9,25 @@
   #- include_tasks: tasks/main.yml
 
   roles:
-    - base
-    - aws-cli
-    - brave
-    - chrome
-    - gh_cli
-    - hashicorp
-    - keepassxc
-    - kubectl
-    - lens
-    - microsoft
-    - opera
-    - role: pip-packages
-      become: false
-    - signal-desktop
-    - sublime-text
-    - trivy
-    - ufw
-    - role: vim
-      become: false
+    # - base
+    # - aws-cli
+    # - brave
+    # - chrome
+    # - gh_cli
+    # - hashicorp
+    # - keepassxc
+    # - kubectl
+    # - microsoft
+    # - opera
+    # - role: pip-packages
+    #   become: false
+    # - signal-desktop
+    # - sublime-text
+    # - trivy
+    # - ufw
+    # - role: vim
+    #   become: false
     - role: env
       become: false
-    - disable-local-dns
+    # - disable-local-dns
     # - yubico
