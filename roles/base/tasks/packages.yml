@@ -10,13 +10,11 @@
     state: latest
     pkg:
       - bat
-      #- brasero
       - build-essential
       - chromium-browser
       - clamav
       - clamav-daemon
       - curl
-      #- fzf # installed via github
       - gcc
       - gimp
       - git
@@ -32,7 +30,6 @@
       - nmap
       - p7zip
       - python3-pip
-      #- qpdf
       - ranger
       - ripgrep
       - rtorrent
@@ -62,12 +59,3 @@
     name: clamav-daemon
     enabled: true
     state: started
-
-# - name: packages | install additional pip packages
-#   pip:
-#     state: latest
-#     executable: pip3
-#     name:
-#       #- pip # self upgrade pip first
-#       - glances
-#       - bottle

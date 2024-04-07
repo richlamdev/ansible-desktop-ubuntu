@@ -1,13 +1,4 @@
 ---
-#- name: install env_functions.sh
-  #copy:
-    #src: "env_functions_v2.sh"
-    #dest: "/{{ home_dir }}/.bashrc.d/"
-    #owner: "{{ local_user }}"
-    #group: "{{ local_user_primary_group }}"
-    #mode: "0644"
-    #
-
 - name: install custom_bash.sh / git_bash_ps1.sh to home .bashrc.d directory
   copy:
     src: "{{ item }}"
