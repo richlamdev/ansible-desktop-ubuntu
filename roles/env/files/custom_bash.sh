@@ -3,8 +3,11 @@ HISTFILESIZE=100000
 HISTFILE=/home/$USER/.bash_history
 HISTCONTROL=ignoreboth:erasedups
 
+# custom aliases
 # set alias to copy to cliboard
 alias cb='xclip -sel clip'
+# view local and utc time
+alias dateu='date && date -u'
 
 # minikube autocomplete
 #source <(minikube completion bash)
@@ -23,8 +26,10 @@ complete -C /usr/bin/terraform terraform
 # vagrant command completion (start)
 . /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
 
-# fzf
-export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --smart-case --hidden'
+
+# fzf configuration
+#export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --smart-case --hidden'
+export FZF_DEFAULT_COMMAND='fdfind --type f --strip-cwd-prefix --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
 
 # Preview file content using bat (https://github.com/sharkdp/bat)
