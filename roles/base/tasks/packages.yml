@@ -15,6 +15,7 @@
       - clamav
       - clamav-daemon
       - curl
+      - fd-find
       - gcc
       - gimp
       - git
