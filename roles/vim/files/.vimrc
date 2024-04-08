@@ -145,7 +145,7 @@ autocmd FileType yaml
 " ALE {{{
 " https://github.com/dense-analysis/ale
 "let g:ale_linters = {'python': ['flake8'], 'yaml': ['yamllint']}
-let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'yaml': ['yamllint']}
+let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'sh': ['shellcheck'], 'yaml': ['yamllint']}
 let g:ale_fixers = {'python': ['black']}
 "let g:ale_fixers = {'*': [], 'python': ['black']}
 let g:ale_python_flake8_options = '--max-line-length 79'
