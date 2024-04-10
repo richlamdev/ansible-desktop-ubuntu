@@ -144,25 +144,25 @@ autocmd FileType yaml
 
 " ALE {{{
 " https://github.com/dense-analysis/ale
-"let g:ale_linters = {'python': ['flake8'], 'yaml': ['yamllint']}
 let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'sh': ['shellcheck'], 'yaml': ['yamllint']}
-let g:ale_fixers = {'python': ['black']}
+let g:ale_fixers = {'python': ['black'], 'sh': ['shfmt']}
 "let g:ale_fixers = {'*': [], 'python': ['black']}
 let g:ale_python_flake8_options = '--max-line-length 79'
 let g:ale_python_black_options = '--line-length 79'
+let g:ale_sh_shfmt_options = '-i 2 -ci'
+
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 0 " if you don't want linters to run on opening a file
-
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
 "set foldlevelstart=20
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " }}}
 
 " indentLine {{{
@@ -259,6 +259,7 @@ set statusline+=\ hex:%B           " value of char under cursor in hex
 " }}}
 
 " vimwiki {{{
+" https://github.com/vimwiki/vimwiki
 filetype plugin on
 autocmd BufNewFile,BufReadPost,BufAdd *.wiki set filetype=vimwiki
 let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
@@ -290,6 +291,7 @@ vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
 " }}}
 
 " fzf {{{
+" https://github.com/junegunn/fzf.vim
 set runtimepath+=~/.fzf
 set runtimepath+=~/.vim/bundle/fzf.vim
 
@@ -316,10 +318,10 @@ nnoremap <Leader>l :Lines<cr>
 " nnoremap <leader>v :vim /
 "map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
 nnoremap <leader>v :execute "vimgrep /" . expand("<cword>") . "/gj **" <Bar> cw<CR>
-
 " }}}
 
 " codeium {{{
+" https://github.com/Exafunction/codeium.vim
 let g:codeium_disable_bindings = 1
 imap <script><silent><nowait><expr> <Tab> codeium#Accept()
 imap <C-n> <Cmd>call codeium#CycleCompletions(1)<CR>
@@ -329,6 +331,7 @@ imap <C-a> <Cmd>call codeium#Complete()<CR>
 " }}}
 
 " nerdtree {{{
+" https://github.com/preservim/nerdtree
 nnoremap <leader>n :NERDTreeToggle<cr>
 " }}}
 
