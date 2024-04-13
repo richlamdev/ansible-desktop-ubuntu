@@ -59,7 +59,7 @@ autocmd Filetype python
     \ set fileformat=unix |
     \ set textwidth=0 |
     \ set smarttab |
-    \ set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with |
+    \ set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with,async,await,match,case |
 
 " highlight a marker at column 80
 highlight ColorColumn ctermbg=red |
