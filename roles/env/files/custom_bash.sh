@@ -2,6 +2,7 @@ HISTSIZE=100000
 HISTFILESIZE=100000
 HISTFILE=/home/$USER/.bash_history
 HISTCONTROL=ignoreboth:erasedups
+HISTIGNORE="&:[ ]*:exit:ls *:bg:fg:history:clear:pwd:cd *"
 
 # custom aliases
 # set alias to copy to cliboard
@@ -25,7 +26,6 @@ complete -C /usr/bin/terraform terraform
 
 # vagrant command completion (start)
 . /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
-
 
 # fzf configuration
 #export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --smart-case --hidden'
@@ -57,44 +57,44 @@ export EDITOR=vim
 # this function obtained from:
 # https://thevaluable.dev/practical-guide-fzf-example/
 se() {
-    if [ -z "$1" ]; then
-        search_folder="$HOME"
-    else
-        search_folder="$1"
-    fi
+  if [ -z "$1" ]; then
+    search_folder="$HOME"
+  else
+    search_folder="$1"
+  fi
 
-    selection=$(find "$search_folder" -type d | fzf --multi --height=80% --border=sharp \
-        --preview='tree -C {}' --preview-window='50%,border-sharp' \
-        --prompt='Dirs > ' \
-        --bind='del:execute(rm -ri {+})' \
-        --bind='ctrl-p:toggle-preview' \
-        --bind='ctrl-d:change-prompt(Dirs > )' \
-        --bind="ctrl-d:+reload(find $search_folder -type d)" \
-        --bind='ctrl-d:+change-preview(tree -C {})' \
-        --bind='ctrl-d:+refresh-preview' \
-        --bind='ctrl-f:change-prompt(Files > )' \
-        --bind="ctrl-f:+reload(find $search_folder -type f)" \
-        --bind='ctrl-f:+change-preview(batcat --color=always {})' \
-        --bind='ctrl-f:+refresh-preview' \
-        --bind='ctrl-a:select-all' \
-        --bind='ctrl-x:deselect-all' \
-        --header '
+  selection=$(find "$search_folder" -type d | fzf --multi --height=80% --border=sharp \
+    --preview='tree -C {}' --preview-window='50%,border-sharp' \
+    --prompt='Dirs > ' \
+    --bind='del:execute(rm -ri {+})' \
+    --bind='ctrl-p:toggle-preview' \
+    --bind='ctrl-d:change-prompt(Dirs > )' \
+    --bind="ctrl-d:+reload(find $search_folder -type d)" \
+    --bind='ctrl-d:+change-preview(tree -C {})' \
+    --bind='ctrl-d:+refresh-preview' \
+    --bind='ctrl-f:change-prompt(Files > )' \
+    --bind="ctrl-f:+reload(find $search_folder -type f)" \
+    --bind='ctrl-f:+change-preview(batcat --color=always {})' \
+    --bind='ctrl-f:+refresh-preview' \
+    --bind='ctrl-a:select-all' \
+    --bind='ctrl-x:deselect-all' \
+    --header '
         CTRL-D to display directories | CTRL-F to display files
         CTRL-A to select all | CTRL-x to deselect all
         ENTER to edit | DEL to delete
         CTRL-P to toggle preview
         ')
 
-    if [ -d "$selection" ]; then
-        cd "$selection" || return
-    elif [ -f "$selection" ]; then
-        # Change to the directory containing the file
-        cd "$(dirname "$selection")" || return
-    fi
-    # alternatively edit selection via EDITOR
-    # else
-    #     eval "$EDITOR $selection"
-    # fi
+  if [ -d "$selection" ]; then
+    cd "$selection" || return
+  elif [ -f "$selection" ]; then
+    # Change to the directory containing the file
+    cd "$(dirname "$selection")" || return
+  fi
+  # alternatively edit selection via EDITOR
+  # else
+  #     eval "$EDITOR $selection"
+  # fi
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
