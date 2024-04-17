@@ -94,6 +94,15 @@ set ignorecase                " case insensitive matching
 set smartcase                 " smart case matching
 set incsearch                 " show search matches while typing
 set hlsearch                  " highlight all matches after search
+
+highlight Search guibg=purple guifg='NONE'
+highlight Search cterm=none ctermbg=green ctermfg=black
+highlight CursorColumn guibg=blue guifg=red
+highlight CursorColumn ctermbg=red ctermfg=blue
+
+"hi Search ctermbg=Yellow   " highlight seached word in yellow
+"hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
+
 " keep search centered
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -184,9 +193,6 @@ set background=dark        " Enable dark background within editing are and synta
 colorscheme monokai          " Set colorscheme
 
 " set termguicolors
-
-hi Search ctermbg=Yellow   " highlight seached word in yellow
-hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
 
 " test color scheme
 " :call DisplayColorSchemes()  -to view all colors
