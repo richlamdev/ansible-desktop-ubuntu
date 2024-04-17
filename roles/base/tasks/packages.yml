@@ -43,6 +43,7 @@
       - tmux
       - tree
       - ufw
+      - universal-ctags
       - unrar
       - unzip
       #- vim-gtk3 # install by github and compile
