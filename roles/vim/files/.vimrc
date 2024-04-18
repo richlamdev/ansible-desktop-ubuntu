@@ -293,7 +293,10 @@ let g:netrw_liststyle = 4
 " }}}
 
 " system clipboard {{{
-vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
+"vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
+"above is unnecessary if clipboard support is compiled with vim,
+"check with :echo has('clipboard') "return 0 = not compiled in, return 1 compiled in)
+vnoremap <c-y> "+y
 " }}}
 
 " fzf {{{
