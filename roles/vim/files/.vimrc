@@ -43,7 +43,9 @@ set nobackup               " do not keep a backup file, use versions instead
 " file find {{{
 set path=.,**              " relative to current file and everything under :pwd
 set wildmenu               " display matches in command-line mode
+set wildmode=full          " first tab complete as much as possible
 set wildignore+=.pyc,.swp  " ignore these files when opening based on glob pattern
+set wildignorecase         " ignore case when completing file names
 set hidden                 " hide buffers when they are abandoned
 " }}}
 
@@ -297,7 +299,8 @@ let g:netrw_liststyle = 4
 "above is unnecessary if clipboard support is compiled with vim,
 "check with :echo has('clipboard') "return 0 = not compiled in, return 1 compiled in)
 vnoremap <c-y> "+y
-set clipboard^=unnamed,unnamedplus
+
+set clipboard^=unnamed,unnamedplus "make vim use system clipboard
 " }}}
 
 " fzf {{{
