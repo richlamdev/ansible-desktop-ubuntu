@@ -25,9 +25,9 @@
     # - sublime-text
     # - trivy
     # - ufw
-    # - role: vim
-    #   become: false
-    - role: env
+    - role: vim
       become: false
+    # - role: env
+    #   become: false
     # - disable-local-dns
     # - yubico
