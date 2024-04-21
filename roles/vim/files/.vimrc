@@ -20,7 +20,7 @@ set encoding=utf-8             " UTF8 Support
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set nu                         " set numbered lines for columns
 set list                       " show all whitespace a character
-set listchars=tab:▸\ ,trail:·  " set characters displayed for tab/space
+set listchars=tab:▸\ ,trail:·,nbsp:␣   " set characters displayed for tab/space
 set mouse=a                    " enable mouse for all modes
 set scrolloff=1                " set number of context lines visible above & below cursor
 set sidescrolloff=5            " make vertical scrolling appear more natural
@@ -297,6 +297,7 @@ let g:netrw_liststyle = 4
 "above is unnecessary if clipboard support is compiled with vim,
 "check with :echo has('clipboard') "return 0 = not compiled in, return 1 compiled in)
 vnoremap <c-y> "+y
+set clipboard^=unnamed,unnamedplus
 " }}}
 
 " fzf {{{
@@ -308,8 +309,10 @@ set runtimepath+=~/.vim/bundle/fzf.vim
 " list when using :Ag :Rg :Lines
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:deselect-all --layout=reverse --height 90% --border'
 
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
 let g:fzf_preview_window = ['right,50%', 'ctrl-/']
-"nnoremap <c-p> :Files<cr>
 nnoremap <Leader>f :Files<cr>
 nnoremap <Leader>b :Buffers<cr>
 nnoremap <Leader>s :BLines<cr>
@@ -317,7 +320,8 @@ nnoremap <Leader>w :Windows<cr>
 nnoremap <Leader>j :Jumps<cr>
 nnoremap <Leader>r :Rg<cr>
 nnoremap <Leader>a :Ag<cr>
-nnoremap <Leader>m :Marks<cr>
+nnoremap <Leader>mk :Marks<cr>
+nnoremap <Leader>ma :Maps<cr>
 nnoremap <Leader>c :Changes<cr>
 nnoremap <Leader>l :Lines<cr>
 " }}}
