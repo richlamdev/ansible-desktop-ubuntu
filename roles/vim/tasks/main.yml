@@ -95,6 +95,23 @@
     - not vim_nerdtree_help.stat.exists
 
 
+- name: install tagbar plugin
+  git:
+    repo: "https://github.com/preservim/tagbar.git"
+    dest: "{{ home_dir }}/.vim/pack/vendor/start/tagbar"
+
+- name: check if tagbar help plugin is installed
+  stat:
+    path: "{{ home_dir }}/.vim/pack/vendor/start/tagbar/doc/tags"
+  register: vim_tagbar_help
+
+- name: install tagbar plugin help
+  shell:
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/vendor/start/tagbar/doc" -c quit
+  when:
+    - not vim_tagbar_help.stat.exists
+
+
 - name: install vim-commentary plugin
   git:
     repo: "https://github.com/tpope/vim-commentary.git"
