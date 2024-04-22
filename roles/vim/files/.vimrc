@@ -351,6 +351,10 @@ imap <C-a> <Cmd>call codeium#Complete()<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
 " }}}
 
+" tagbar {{{
+nnoremap <Leader>tb :TagbarToggle<cr>
+" }}}
+
 " testing {{{
 " 'cd' towards the directory in which the current file is edited
 " but only change the path for the current window
@@ -360,12 +364,13 @@ nnoremap <leader>cd :lcd %:h<CR>
 nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
 " tree view from current working directory
-nnoremap <Leader>t :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
+nnoremap <Leader>tr :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
+" }}}
 
-" open vimrc
-nnoremap ,v :edit   $MYVIMRC<CR>
-" source vimrc and reload (ensures folding continues to work)
-nnoremap ,u :source $MYVIMRC<CR> :edit $MYVIMRC<CR>
+" vimrc {{{
+" open vimrc / reload vimrc
+nnoremap ,v :edit   $MYVIMRC<cr>
+nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
 " }}}
 
 " folding {{{
