@@ -28,7 +28,7 @@ complete -C /usr/bin/terraform terraform
 . /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
 
 # pipx autocomplete
-eval "$(register-python-argcomplete pipx)"
+eval "$(register-python-argcomplete3 pipx)"
 
 # fzf configuration
 #export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --smart-case --hidden'
