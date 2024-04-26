@@ -17,3 +17,13 @@
     - ruff
     #- urllib3
     - yamllint
+
+- name: Check if pipx path is present
+  shell: test -d ~/.local/bin && echo "Pipx ensurepath executed" || echo "Pipx ensurepath not executed"
+  register: pipx_ensurepath_output
+  changed_when: false
+  ignore_errors: true
+
+- name: Execute pipx ensurepath
+  command: pipx ensurepath
+  when: pipx_ensurepath_output.rc != 0
