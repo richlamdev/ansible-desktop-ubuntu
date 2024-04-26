@@ -1,19 +1,19 @@
 ---
 # execute this role as normal user, to avoid affecting the host system
 - name: install python black, flake8, pre-commit, ruff, yamllint with pip
-  pip:
+  community.general.pipx:
     state: latest
-    extra_args: --user
-    executable: pip3
-    name:
-      - bandit
-      - boto3
-      - black
-      - bottle
-      - flake8
-      - glances
-      - pre-commit
-      - pytest
-      - ruff
-      - urllib3
-      - yamllint
+    name: "{{ item }}"
+    install_deps: true
+  loop:
+    - bandit
+    - boto3
+    - black
+    - bottle
+    - flake8
+    - glances
+    - pre-commit
+    - pytest
+    - ruff
+    #- urllib3
+    - yamllint
