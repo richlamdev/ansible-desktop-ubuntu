@@ -105,9 +105,11 @@ Additional information for the following roles:
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * .bashrc -bash function `se` is for fast directory navigation at the CLI
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
+    (this is slightly different from the built in alt-c command provided with fzf)
 
-* pip-packages
-  * primarily installs pip packages for coding/development
+* pipx-packages
+  * using pipx where possible due to [PEP 668](https://peps.python.org/pep-0668/)
+  * primarily installs pipx packages for coding/development
     * [bandit](https://github.com/PyCQA/bandit)
     * [boto3](https://github.com/boto/boto3)
     * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
@@ -117,8 +119,11 @@ Additional information for the following roles:
     * [pre-commit](https://github.com/pre-commit/pre-commit)
     * [pytest](https://github.com/pytest-dev/pytest)
     * [ruff](https://github.com/charliermarsh/ruff)
-    * [urllib3](https://github.com/urllib3/urllib3)
     * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
+
+* pip-packages
+  * installs pip packages for coding/development
+    * [urllib3](https://github.com/urllib3/urllib3)
 
 * ufw
   * disables incoming ports, except port 22 (limit inbound connections port 22)
@@ -151,6 +156,7 @@ Additional information for the following roles:
     * [indentLine](https://github.com/Yggdroot/indentLine)
     * [monokai colorscheme](https://github.com/sickill/vim-monokai)
     * [nerdtree](https://github.com/preservim/nerdtree)
+    * [tagbar](https://github.com/preservim/tagbar)
     * [vim-commentary](https://github.com/tpope/vim-commentary)
     * [vim-unimpaired](https://github.com/tpope/vim-unimpaired)
     * [vimwiki](https://github.com/vimwiki/vimwiki)
