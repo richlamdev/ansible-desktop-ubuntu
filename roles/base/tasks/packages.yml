@@ -30,6 +30,7 @@
       - net-tools
       - nmap
       - p7zip
+      - pipx
       - python3-pip
       - ranger
       - ripgrep

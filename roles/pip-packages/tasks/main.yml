@@ -1,19 +1,29 @@
 ---
 # execute this role as normal user, to avoid affecting the host system
 - name: install python black, flake8, pre-commit, ruff, yamllint with pip
-  pip:
+  community.general.pipx:
     state: latest
-    extra_args: --user
-    executable: pip3
-    name:
-      - bandit
-      - boto3
-      - black
-      - bottle
-      - flake8
-      - glances
-      - pre-commit
-      - pytest
-      - ruff
-      - urllib3
-      - yamllint
+    name: "{{ item }}"
+    install_deps: true
+  loop:
+    - bandit
+    - boto3
+    - black
+    - bottle
+    - flake8
+    - glances
+    - pre-commit
+    - pytest
+    - ruff
+    #- urllib3
+    - yamllint
+
+- name: Check if pipx path is present
+  shell: test -d ~/.local/bin && echo "Pipx ensurepath executed" || echo "Pipx ensurepath not executed"
+  register: pipx_ensurepath_output
+  changed_when: false
+  ignore_errors: true
+
+- name: Execute pipx ensurepath
+  command: pipx ensurepath
+  when: pipx_ensurepath_output.rc != 0

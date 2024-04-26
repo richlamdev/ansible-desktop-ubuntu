@@ -1,12 +1,27 @@
 ---
-- include: packages.yml
-- include: system.yml
-- include: authentication.yml
-- include: security.yml
-- include: optimize.yml
-- include: powersave.yml
-- include: keychron.yml
-- include: autostart.yml
+- name: packages tasks
+  import_tasks: packages.yml
+
+- name: systems tasks
+  import_tasks: system.yml
+
+- name: authentication tasks
+  import_tasks: authentication.yml
+
+- name: security tasks
+  import_tasks: security.yml
+
+- name: optimize tasks
+  import_tasks: optimize.yml
+
+- name: powersave tasks
+  import_tasks: powersave.yml
+
+- name: keychron tasks
+  import_tasks: keychron.yml
+
+- name: autostart tasks
+  import_tasks: autostart.yml
 
 # disable motd-news
-#- include: motd-news.yml
+#- import_playbook: motd-news.yml
