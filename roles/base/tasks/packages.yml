@@ -31,7 +31,8 @@
       - nmap
       - p7zip
       - pipx
-      - python3-pip
+      - python3-argcomplete
+      - python3-urllib3
       - ranger
       - ripgrep
       - rtorrent
