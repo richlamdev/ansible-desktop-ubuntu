@@ -1,13 +1,4 @@
 ---
-# execute this role as normal user, to minimize affecting the system files/dependencies
-- name: install urllib3 with pip
-  pip:
-    state: latest
-    extra_args: --user
-    executable: pip3
-    name:
-      - urllib3
-
 - name: install bandit, boto3, black, bottle, flake8, glances, pre-commit, pytest, ruff, yamllint with pipx
   community.general.pipx:
     state: latest
