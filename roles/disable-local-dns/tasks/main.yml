@@ -20,6 +20,12 @@
     state: absent
   when: dns_default_status.changed == 'true'
 
+- name: Re-enable systemd-resolved after disabling local dns
+  systemd:
+    name: systemd-resolved.service
+    enabled: true
+    state: started
+
 
 # use handler instead
 # - name: restart network-manager systemd-resolved
