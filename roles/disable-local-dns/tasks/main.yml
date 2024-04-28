@@ -1,10 +1,4 @@
 ---
-- name: disable systemd-resolved
-  systemd:
-    name: systemd-resolved.service
-    enabled: false
-    state: stopped
-
 - name: add dns=default to /etc/NetworkManager/NetworkManager.conf
   lineinfile:
     firstmatch: true
@@ -12,25 +6,38 @@
     insertafter: '[main]'
     line: "dns=default"
   register: dns_default_status
-  notify: restart network manager
 
-- name: remove /etc/resolv.conf
+- name: print dns_default_status
+  debug:
+    var: dns_default_status.changed
+
+- name: disable systemd-resolved
+  systemd:
+    name: systemd-resolved.service
+    enabled: false
+    state: stopped
+  when: dns_default_status.changed
+  #notify: restart systemd resolved # don't bother restarting resolved, it's not needed
+
+- name: Check if /etc/resolv.conf is a symbolic link or a static file
+  stat:
+    path: /etc/resolv.conf
+  register: resolv_conf_info
+
+- name: Print the type of /etc/resolv.conf
+  debug:
+    msg: "/etc/resolv.conf is {{ 'a symbolic link' if resolv_conf_info.stat.islnk else 'a static file' }}"
+
+- name: Remove /etc/resolv.conf if it's a symbolic link
   file:
     path: /etc/resolv.conf
     state: absent
-  when: dns_default_status.changed == 'true'
+  when: resolv_conf_info.stat.islnk
+  notify: restart network manager
 
-- name: Re-enable systemd-resolved after disabling local dns
-  systemd:
-    name: systemd-resolved.service
-    enabled: true
-    state: started
-
-
-# use handler instead
-# - name: restart network-manager systemd-resolved
-#   systemd:
-#     name: NetworkManager.service
-#     enabled: true
-#     state: restarted
-#   when: dns_default_status.changed == 'true'
+# for testing, to revert to default setting
+# edit /etc/NetworkManager/NetworkManager.conf and remove dns=default under [main]
+# sudo rm /etc/resolv.conf
+# sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+# sudo systemctl start systemd-resolved
+# sudo systemctl enable systemd-resolved
