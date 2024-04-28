@@ -4,4 +4,9 @@
     name: NetworkManager.service
     enabled: true
     state: restarted
-  #when: dns_default_status.changed == 'true'
+
+- name: restart systemd resolved
+  systemd:
+    name: systemd-resolved.service
+    enabled: true
+    state: restarted
