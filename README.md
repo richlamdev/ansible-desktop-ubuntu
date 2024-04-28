@@ -5,18 +5,18 @@
 This is a collection of roles and configuarions I use for my Ubuntu
 desktop/laptop deployment.
 
+This Playbook is designed and tested for Ubunutu 24.04 LTS.  This playbook may
+not work on older versions of Ubuntu without modification.
+
 
 ## Requirements
 
 1) Basic knowledge of Ansible
 
-2) Ubuntu (other apt based Linux Distro may work, may require minor changes)
+2) Ubuntu 24.04 (other apt based Linux Distros may work, may require minor changes)
 
-3) ansible\
-`pip3 install ansible`
-
-4) jinja2 template\
-`pip3 install jinja2`
+3) Software: ansible, git, openssh-server, vim-gtk3 (vim or vim-gtk3 is not
+strictly required, but is required if the vim role is executed)
 
 
 ## Instructions
@@ -28,7 +28,7 @@ below by \<username\> belongs to the sudo group.  Additionally, this assumes
 the user's primary group on the host and target machine(s) are the same.*
 
 1. Install required software for this playbook.\
-`sudo apt update && sudo apt install ansible git openssh-server -y`
+`sudo apt update && sudo apt install ansible git openssh-server vim-gtk3 -y`
 
 2. Clone ansible-desktop-ubuntu repo.\
 `git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git`
@@ -121,10 +121,6 @@ Additional information for the following roles:
     * [ruff](https://github.com/charliermarsh/ruff)
     * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
 
-* pip-packages
-  * installs pip packages for coding/development
-    * [urllib3](https://github.com/urllib3/urllib3)
-
 * ufw
   * disables incoming ports, except port 22 (limit inbound connections port 22)
 
@@ -199,8 +195,9 @@ available via the default apt repositories.  Other software are some git repos,
 keychron keyboard setup, and screen blanking short-cut key enablement.
 Furthermore the roles env and vim are personal preferences.
 
-3. Proper GPG keys are added to /usr/share/keyrings/ folder, and referenced
-within repos, per deprecation of apt-key as of Ubuntu 22.04.
+3. Appropriate GPG keys are added to /usr/share/keyrings/ folder for third
+party apt packages, and referenced within repos, per deprecation of apt-key as
+of Ubuntu 22.04.
 
 4. The organization of this ansible repo has become a little messier than
 preferred.  TODO: Clean it up to be more organized / readable / reusable.
