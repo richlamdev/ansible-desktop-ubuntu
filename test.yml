@@ -56,3 +56,7 @@
     - name: Display user's primary group name
       debug:
         var: user_primary_group
+
+    - name: Distribution version
+      debug:
+        var: "{{ ansible_distribution_version }}"
