@@ -51,7 +51,6 @@ set hidden                 " hide buffers when they are abandoned
 
 " Python PEP8 {{{
 " To add the proper PEP8 indentation, add the following to your .vimrc:
-"autocmd BufNewFile,BufRead *.py
 autocmd Filetype python
     \ set tabstop=4 |
     \ set softtabstop=4 |
@@ -85,10 +84,14 @@ set splitright splitbelow     " open splits to the right and below
 " }}}
 
 " visual moving text {{{
+" https://vimrcfu.com/snippet/77
+" visual mode moving lines of text
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
-inoremap <C-j> :m .+1<CR>==
-inoremap <C-k> :m .-2<CR>==
+
+" insert mode moving line of text
+inoremap <C-j> <Esc>:m .+1<CR>==i
+inoremap <C-k> <Esc>:m .-2<CR>==i
 " }}}
 
 " search settings {{{
@@ -101,9 +104,6 @@ highlight Search guibg=purple guifg='NONE'
 highlight Search cterm=none ctermbg=green ctermfg=black
 highlight CursorColumn guibg=blue guifg=red
 highlight CursorColumn ctermbg=red ctermfg=blue
-
-"hi Search ctermbg=Yellow   " highlight seached word in yellow
-"hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
 
 " keep search centered
 nnoremap n nzzzv
@@ -287,11 +287,9 @@ set clipboard^=unnamed,unnamedplus "make vim use system clipboard
 
 " fzf {{{
 " https://github.com/junegunn/fzf.vim
-set runtimepath+=~/.fzf
-set runtimepath+=~/.vim/bundle/fzf.vim
+set runtimepath+=~/.fzf,~/.vim/bundle/fzf.vim
 
-" for MacOS and Ubuntu - if you need CTRL-A and CTRL-D to populate quickfix
-" list when using :Ag :Rg :Lines
+" CTRL-A and CTRL-D to populate quickfix list when using :Ag :Rg :Lines
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:deselect-all --layout=reverse --height 90% --border'
 
 " [Buffers] Jump to the existing window if possible
@@ -334,7 +332,6 @@ imap <C-a> <Cmd>call codeium#Complete()<CR>
 " }}}
 
 " nerdtree {{{
-" https://github.com/preservim/nerdtree
 nnoremap <leader>n :NERDTreeToggle<cr>
 " }}}
 
