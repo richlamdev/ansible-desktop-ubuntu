@@ -51,7 +51,6 @@ set hidden                 " hide buffers when they are abandoned
 
 " Python PEP8 {{{
 " To add the proper PEP8 indentation, add the following to your .vimrc:
-"autocmd BufNewFile,BufRead *.py
 autocmd Filetype python
     \ set tabstop=4 |
     \ set softtabstop=4 |
@@ -85,10 +84,14 @@ set splitright splitbelow     " open splits to the right and below
 " }}}
 
 " visual moving text {{{
+" https://vimrcfu.com/snippet/77
+" visual mode moving lines of text
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
-inoremap <C-j> :m .+1<CR>==
-inoremap <C-k> :m .-2<CR>==
+
+" insert mode moving line of text
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
 " }}}
 
 " search settings {{{
@@ -101,9 +104,6 @@ highlight Search guibg=purple guifg='NONE'
 highlight Search cterm=none ctermbg=green ctermfg=black
 highlight CursorColumn guibg=blue guifg=red
 highlight CursorColumn ctermbg=red ctermfg=blue
-
-"hi Search ctermbg=Yellow   " highlight seached word in yellow
-"hi Search ctermfg=DarkRed  " change cursor color to dark red when at the highlighted word
 
 " keep search centered
 nnoremap n nzzzv
@@ -190,29 +190,11 @@ nnoremap <Leader>i :IndentLinesToggle<cr>
 " colours {{{
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
+set termguicolors
+
 "colorscheme molokai          " Set colorscheme
 "let g:molokai_original = 1
 colorscheme monokai          " Set colorscheme
-
-" set termguicolors
-
-" test color scheme
-" :call DisplayColorSchemes()  -to view all colors
-
-"function! DisplayColorSchemes()
-   "let currDir = getcwd()
-   "exec "cd $VIMRUNTIME/colors"
-   "for myCol in split(glob("*"), '\n')
-      "if myCol =~ '\.vim'
-         "let mycol = substitute(myCol, '\.vim', '', '')
-         "exec "colorscheme " . mycol
-         "exec "redraw!"
-         "echo "colorscheme = ". myCol
-         "sleep 2
-      "endif
-   "endfor
-   "exec "cd " . currDir
-"endfunction
 " }}}
 
 " statusline {{{
@@ -304,12 +286,9 @@ set clipboard^=unnamed,unnamedplus "make vim use system clipboard
 " }}}
 
 " fzf {{{
-" https://github.com/junegunn/fzf.vim
-set runtimepath+=~/.fzf
-set runtimepath+=~/.vim/bundle/fzf.vim
+set runtimepath+=~/.fzf,~/.vim/bundle/fzf.vim
 
-" for MacOS and Ubuntu - if you need CTRL-A and CTRL-D to populate quickfix
-" list when using :Ag :Rg :Lines
+" CTRL-A and CTRL-D to populate quickfix list when using :Ag :Rg :Lines
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:deselect-all --layout=reverse --height 90% --border'
 
 " [Buffers] Jump to the existing window if possible
@@ -329,11 +308,16 @@ nnoremap <Leader>c :Changes<cr>
 nnoremap <Leader>l :Lines<cr>
 " }}}
 
-" vimgrep {{{
-" slightly quicker method to execute vimgrep
-" nnoremap <leader>v :vim /
-"map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
-nnoremap <leader>v :execute "vimgrep /" . expand("<cword>") . "/gj **" <Bar> cw<CR>
+" vimgrep & grep {{{
+" use :Vim <search_term>
+command! -nargs=+ Vim execute "silent vimgrep! /<args>/gj ##" | copen | execute 'silent /<args>' | redraw!
+nnoremap <silent> <leader>v :Vim <c-r>=expand("<cword>")<cr><cr>
+
+" modified from: https://chase-seibert.github.io/blog/2013/09/21/vim-grep-under-cursor.html
+" use :Grep <search_term>
+command! -nargs=+ Grep execute 'silent grep! -I -i -r -n --exclude=\*.pyc --exclude-dir=.git ## -e <args>' | copen | execute 'silent /<args>' | redraw!
+":nmap <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
+nnoremap <silent> <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
 " }}}
 
 " codeium {{{
@@ -347,7 +331,6 @@ imap <C-a> <Cmd>call codeium#Complete()<CR>
 " }}}
 
 " nerdtree {{{
-" https://github.com/preservim/nerdtree
 nnoremap <leader>n :NERDTreeToggle<cr>
 " }}}
 
@@ -365,16 +348,27 @@ nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
 " tree view from current working directory
 nnoremap <Leader>tr :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
-" opens search results in a window w/ links and highlight the matches
-command! -nargs=+ Grep execute 'silent grep! -I -r -n --exclude *.{json,pyc} . -e <args>' | copen | execute 'silent /<args>'
-" shift-control-* Greps for the word under the cursor
-:nmap <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
 " }}}
 
 " vimrc {{{
 " open vimrc / reload vimrc
 nnoremap ,v :edit   $MYVIMRC<cr>
 nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
+" }}}
+
+" Damn (sudo save) {{{
+" Define custom command with optional bang
+command! -nargs=0 -bang Damn :call SaveWithSudo(<bang>0)
+
+function! SaveWithSudo(bang)
+    if a:bang
+        let filename = expand('%:p') " Get full path of current file
+        silent execute 'w !sudo tee > /dev/null ' . shellescape(filename)
+        echohl WarningMsg | echo 'Saved ' . filename . ' with sudo' | echohl None
+    else
+        w
+    endif
+endfunction
 " }}}
 
 " folding {{{
