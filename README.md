@@ -8,13 +8,6 @@ desktop/laptop deployment.
 This Playbook is designed and tested for Ubunutu 24.04 LTS.  This playbook may
 not work on older versions of Ubuntu without modification.
 
-NOTE: The disable-local-dns role is not quite working as intended.
-If you use this role you will need to recreate /etc/resolv.conf yourself.
-This will be fixed in the near future.
-
-Updated: 04 May 2024, disable-local-dns role _should_ be working now.
-Still needs more testing.
-
 
 ## Requirements
 
