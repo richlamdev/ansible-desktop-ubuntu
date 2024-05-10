@@ -356,19 +356,9 @@ nnoremap ,v :edit   $MYVIMRC<cr>
 nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
 " }}}
 
-" Damn (sudo save) {{{
-" Define custom command with optional bang
-command! -nargs=0 -bang Damn :call SaveWithSudo(<bang>0)
-
-function! SaveWithSudo(bang)
-    if a:bang
-        let filename = expand('%:p') " Get full path of current file
-        silent execute 'w !sudo tee > /dev/null ' . shellescape(filename)
-        echohl WarningMsg | echo 'Saved ' . filename . ' with sudo' | echohl None
-    else
-        w
-    endif
-endfunction
+" sudo write {{{
+" Save a file with sudo (sw => sudo write)
+noremap <leader>sw :w !sudo tee % > /dev/null<CR>
 " }}}
 
 " folding {{{
