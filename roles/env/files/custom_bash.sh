@@ -5,8 +5,9 @@ HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="&:[ ]*:exit:ls *:bg:fg:history:clear:pwd:cd *"
 
 # custom aliases
-# set alias to copy to cliboard, simliar to pbcopy on MacOS
-alias cb='xclip -sel clip'
+# set aliases simliar to pbcopy/pbpaste, cbc/cbp=cliboard copy/paste
+alias cbc='xclip -sel clip'
+alias cbp='xclip -sel clip -o'
 alias dateu='date && date -u'
 # google search from the command line
 google() {
