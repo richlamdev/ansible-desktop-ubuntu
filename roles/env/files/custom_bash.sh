@@ -5,10 +5,13 @@ HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="&:[ ]*:exit:ls *:bg:fg:history:clear:pwd:cd *"
 
 # custom aliases
-# set alias to copy to cliboard
+# set alias to copy to cliboard, simliar to pbcopy on MacOS
 alias cb='xclip -sel clip'
-# view local and utc time
 alias dateu='date && date -u'
+# google search from the command line
+google() {
+  xdg-open "https://www.google.com/search?q=$*" >/dev/null 2>&1 &
+}
 
 # minikube autocomplete
 #source <(minikube completion bash)
@@ -54,9 +57,9 @@ export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -selection clipboard)+abort'
   --color header:italic
   --header '
-      Press CTRL-P: toggle preview
-      Press CTRL-Y to copy command into clipboard
-      '"
+Press CTRL-P: toggle preview
+Press CTRL-Y to copy command into clipboard
+'"
 
 # Print tree structure in the preview window
 export FZF_ALT_C_OPTS="
@@ -74,28 +77,32 @@ se() {
     search_folder="$1"
   fi
 
-  selection=$(find "$search_folder" -type d | fzf \
-    --preview='tree -C {}' --preview-window='50%' \
-    --prompt='Dirs > ' \
-    --bind='del:execute(rm -ri {+})' \
-    --bind='ctrl-p:toggle-preview' \
-    --bind='ctrl-d:change-prompt(Dirs > )' \
-    --bind="ctrl-d:+reload(find $search_folder -type d)" \
-    --bind='ctrl-d:+change-preview(tree -C {})' \
-    --bind='ctrl-d:+refresh-preview' \
-    --bind='ctrl-f:change-prompt(Files > )' \
-    --bind="ctrl-f:+reload(find $search_folder -type f)" \
-    --bind='ctrl-f:+change-preview(batcat --color=always {})' \
-    --bind='ctrl-f:+refresh-preview' \
-    --bind='ctrl-a:select-all' \
-    --bind='ctrl-x:deselect-all' \
-    --header '
-        CTRL-D to display directories
-        CTRL-F to display files
-        CTRL-A/CTRL-X to select/deselect all
-        ENTER to edit | DEL to delete
-        CTRL-P to toggle preview
-        ')
+  selection=$(
+    find "$search_folder" -type d | fzf \
+      --preview='tree -C {}' --preview-window='50%' \
+      --prompt='Dirs > ' \
+      --bind='del:execute(rm -ri {+})' \
+      --bind='ctrl-p:toggle-preview' \
+      --bind='ctrl-d:change-prompt(Dirs > )' \
+      --bind="ctrl-d:+reload(find $search_folder -type d)" \
+      --bind='ctrl-d:+change-preview(tree -C {})' \
+      --bind='ctrl-d:+refresh-preview' \
+      --bind='ctrl-f:change-prompt(Files > )' \
+      --bind="ctrl-f:+reload(find $search_folder -type f)" \
+      --bind='ctrl-f:+change-preview(batcat --color=always {})' \
+      --bind='ctrl-f:+refresh-preview' \
+      --bind='ctrl-a:select-all' \
+      --bind='ctrl-x:deselect-all' \
+      --color header:italic \
+      --header '
+CTRL-D to display directories
+CTRL-F to display files
+CTRL-A/CTRL-X to select/deselect all
+ENTER to edit | DEL to delete
+CTRL-P to toggle preview
+
+'
+  )
 
   if [ -d "$selection" ]; then
     cd "$selection" || return
