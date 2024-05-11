@@ -28,12 +28,17 @@ complete -C /usr/bin/terraform terraform
 . /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
 
 # pipx autocomplete
-eval "$(register-python-argcomplete pipx)"
+eval "$(register-python-argcomplete3 pipx)"
 
 # fzf configuration
 #export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --smart-case --hidden'
 export FZF_DEFAULT_COMMAND='fdfind --type f --strip-cwd-prefix --hidden --follow --exclude .git'
-export FZF_DEFAULT_OPTS='--height 80% --layout=reverse'
+export FZF_DEFAULT_OPTS="
+  --height 80%
+  --layout reverse
+  --multi
+  --border
+  --highlight-line --color gutter:-1,selected-bg:238,selected-fg:146,current-fg:189"
 
 # Preview file content using bat (https://github.com/sharkdp/bat)
 export FZF_CTRL_T_OPTS="
@@ -41,14 +46,17 @@ export FZF_CTRL_T_OPTS="
   --preview 'batcat -n --color=always {}'
   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
-# CTRL-/ to toggle small preview window to see the full command
+# CTRL-P to toggle preview window to view full command
 # CTRL-Y to copy the command into clipboard using pbcopy
 export FZF_CTRL_R_OPTS="
   --preview 'echo {}' --preview-window up:3:hidden:wrap
-  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-p:toggle-preview'
   --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -selection clipboard)+abort'
   --color header:italic
-  --header 'Press CTRL-Y to copy command into clipboard'"
+  --header '
+      Press CTRL-P: toggle preview
+      Press CTRL-Y to copy command into clipboard
+      '"
 
 # Print tree structure in the preview window
 export FZF_ALT_C_OPTS="
@@ -66,8 +74,8 @@ se() {
     search_folder="$1"
   fi
 
-  selection=$(find "$search_folder" -type d | fzf --multi --height=80% --border=sharp \
-    --preview='tree -C {}' --preview-window='50%,border-sharp' \
+  selection=$(find "$search_folder" -type d | fzf \
+    --preview='tree -C {}' --preview-window='50%' \
     --prompt='Dirs > ' \
     --bind='del:execute(rm -ri {+})' \
     --bind='ctrl-p:toggle-preview' \
@@ -82,8 +90,9 @@ se() {
     --bind='ctrl-a:select-all' \
     --bind='ctrl-x:deselect-all' \
     --header '
-        CTRL-D to display directories | CTRL-F to display files
-        CTRL-A to select all | CTRL-x to deselect all
+        CTRL-D to display directories
+        CTRL-F to display files
+        CTRL-A/CTRL-X to select/deselect all
         ENTER to edit | DEL to delete
         CTRL-P to toggle preview
         ')
