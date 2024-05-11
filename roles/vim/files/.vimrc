@@ -361,6 +361,20 @@ nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
 noremap <leader>sw :w !sudo tee % > /dev/null<CR>
 " }}}
 
+" view/paste register {{{
+function! Reg()
+    reg
+    echo "Register: "
+    let char = nr2char(getchar())
+    if char != "\<Esc>"
+        execute "normal! \"".char."p"
+    endif
+    redraw
+endfunction
+
+command! -nargs=0 Reg call Reg()
+" }}}
+
 " folding {{{
 set foldmethod=syntax
 set foldlevelstart=1
