@@ -80,9 +80,10 @@ Additional information for the following roles:
 
 * aws-cli
   * installs AWS CLI v2 via zip archive from aws
-  * in order to update aws cli remove the following file and folder and rerun this playbook
-    * rm -rf /usr/local/bin/aws
+  * to update aws cli remove the following and rerun the aws-cli role
+    * rm /usr/local/bin/aws
     * rm -rf /usr/local/aws-cli
+  * alternatively run the `scripts/upgrade_aws.sh` script
 
 * base
   * packages.yml - contains a list of packages to install via apt
@@ -101,7 +102,8 @@ Additional information for the following roles:
 
 * env
   * setups personal preferences for bash shell
-  * installs fzf via git (to upgrade remove ~/.fzf folder and re-run ansible)
+  * installs fzf via git (to upgrade remove ~/.fzf folder and re-run fzf role)
+    * alternatively run the `scripts/install_fzf.sh` script
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * .bashrc -bash function `se` is for fast directory navigation at the CLI
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
