@@ -281,8 +281,7 @@ let g:netrw_liststyle = 4
 "above is unnecessary if clipboard support is compiled with vim,
 "check with :echo has('clipboard') "return 0 = not compiled in, return 1 compiled in)
 vnoremap <c-y> "+y
-
-set clipboard^=unnamed,unnamedplus "make vim use system clipboard
+"set clipboard^=unnamed,unnamedplus "make vim use system clipboard
 " }}}
 
 " fzf {{{
