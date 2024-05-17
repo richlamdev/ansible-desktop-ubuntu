@@ -327,6 +327,25 @@ imap <C-n> <Cmd>call codeium#CycleCompletions(1)<CR>
 imap <C-p> <Cmd>call codeium#CycleCompletions(-1)<CR>
 imap <C-x> <Cmd>call codeium#Clear()<CR>
 imap <C-a> <Cmd>call codeium#Complete()<CR>
+
+function! GetLanguageServerVersion()
+    let autoload_dir = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium")
+    let script_file = autoload_dir . "/server.vim"
+
+    if filereadable(script_file)
+        let script_contents = readfile(script_file)
+        for line in script_contents
+            if line =~ 'let s:language_server_version'
+                let parts = split(line, "'")
+                return "Codeium version: " . parts[1]
+            endif
+        endfor
+    endif
+
+    return "Codeium version: not found"
+endfunction
+
+command! CodeiumVersion echo GetLanguageServerVersion()
 " }}}
 
 " nerdtree {{{
