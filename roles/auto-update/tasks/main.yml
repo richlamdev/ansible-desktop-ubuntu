@@ -1,0 +1,46 @@
+---
+- name: force dpkg to accept default settings during updates
+  copy:
+    src: "99force-yes"
+    dest: "/etc/apt/apt.conf.d/99force-yes"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: add cron to run apt update and dist-upgrade daily
+  cron:
+    name: "daily apt update and dist-upgrade"
+    user: "root"
+    minute: "0"
+    hour: "2"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    job: "apt update && apt dist-upgrade -y >> /var/log/apt-updates.log 2>&1"
+
+- name: add cron to run snap update daily
+  cron:
+    name: "daily snap update"
+    user: "root"
+    minute: "0"
+    hour: "4"
+    day: "*"
+    month: "*"
+    weekday: "*"
+    job: "snap refresh >> /var/log/snap-updates.log 2>&1"
+
+- name: create snap-updates.log file
+  file:
+    path: /var/log/snap-updates.log
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: create apt-updates.log file
+  file:
+    path: /var/log/apt-updates.log
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
