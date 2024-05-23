@@ -9,6 +9,7 @@
   #- include_tasks: tasks/main.yml
 
   roles:
+    - auto-update
     - base
     - aws-cli
     - brave
