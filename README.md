@@ -78,6 +78,15 @@ The majority of roles are self explantory in terms of what they install.
 
 Additional information for the following roles:
 
+* auto-update
+  * force dpkg to accept default settings during updates
+  * add cron to run apt update and dist-upgrade daily
+  * add cron to run snap update daily
+  * technically there are built-in methods to run apt and snap update daily
+    (unattended-upgrades), however, none of those methods seem to work.
+    This primitive implementation achieves a similar effect.
+  * This role is for any desktop/laptop that requires running 24/7.
+
 * aws-cli
   * installs AWS CLI v2 via zip archive from aws
   * to update aws cli remove the following and rerun the aws-cli role
@@ -99,6 +108,13 @@ Additional information for the following roles:
   * this role is executed last, as a dns service restart is required; the
     restart will take too long and cause the following playbook role(s) to fail
     (a delay could be added, but that adds unnecessary time to the playbook)
+
+* docker
+  * installs docker-ce-cli
+  * add current user to docker group
+  * install [docker-desktop](https://docs.docker.com/desktop/install/linux-install/) for remainder of local docker setup
+  * NOTE: At the time of this writing, Docker is not yet officially supported
+          on Ubuntu 24.04 LTS.  Follow the instructions under the [prerequisites section](https://docs.docker.com/desktop/install/ubuntu/#prerequisites)
 
 * env
   * setups personal preferences for bash shell
