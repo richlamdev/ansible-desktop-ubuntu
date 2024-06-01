@@ -90,8 +90,8 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " insert mode moving line of text
-inoremap <C-j> <Esc>:m .+1<CR>==i
-inoremap <C-k> <Esc>:m .-2<CR>==i
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
 " }}}
 
 " search settings {{{
@@ -281,12 +281,10 @@ let g:netrw_liststyle = 4
 "above is unnecessary if clipboard support is compiled with vim,
 "check with :echo has('clipboard') "return 0 = not compiled in, return 1 compiled in)
 vnoremap <c-y> "+y
-
-set clipboard^=unnamed,unnamedplus "make vim use system clipboard
+"set clipboard^=unnamed,unnamedplus "make vim use system clipboard
 " }}}
 
 " fzf {{{
-" https://github.com/junegunn/fzf.vim
 set runtimepath+=~/.fzf,~/.vim/bundle/fzf.vim
 
 " CTRL-A and CTRL-D to populate quickfix list when using :Ag :Rg :Lines
@@ -312,13 +310,12 @@ nnoremap <Leader>l :Lines<cr>
 " vimgrep & grep {{{
 " use :Vim <search_term>
 command! -nargs=+ Vim execute "silent vimgrep! /<args>/gj ##" | copen | execute 'silent /<args>' | redraw!
-nnoremap <silent> <leader>v :Vim <c-r>=expand("<cword>")<cr><cr>
+nnoremap <silent> <leader>v :Vim <c-r>=expand("<cWORD>")<cr><cr>
 
 " modified from: https://chase-seibert.github.io/blog/2013/09/21/vim-grep-under-cursor.html
 " use :Grep <search_term>
 command! -nargs=+ Grep execute 'silent grep! -I -i -r -n --exclude=\*.pyc --exclude-dir=.git ## -e <args>' | copen | execute 'silent /<args>' | redraw!
-":nmap <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
-nnoremap <silent> <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
+nnoremap <silent> <leader>g :Grep <c-r>=expand("<cWORD>")<cr><cr>
 " }}}
 
 " codeium {{{
@@ -329,6 +326,25 @@ imap <C-n> <Cmd>call codeium#CycleCompletions(1)<CR>
 imap <C-p> <Cmd>call codeium#CycleCompletions(-1)<CR>
 imap <C-x> <Cmd>call codeium#Clear()<CR>
 imap <C-a> <Cmd>call codeium#Complete()<CR>
+
+function! GetLanguageServerVersion()
+    let autoload_dir = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium")
+    let script_file = autoload_dir . "/server.vim"
+
+    if filereadable(script_file)
+        let script_contents = readfile(script_file)
+        for line in script_contents
+            if line =~ 'let s:language_server_version'
+                let parts = split(line, "'")
+                return "Codeium version: " . parts[1]
+            endif
+        endfor
+    endif
+
+    return "Codeium version: not found"
+endfunction
+
+command! CodeiumVersion echo GetLanguageServerVersion()
 " }}}
 
 " nerdtree {{{
@@ -355,6 +371,25 @@ nnoremap <Leader>tr :!clear && echo "Working Directory:" && pwd && tree \| less<
 " open vimrc / reload vimrc
 nnoremap ,v :edit   $MYVIMRC<cr>
 nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
+" }}}
+
+" sudo write {{{
+" Save a file with sudo (sw => sudo write)
+noremap <leader>sw :w !sudo tee % > /dev/null<CR>
+" }}}
+
+" view/paste register {{{
+function! Reg()
+    reg
+    echo "Register: "
+    let char = nr2char(getchar())
+    if char != "\<Esc>"
+        execute "normal! \"".char."p"
+    endif
+    redraw
+endfunction
+
+command! -nargs=0 Reg call Reg()
 " }}}
 
 " folding {{{
