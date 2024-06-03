@@ -12,6 +12,7 @@ set ttyfast                    " Make the keyboard fast
 "set timeout timeoutlen=1000 ttimeoutlen=50
 set showmode                   " always show what mode we're currently editing in
 set showcmd                    " Show (partial) command in status line.
+set report=1                   " provide a report when any command is executed
 set showmatch                  " Show matching brackets.
 set history=2500               " keep 2500 lines of command line history
 set ruler                      " show the cursor position all the time
@@ -308,15 +309,15 @@ nnoremap <Leader>l :Lines<cr>
 " }}}
 
 " vimgrep & grep {{{
+" need to load args list first
 " use :Vim <search_term>
 command! -nargs=+ Vim execute "silent vimgrep! /<args>/gj ##" | copen | execute 'silent /<args>' | redraw!
-nnoremap <silent> <leader>v :Vim <c-r>=expand("<cword>")<cr><cr>
+nnoremap <silent> <leader>v :Vim <c-r>=expand("<cWORD>")<cr><cr>
 
 " modified from: https://chase-seibert.github.io/blog/2013/09/21/vim-grep-under-cursor.html
 " use :Grep <search_term>
 command! -nargs=+ Grep execute 'silent grep! -I -i -r -n --exclude=\*.pyc --exclude-dir=.git ## -e <args>' | copen | execute 'silent /<args>' | redraw!
-":nmap <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
-nnoremap <silent> <leader>g :Grep <c-r>=expand("<cword>")<cr><cr>
+nnoremap <silent> <leader>g :Grep <c-r>=expand("<cWORD>")<cr><cr>
 " }}}
 
 " codeium {{{
