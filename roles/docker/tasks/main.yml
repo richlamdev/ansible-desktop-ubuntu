@@ -31,6 +31,11 @@
       #- docker-buildx-plugin
       #- docker-compose-plugin
 
+- name: Create the docker group
+  group:
+    name: docker
+    state: present
+
 - name: Add current user to the docker group
   user:
     name: "{{ local_user }}"
