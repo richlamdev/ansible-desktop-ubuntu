@@ -111,7 +111,7 @@ Additional information for the following roles:
 
 * docker
   * installs docker-ce-cli
-  * add current user to docker group
+  * creates docker group and add the current user to it
   * install [docker-desktop](https://docs.docker.com/desktop/install/linux-install/) for remainder of local docker setup
   * NOTE: At the time of this writing, Docker is not yet officially supported
           on Ubuntu 24.04 LTS.  Follow the instructions under the [prerequisites section](https://docs.docker.com/desktop/install/ubuntu/#prerequisites)
