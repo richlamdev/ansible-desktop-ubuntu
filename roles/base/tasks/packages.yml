@@ -33,7 +33,6 @@
       - pipx
       - python3-argcomplete
       - python3-urllib3
-      - qemu
       - ranger
       - ripgrep
       - rtorrent
