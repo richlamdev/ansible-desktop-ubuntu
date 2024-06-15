@@ -85,14 +85,14 @@ Additional information for the following roles:
   * technically there are built-in methods to run apt and snap update daily
     (unattended-upgrades), however, none of those methods seem to work.
     This primitive implementation achieves a similar effect.
-  * This role is for any desktop/laptop that requires running 24/7.
+  * This role is for any desktop/laptop that requires operating 24/7.
 
 * aws-cli
   * installs AWS CLI v2 via zip archive from aws
   * to update aws cli remove the following and rerun the aws-cli role
     * rm /usr/local/bin/aws
     * rm -rf /usr/local/aws-cli
-  * alternatively run the `scripts/upgrade_aws.sh` script
+  * alternatively execute the `scripts/upgrade_aws.sh` script
 
 * base
   * packages.yml - contains a list of packages to install via apt
@@ -110,14 +110,29 @@ Additional information for the following roles:
     (a delay could be added, but that adds unnecessary time to the playbook)
 
 * docker
-  * installs docker-ce-cli
-  * creates docker group and add the current user to it
+  * installs docker-ce-cli (required for Docker Desktop)
+  * creates docker group and adds the current user to it
   * install [docker-desktop](https://docs.docker.com/desktop/install/linux-install/) for remainder of local docker setup
   * NOTE: At the time of this writing, Docker is not yet officially supported
-          on Ubuntu 24.04 LTS.  Follow the instructions under the [prerequisites section](https://docs.docker.com/desktop/install/ubuntu/#prerequisites)
+          on Ubuntu 24.04 LTS.  Follow the instructions under the
+          [prerequisites section](https://docs.docker.com/desktop/install/ubuntu/#prerequisites)
+
+      Short version, either execute this on each reboot, before executing
+      Docker Desktop
+      `sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0`
+      or edit (create) this file /etc/sysctl.d/99-custom.conf
+      `echo "kernel.apparmor_restrict_unprivileged_userns=0" > /etc/sysctl.d/99-docker.conf`
+
+      Apply the change immediately by executing `sudo sysctl --system` or reboot
+
+      This was not added to the docker ansible role intentionally.  May
+      consider adding this, when Docker Desktop is officially supported
+      for Ubuntu 24.04 LTS.
+
   * Additional references:
     * [Github Issue #209](https://github.com/docker/desktop-linux/issues/209)
     * [reddit thread](https://www.reddit.com/r/docker/comments/1c9rzxz/cannot_get_docker_desktop_to_start_on_ubuntu_2404/)
+    * [restricted unprivileged user namespace](https://ubuntu.com/blog/ubuntu-23-10-restricted-unprivileged-user-namespaces)
 
 * env
   * setups personal preferences for bash shell
@@ -181,6 +196,24 @@ Additional information for the following roles:
     * [personal/custom .vimrc](https://github.com/richlamdev/ansible-desktop-ubuntu/blob/master/roles/vim/files/.vimrc)
 
 
+## Upgrading System
+
+The to upgrade system are:
+
+1. `sudo apt update && sudo apt upgrade -y`
+2. `sudo apt autoremove -y`
+3. `sudo snap refresh`
+
+Upgrade specific packages, not upraded via apt or snap:
+
+1. `execute scripts/upgrade_aws.sh`
+2. `execute scripts/upgrade_fzf.sh`
+3. Docker Desktop, if installed.  Start Docker Desktop, click "Settings", then
+   "Software updates", then "Check for updates", then Download and install
+   updated Docker Desktop.
+   `sudo apt update && sudo apt install ./docker-desktop-<version>-<arch>.deb`
+
+
 ## Idempotency
 
 The majority of this playbook is idempotent.  Minimal use of Ansible shell or
@@ -188,7 +221,8 @@ command is used.
 
 However, the idempotency checks are not perfect, not all software upgrades
 are handled automatically.  To upgrade fzf (command line), remove the ~/.fzf
-folder and re-run ansible.   Likewise for vim plugins.  Locate the folders for
+folder and re-run ansible (refer to above section ## Upgrading System).
+Likewise for vim plugins.  Locate the folders for
 any vim plugins that require an upgrade, remove them, and re-run ansible.
 
 
