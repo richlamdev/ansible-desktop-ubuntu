@@ -31,13 +31,21 @@
       #- docker-buildx-plugin
       #- docker-compose-plugin
 
-- name: Create the docker group
+- name: create the docker group
   group:
     name: docker
     state: present
 
-- name: Add current user to the docker group
+- name: add current user to the docker group
   user:
     name: "{{ local_user }}"
     groups: docker
     append: true
+
+- name: disable apparmor restriction for unprivileged users
+  sysctl:
+    name: kernel.apparmor_restrict_unprivileged_userns
+    value: 0
+    state: present
+    sysctl_file: /etc/sysctl.d/99-docker.conf
+    reload: yes

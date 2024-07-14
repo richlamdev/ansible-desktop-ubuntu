@@ -120,14 +120,14 @@ Additional information for the following roles:
       Short version, either execute this on each reboot, before executing
       Docker Desktop
       `sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0`
-      or edit (create) this file /etc/sysctl.d/99-custom.conf
+      or edit (create) this file /etc/sysctl.d/99-docker.conf
       `echo "kernel.apparmor_restrict_unprivileged_userns=0" > /etc/sysctl.d/99-docker.conf`
 
       Apply the change immediately by executing `sudo sysctl --system` or reboot
 
-      This was not added to the docker ansible role intentionally.  May
-      consider adding this, when Docker Desktop is officially supported
-      for Ubuntu 24.04 LTS.
+  * The kernel.apparmor_restrict_unprivileged_userns=0 setting is now applied
+    with the docker role
+
 
   * Additional references:
     * [Github Issue #209](https://github.com/docker/desktop-linux/issues/209)
