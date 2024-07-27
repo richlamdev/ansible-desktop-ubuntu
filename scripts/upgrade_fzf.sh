@@ -3,6 +3,11 @@
 # Set the desired version of fzf
 #FZF_VERSION="0.27.2" # Change this to the desired version
 
+# display current fzf version
+echo "Current fzf version: "
+fzf --version
+echo
+
 # Define the installation directory
 INSTALL_DIR="$HOME/.fzf"
 
@@ -21,3 +26,8 @@ echo "Running fzf installation script..."
 "$INSTALL_DIR/install" --key-bindings --completion --no-update-rc
 
 echo "fzf upgraded successfully to version $FZF_VERSION"
+echo
+
+# display current fzf version
+echo "Upgraded fzf version: "
+fzf --version

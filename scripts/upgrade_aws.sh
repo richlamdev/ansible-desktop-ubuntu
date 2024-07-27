@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo
+echo "Current AWS CLI version: "
+aws --version
+echo
+
 file="/usr/local/bin/aws"
 folder="/usr/local/aws-cli"
 
@@ -43,3 +48,8 @@ else
   echo "Error: AWS CLI v2 installation failed."
   exit 1
 fi
+
+echo
+echo "Upgraded AWS CLI version: "
+aws --version
+echo
