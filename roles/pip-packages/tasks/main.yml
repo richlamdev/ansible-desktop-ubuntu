@@ -1,14 +1,12 @@
 ---
-- name: install bandit, boto3, black, bottle, flake8, glances, pre-commit, pytest, ruff, yamllint with pipx
+- name: install bandit, black, flake8, glances, pre-commit, pytest, ruff, yamllint with pipx
   community.general.pipx:
     state: latest
     name: "{{ item }}"
     install_deps: true
   loop:
     - bandit
-    - boto3
     - black
-    - bottle
     - flake8
     - glances
     - pre-commit
