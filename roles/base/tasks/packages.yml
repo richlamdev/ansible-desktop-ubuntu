@@ -24,6 +24,7 @@
       - graphviz
       - htop
       - httpie
+      - iperf
       - jq
       - make
       - meld
@@ -32,6 +33,7 @@
       - p7zip
       - pipx
       - python3-argcomplete
+      - python3-psutil
       - python3-urllib3
       - ranger
       - ripgrep
