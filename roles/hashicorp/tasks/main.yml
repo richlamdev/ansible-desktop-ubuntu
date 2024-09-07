@@ -8,7 +8,7 @@
 
 - name: add hashicorp repo
   apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com mantic main"
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com noble main"
     filename: hashicorp
     state: present
     update_cache: true
