@@ -145,11 +145,9 @@ Additional information for the following roles:
 
 * pipx-packages
   * using pipx where possible due to [PEP 668](https://peps.python.org/pep-0668/)
-  * primarily installs pipx packages for coding/development
+  * primarily installs pipx binary packages for coding/development
     * [bandit](https://github.com/PyCQA/bandit)
-    * [boto3](https://github.com/boto/boto3)
     * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
-    * [bottle](https://github.com/pallets/bottle)
     * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
     * [glances](https://github.com/nicolargo/glances)
     * [pre-commit](https://github.com/pre-commit/pre-commit)
