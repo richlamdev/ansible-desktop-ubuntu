@@ -1,0 +1,62 @@
+---
+- name: Check if AWS SAM CLI is installed
+  command: sam --version
+  register: sam_cli_installed
+  failed_when: false
+  changed_when: false
+
+- name: Display current AWS SAM CLI version (if installed)
+  debug:
+    msg: "Current AWS SAM CLI version: {{ sam_cli_installed.stdout }}"
+  when: sam_cli_installed.rc == 0
+
+- name: Download the latest AWS SAM CLI
+  get_url:
+    url: "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip"
+    dest: "/tmp/aws-sam-cli-linux-x86_64.zip"
+    mode: '0644'
+  changed_when: false
+
+- name: Ensure AWS SAM CLI installation directory exists
+  file:
+    path: "/tmp/sam-installation/"
+    state: directory
+    mode: '0755'
+  changed_when: false
+
+- name: Unzip AWS SAM CLI installer
+  ansible.builtin.unarchive:
+    src: "/tmp/aws-sam-cli-linux-x86_64.zip"
+    dest: "/tmp/sam-installation/"
+    remote_src: yes
+  changed_when: false
+
+- name: Update AWS SAM CLI if already installed
+  command: "/tmp/sam-installation/install --update"
+  when: sam_cli_installed.rc == 0
+  changed_when: false
+
+- name: Install AWS SAM CLI if not installed
+  command: "/tmp/sam-installation/install"
+  when: sam_cli_installed.rc != 0
+
+- name: Remove temporary files
+  file:
+    path: "/tmp/aws-sam-cli-linux-x86_64.zip"
+    state: absent
+  changed_when: false
+
+- name: Remove AWS SAM CLI installation directory
+  file:
+    path: "/tmp/sam-installation/"
+    state: absent
+  changed_when: false
+
+- name: Display installed or updated AWS SAM CLI version
+  command: sam --version
+  register: sam_cli_version
+  changed_when: false
+
+- name: Show AWS SAM CLI version
+  debug:
+    msg: "AWS SAM CLI installation or update completed. Current version: {{ sam_cli_version.stdout }}"
