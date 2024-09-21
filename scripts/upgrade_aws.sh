@@ -1,55 +1,34 @@
 #!/bin/bash
 
-echo
-echo "Current AWS CLI version: "
-aws --version
-echo
+# Check if AWS CLI is installed
+if command -v aws &>/dev/null; then
+  echo "Current AWS CLI version: $(aws --version)"
+  echo "Updating to the latest version..."
 
-file="/usr/local/bin/aws"
-folder="/usr/local/aws-cli"
+  # Download the latest version of AWS CLI
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  unzip -q awscliv2.zip
 
-# Check if the file exists and delete it if it does
-if [ -e "$file" ]; then
-  echo "Deleting $file..."
-  sudo rm "$file"
-  echo "Deleted aws file successfully."
+  # Update the existing AWS CLI without deleting the old one
+  sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
 else
-  echo "AWS file does not exist."
+  echo "AWS CLI is not installed. Installing the latest version..."
+
+  # Download and install the latest version of AWS CLI
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  unzip -q awscliv2.zip
+
+  # Install AWS CLI
+  sudo ./aws/install
 fi
 
-# Check if the folder exists and delete it if it does
-if [ -d "$folder" ]; then
-  echo "Deleting $folder..."
-  sudo rm -rf "$folder"
-  echo "Deleted aws folder successfully."
-else
-  echo "AWS folder does not exist."
-fi
-
-executable_temp_dir="/tmp"
-aws_cli_installed="/usr/local/bin/aws"
-
-# Download AWS CLI v2 installer
-echo "Downloading AWS CLI v2 installer..."
-wget -qO /tmp/awscli-exe-linux-x86_64.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
-
-# Unarchive AWS CLI v2 installer
-echo "Unarchiving AWS CLI v2 installer..."
-unzip -qo /tmp/awscli-exe-linux-x86_64.zip -d "${executable_temp_dir:-/tmp}"
-
-# Run AWS CLI v2 installer
-echo "Running AWS CLI v2 installer..."
-sudo "${executable_temp_dir:-/tmp}"/aws/install
-
-# Check if AWS CLI installation was successful
-if [ -e "$aws_cli_installed" ]; then
-  echo "AWS CLI v2 installation completed successfully."
-else
-  echo "Error: AWS CLI v2 installation failed."
-  exit 1
-fi
-
+# Clean up
+rm -rf awscliv2.zip aws/
+echo "AWS CLI installation or update completed."
 echo
-echo "Upgraded AWS CLI version: "
-aws --version
+echo "Current AWS CLI version: $(aws --version)"
 echo
+
+# to uninstall
+# sudo rm /usr/local/bin/aws
+# sudo rm -rf /usr/local/aws-cli

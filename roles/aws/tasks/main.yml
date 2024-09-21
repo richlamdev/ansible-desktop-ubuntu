@@ -1,0 +1,6 @@
+---
+- name: install aws cli
+  import_tasks: aws-cli.yml
+
+- name: install aws sam cli
+  import_tasks: aws-sam-cli.yml
