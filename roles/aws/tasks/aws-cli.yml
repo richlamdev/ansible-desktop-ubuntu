@@ -1,0 +1,55 @@
+---
+- name: Check if AWS CLI is installed
+  command: aws --version
+  register: aws_cli_installed
+  failed_when: false
+  changed_when: false
+
+- name: Display current AWS CLI version (if installed)
+  debug:
+    msg: "Current AWS CLI version: {{ aws_cli_installed.stdout }}"
+  when: aws_cli_installed.rc == 0
+
+- name: Download the latest AWS CLI
+  get_url:
+    url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+    dest: "/tmp/awscliv2.zip"
+    mode: '0644'
+  changed_when: false
+
+- name: Unzip AWS CLI installer
+  ansible.builtin.unarchive:
+    src: "/tmp/awscliv2.zip"
+    dest: "/tmp/"
+    remote_src: yes
+  changed_when: false
+
+- name: Update AWS CLI if already installed
+  command: "/tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update"
+  when: aws_cli_installed.rc == 0
+  changed_when: false
+
+- name: Install AWS CLI if not installed
+  command: "/tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli"
+  when: aws_cli_installed.rc != 0
+
+- name: Remove temporary files
+  file:
+    path: "/tmp/awscliv2.zip"
+    state: absent
+  changed_when: false
+
+- name: Remove AWS CLI installation directory
+  file:
+    path: "/tmp/aws/"
+    state: absent
+  changed_when: false
+
+- name: Display installed or updated AWS CLI version
+  command: aws --version
+  register: aws_cli_version
+  changed_when: false
+
+- name: Show AWS CLI version
+  debug:
+    msg: "AWS CLI installation or update completed. Current version: {{ aws_cli_version.stdout }}"
