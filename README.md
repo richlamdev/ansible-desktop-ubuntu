@@ -88,7 +88,8 @@ Additional information for the following roles:
   * This role is for any desktop/laptop that requires operating 24/7.
 
 * aws
-  * installs AWS CLI v2 and AWS SAM CLI via zip archive from aws
+  * installs [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+    and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) via zip archive from aws
   * to update AWS CLI and AWS SAM CLI, rerun the aws role
   * alternatively execute the `scripts/upgrade_aws.sh` or
     the `scripts/upgrade_aws_sam.sh` script, respectively
