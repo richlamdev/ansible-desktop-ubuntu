@@ -1,26 +1,52 @@
 ---
-- name: development packages and libraries
+# - name: development packages and libraries
+#   apt:
+#     state: latest
+#     pkg:
+#       - build-essential
+#       - gcc
+#       - git
+#       - gitk
+#       - golang
+#       - httpie
+#       - jq
+#       - make
+#       - pipx
+#       - python3-argcomplete
+#       - python3-boto3
+#       - python3-bottle
+#       - python3-demjson
+#       - python3-psutil
+#       - python3-urllib3
+#       - shellcheck
+#       - shfmt
+#       - universal-ctags
+
+- name: Ensure development packages and libraries are installed
   apt:
     state: latest
-    pkg:
-      - build-essential
-      - gcc
-      - git
-      - gitk
-      - golang
-      - httpie
-      - jq
-      - make
-      - pipx
-      - python3-argcomplete
-      - python3-boto3
-      - python3-bottle
-      - python3-demjson
-      - python3-psutil
-      - python3-urllib3
-      - shellcheck
-      - shfmt
-      - universal-ctags
+    pkg: "{{ item }}"
+  loop:
+    - build-essential
+    - gcc
+    - git
+    - gitk
+    - golang
+    - httpie
+    - jq
+    - make
+    - pipx
+    - python3-argcomplete
+    - python3-boto3
+    - python3-bottle
+    - python3-demjson
+    - python3-psutil
+    - python3-urllib3
+    - shellcheck
+    - shfmt
+    - universal-ctags
+  loop_control:
+    label: "{{ item }}"
 
 - name: install development tools
   community.general.pipx:

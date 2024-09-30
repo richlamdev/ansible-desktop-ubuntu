@@ -10,7 +10,6 @@
     state: latest
     pkg:
       - bat
-      - chromium-browser
       - clamav
       - clamav-daemon
       - curl

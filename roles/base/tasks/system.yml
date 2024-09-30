@@ -1,4 +1,0 @@
----
-# for ansible 2.2+
- - name: system | set timezone
-   timezone: name=America/Vancouver
