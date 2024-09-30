@@ -2,6 +2,9 @@
 localhost
 #192.168.60.6
 
+[multipass]
+10.193.24.234
+
 # Group 'multi' with all hosts
 [multi:children]
 local

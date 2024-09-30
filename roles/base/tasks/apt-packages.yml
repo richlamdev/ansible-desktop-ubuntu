@@ -35,17 +35,15 @@
       - ufw
       - unrar
       - unzip
-      #- vim-gtk3 # install by github and compile
+      #- vim-gtk3  # install by github and compile
       - virtualbox
       - vlc
       - whois
       - xclip
-
 - name: packages | apt autoremove & autoclean
   apt:
     autoremove: true
     autoclean: true
-
 - name: packages | enable clamav service
   systemd:
     name: clamav-daemon
