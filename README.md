@@ -13,10 +13,12 @@ not work on older versions of Ubuntu without modification.
 
 1) Basic knowledge of Ansible
 
-2) Ubuntu 24.04 (other apt based Linux Distros may work, may require minor changes)
+2) Ubuntu 24.04 (may work on other apt based distros with modification)
 
 3) Software: ansible, git, openssh-server, vim-gtk3 (vim or vim-gtk3 is not
 strictly required, but is required if the vim role is executed)
+
+4) Ensure ansible community modules are installed. See below for instructions.
 
 
 ## Instructions
@@ -29,6 +31,7 @@ the user's primary group on the host and target machine(s) are the same.*
 
 1. Install required software for this playbook.\
 `sudo apt update && sudo apt install ansible git openssh-server vim-gtk3 -y`
+`ansible-galaxy collection install community.general`
 
 2. Clone ansible-desktop-ubuntu repo.\
 `git clone https://github.com/richlamdev/ansible-desktop-ubuntu.git`
@@ -48,7 +51,7 @@ Alternatively, if password authentication is preferred, install sshpass.\
 
 Note: Be aware the /role/base/tasks/authentication.yml will update the
 /etc/ssh/sshd_config, which will disable SSH password authentication;
-consequently, making SSH key authentication required.
+consequently, making SSH key authentication a hard requirement.
 
 4. Amend inventory file if needed, default target is localhost.
 
@@ -86,16 +89,32 @@ Additional information for the following roles:
     (unattended-upgrades), however, none of those methods seem to work.
     This primitive implementation achieves a similar effect.
   * This role is for any desktop/laptop that requires operating 24/7.
+  * unfortunately there is no method to ensure reboots are triggered when
+    required
 
 * aws
   * installs [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
     and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) via zip archive from aws
-  * to update AWS CLI and AWS SAM CLI, rerun the aws role
-  * alternatively execute the `scripts/upgrade_aws.sh` or
-    the `scripts/upgrade_aws_sam.sh` script, respectively
+  * this majority of this role ignores changes; it's not truly idempotent,
+    due to not using a built-in ansible module to handle installation
+  * refer to System Updates section for manual (script) updating
 
 * base
-  * packages.yml - contains a list of packages to install via apt
+  * packages.yml - list of packages to install via apt
+  * dev-packages.yml - list of development packages to install via apt and pipx
+    * some of the development packages are installed using pipx where possible
+      due to [PEP 668](https://peps.python.org/pep-0668/)
+    * primarily installs pipx binary packages for coding/development
+       * [bandit](https://github.com/PyCQA/bandit)
+       * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
+       * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
+       * [glances](https://github.com/nicolargo/glances)
+       * [pre-commit](https://github.com/pre-commit/pre-commit)
+       * [pytest](https://github.com/pytest-dev/pytest)
+       * [ruff](https://github.com/charliermarsh/ruff) (needed for VIM ALE plugin)
+       * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
+       * [yamlfix](https://github.com/lyz-code/yamlfix) (needed for VIM ALE plugin)
+       * [yamlfmt](https://github.com/google/yamlfmt) (needed for VIM ALE plugin)
   * keychron.yml - enables keychron keyboard shortcuts
   * autostart.yml - enables autostart of applications
   * authentication.yml - configures ssh server and client.
@@ -107,7 +126,8 @@ Additional information for the following roles:
     DNS lookup and filtering)
   * this role is executed last, as a dns service restart is required; the
     restart will take too long and cause the following playbook role(s) to fail
-    (a delay could be added, but that adds unnecessary time to the playbook)
+    (a delay could be added, but that adds unnecessary execution time for the
+    playbook)
 
 * docker
   * installs docker-ce-cli (required for Docker Desktop)
@@ -128,7 +148,6 @@ Additional information for the following roles:
   * The kernel.apparmor_restrict_unprivileged_userns=0 setting is now applied
     with the docker role
 
-
   * Additional references:
     * [Github Issue #209](https://github.com/docker/desktop-linux/issues/209)
     * [reddit thread](https://www.reddit.com/r/docker/comments/1c9rzxz/cannot_get_docker_desktop_to_start_on_ubuntu_2404/)
@@ -136,24 +155,11 @@ Additional information for the following roles:
 
 * env
   * setups personal preferences for bash shell
-  * installs fzf via git (to upgrade remove ~/.fzf folder and re-run fzf role)
-    * alternatively run the `scripts/install_fzf.sh` script
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * .bashrc -bash function `se` is for fast directory navigation at the CLI
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
     (this is slightly different from the built in alt-c command provided with fzf)
-
-* pipx-packages
-  * using pipx where possible due to [PEP 668](https://peps.python.org/pep-0668/)
-  * primarily installs pipx binary packages for coding/development
-    * [bandit](https://github.com/PyCQA/bandit)
-    * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
-    * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
-    * [glances](https://github.com/nicolargo/glances)
-    * [pre-commit](https://github.com/pre-commit/pre-commit)
-    * [pytest](https://github.com/pytest-dev/pytest)
-    * [ruff](https://github.com/charliermarsh/ruff)
-    * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
+  * refer to System Updates section for manual (script) updating of fzf
 
 * ufw
   * disables incoming ports, except port 22 (limit inbound connections port 22)
@@ -165,7 +171,7 @@ Additional information for the following roles:
     writing of this playbook, Vim 9.x was not available in the official Ubuntu
     repos
 
-  * if codeium is not wanted, disable codeium in the status line within .vimrc
+  * if codeium is not needed, disable codeium in the status line within .vimrc
     that is deployed with this role:
     * comment out this line
 
@@ -190,24 +196,29 @@ Additional information for the following roles:
     * [vim-commentary](https://github.com/tpope/vim-commentary)
     * [vim-unimpaired](https://github.com/tpope/vim-unimpaired)
     * [vimwiki](https://github.com/vimwiki/vimwiki)
-    * [yammlint](https://github.com/adrienverge/yamllint)
     * [personal/custom .vimrc](https://github.com/richlamdev/ansible-desktop-ubuntu/blob/master/roles/vim/files/.vimrc)
 
 
-## Upgrading System
+## System Updates
 
-The to upgrade system are:
+The commands used to keep your system up to date are:
 
 1. `sudo apt update && sudo apt upgrade -y`
-2. `sudo apt autoremove -y`
-3. `sudo snap refresh`
+2. `sudo apt autoremove -y` (not really an update, but removes old packages)
+3. `sudo snap refresh`*
+4. `pipx upgrade-all`
+
+*while snap package mangement is controversial - tradeoff of manual updates
+and convenience...
 
 Upgrade specific packages, not upraded via apt or snap:
 
-1. `execute scripts/upgrade_aws.sh`
-2. `execute scripts/upgrade_fzf.sh`
-3. Docker Desktop, if installed.  Start Docker Desktop, click "Settings", then
-   "Software updates", then "Check for updates", then Download and install
+1. `execute scripts/aws_upgrade.sh`
+2. `execute scripts/sam_upgrade.sh`
+3. `execute scripts/fzf_upgrade.sh`
+   (alternatively delete the ~/.fzf folder and re-run ansible)
+4. If Docker Desktop, is installed.  Start Docker Desktop, click "Settings",
+   then "Software updates", then "Check for updates", then Download and install
    updated Docker Desktop.
    `sudo apt update && sudo apt install ./docker-desktop-<version>-<arch>.deb`
 
@@ -217,11 +228,10 @@ Upgrade specific packages, not upraded via apt or snap:
 The majority of this playbook is idempotent.  Minimal use of Ansible shell or
 command is used.
 
-However, the idempotency checks are not perfect, not all software upgrades
-are handled automatically.  To upgrade fzf (command line), remove the ~/.fzf
-folder and re-run ansible (refer to above section ## Upgrading System).
-Likewise for vim plugins.  Locate the folders for
-any vim plugins that require an upgrade, remove them, and re-run ansible.
+AWS CLI, AWS SAM CLI, and fzf are not idempotent.
+While fzf could be installed and maintained via apt, I prefer to update fzf
+more frequently and therefore perform the upgrades manually (by script).
+Refer to above System Updates section for updates beyond package management.
 
 
 ## Scripts
@@ -234,6 +244,14 @@ to save dconf settings)
 
 3. check_ssh_auth.sh - checks for SSH authentication methods against a host
 Eg: `./check_ssh_auth.sh localhost`
+
+4. multipass-test.sh - basic script to test ansible roles with multipass Ubuntu
+                       virtual machines
+                     - open the file for documentation and usage
+                     - multipass credentials saved in the file; naturally
+                       not a concern given it's an ephemeral VM
+                     - short version: update inventory file, update multipass
+                       vm ip address, then `cd scripts` and `./multipass-test.sh`
 
 
 ## Random Notes, General Information & Considerations
