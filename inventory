@@ -1,13 +1,13 @@
 [local]
 localhost
-#192.168.60.6
 
 [multipass]
-10.193.24.234
+10.193.24.72
 
 # Group 'multi' with all hosts
 [multi:children]
 local
+multipass
 
 [multi:vars]
 local_username="{{ ansible_env.SUDO_USER }}"

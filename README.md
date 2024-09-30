@@ -245,7 +245,13 @@ to save dconf settings)
 3. check_ssh_auth.sh - checks for SSH authentication methods against a host
 Eg: `./check_ssh_auth.sh localhost`
 
-4. multipass-test.sh - basic setup to test ansible roles against multipass vm
+4. multipass-test.sh - basic script to test ansible roles with multipass Ubuntu
+                       virtual machines
+                     - open the file for documentation and usage
+                     - multipass credentials saved in the file; naturally
+                       not a concern given it's an ephemeral VM
+                     - short version: update inventory file, update multipass
+                       vm ip address, then `cd scripts` and `./multipass-test.sh`
 
 
 ## Random Notes, General Information & Considerations
