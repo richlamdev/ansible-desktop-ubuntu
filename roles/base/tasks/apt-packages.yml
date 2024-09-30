@@ -10,38 +10,22 @@
     state: latest
     pkg:
       - bat
-      - build-essential
       - chromium-browser
       - clamav
       - clamav-daemon
       - curl
       - fd-find
-      - gcc
       - gimp
-      - git
-      - gitk
-      - golang
       - graphviz
       - htop
-      - httpie
       - iperf
-      - jq
-      - make
       - meld
       - net-tools
       - nmap
       - p7zip
-      - pipx
-      - python3-argcomplete
-      - python3-boto3
-      - python3-bottle
-      - python3-psutil
-      - python3-urllib3
       - ranger
       - ripgrep
       - rtorrent
-      - shellcheck
-      - shfmt
       - silversearcher-ag
       - sshfs
       - termshark
@@ -49,7 +33,6 @@
       - tmux
       - tree
       - ufw
-      - universal-ctags
       - unrar
       - unzip
       #- vim-gtk3 # install by github and compile
