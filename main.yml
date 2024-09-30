@@ -9,25 +9,25 @@
   #- include_tasks: tasks/main.yml
 
   roles:
-    # - auto-update
+    - auto-update
     - base
-    # - aws
-    # - brave
-    # - chrome
-    # - docker
-    # - gh_cli
-    # - hashicorp
-    # - keepassxc
-    # - kubectl
-    # - microsoft
-    # - opera
-    # - signal-desktop
-    # - sublime-text
-    # - trivy
-    # - ufw
-    # - role: vim
-    #   become: false
-    # - role: env
-    #   become: false
-    # - disable-local-dns
+    - aws
+    - brave
+    - chrome
+    - docker
+    - gh_cli
+    - hashicorp
+    - keepassxc
+    - kubectl
+    - microsoft
+    - opera
+    - signal-desktop
+    - sublime-text
+    - trivy
+    - ufw
+    - role: vim
+      become: false
+    - role: env
+      become: false
+    - disable-local-dns
     # - yubico
