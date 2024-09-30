@@ -95,7 +95,19 @@ Additional information for the following roles:
     the `scripts/upgrade_aws_sam.sh` script, respectively
 
 * base
-  * packages.yml - contains a list of packages to install via apt
+  * packages.yml - list of packages to install via apt
+  * dev-packages.yml - list of development packages to install via apt and pipx
+    * some of the development packages are installed using pipx where possible
+      due to [PEP 668](https://peps.python.org/pep-0668/)
+    * primarily installs pipx binary packages for coding/development
+       * [bandit](https://github.com/PyCQA/bandit)
+       * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
+       * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
+       * [glances](https://github.com/nicolargo/glances)
+       * [pre-commit](https://github.com/pre-commit/pre-commit)
+       * [pytest](https://github.com/pytest-dev/pytest)
+       * [ruff](https://github.com/charliermarsh/ruff)
+       * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
   * keychron.yml - enables keychron keyboard shortcuts
   * autostart.yml - enables autostart of applications
   * authentication.yml - configures ssh server and client.
@@ -107,7 +119,8 @@ Additional information for the following roles:
     DNS lookup and filtering)
   * this role is executed last, as a dns service restart is required; the
     restart will take too long and cause the following playbook role(s) to fail
-    (a delay could be added, but that adds unnecessary time to the playbook)
+    (a delay could be added, but that adds unnecessary execution time for the
+    playbook)
 
 * docker
   * installs docker-ce-cli (required for Docker Desktop)
@@ -128,7 +141,6 @@ Additional information for the following roles:
   * The kernel.apparmor_restrict_unprivileged_userns=0 setting is now applied
     with the docker role
 
-
   * Additional references:
     * [Github Issue #209](https://github.com/docker/desktop-linux/issues/209)
     * [reddit thread](https://www.reddit.com/r/docker/comments/1c9rzxz/cannot_get_docker_desktop_to_start_on_ubuntu_2404/)
@@ -142,18 +154,6 @@ Additional information for the following roles:
   * .bashrc -bash function `se` is for fast directory navigation at the CLI
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
     (this is slightly different from the built in alt-c command provided with fzf)
-
-* pipx-packages
-  * using pipx where possible due to [PEP 668](https://peps.python.org/pep-0668/)
-  * primarily installs pipx binary packages for coding/development
-    * [bandit](https://github.com/PyCQA/bandit)
-    * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
-    * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
-    * [glances](https://github.com/nicolargo/glances)
-    * [pre-commit](https://github.com/pre-commit/pre-commit)
-    * [pytest](https://github.com/pytest-dev/pytest)
-    * [ruff](https://github.com/charliermarsh/ruff)
-    * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
 
 * ufw
   * disables incoming ports, except port 22 (limit inbound connections port 22)

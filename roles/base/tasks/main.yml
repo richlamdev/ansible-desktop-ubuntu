@@ -1,6 +1,9 @@
 ---
-- name: packages tasks
-  import_tasks: packages.yml
+- name: apt packages tasks
+  import_tasks: apt-packages.yml
+
+- name: development tools and libraries tasks
+  import_tasks: dev-packages.yml
 
 - name: systems tasks
   import_tasks: system.yml
@@ -22,6 +25,3 @@
 
 - name: autostart tasks
   import_tasks: autostart.yml
-
-# disable motd-news
-#- import_playbook: motd-news.yml
