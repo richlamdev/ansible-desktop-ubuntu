@@ -91,8 +91,10 @@ Additional information for the following roles:
   * installs [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
     and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) via zip archive from aws
   * to update AWS CLI and AWS SAM CLI, rerun the aws role
-  * alternatively execute the `scripts/upgrade_aws.sh` or
-    the `scripts/upgrade_aws_sam.sh` script, respectively
+  * alternatively execute the `scripts/aws_upgrade.sh` or
+    the `scripts/sam_upgrade.sh` script, respectively
+  * this majority of this role ignores changes; it's not truly idempotent,
+    due to not using a built-in ansible module to handle installation
 
 * base
   * packages.yml - list of packages to install via apt
@@ -149,7 +151,7 @@ Additional information for the following roles:
 * env
   * setups personal preferences for bash shell
   * installs fzf via git (to upgrade remove ~/.fzf folder and re-run fzf role)
-    * alternatively run the `scripts/install_fzf.sh` script
+    * alternatively run the `scripts/fzf_upgrade.sh` script
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * .bashrc -bash function `se` is for fast directory navigation at the CLI
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
@@ -196,17 +198,19 @@ Additional information for the following roles:
 
 ## Upgrading System
 
-The to upgrade system are:
+The commands used to upgrade system are:
 
 1. `sudo apt update && sudo apt upgrade -y`
 2. `sudo apt autoremove -y`
 3. `sudo snap refresh`
+4. `pipx upgrade-all`
 
 Upgrade specific packages, not upraded via apt or snap:
 
-1. `execute scripts/upgrade_aws.sh`
-2. `execute scripts/upgrade_fzf.sh`
-3. Docker Desktop, if installed.  Start Docker Desktop, click "Settings", then
+1. `execute scripts/aws_upgrade.sh`
+2. `execute scripts/sam_upgrade.sh`
+3. `execute scripts/fzf_upgrade.sh`
+4. Docker Desktop, if installed.  Start Docker Desktop, click "Settings", then
    "Software updates", then "Check for updates", then Download and install
    updated Docker Desktop.
    `sudo apt update && sudo apt install ./docker-desktop-<version>-<arch>.deb`
