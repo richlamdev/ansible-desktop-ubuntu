@@ -17,7 +17,7 @@
     owner: root
     group: root
 
-- name: enable xorg as default - just say no to wayland
+- name: powersave | enable xorg as default - just say no to wayland
   copy:
     src: custom.conf
     dest: "/etc/gdm3/custom.conf"

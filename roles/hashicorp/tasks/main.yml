@@ -16,7 +16,10 @@
 - name: install terraform, vagrant, and vault
   apt:
     state: present
-    pkg:
-      - terraform
-      - vagrant
-      - vault
+    pkg: "{{ item }}"
+  loop:
+    - terraform
+    - vagrant
+    - vault
+  loop_control:
+    label: "{{ item }}"
