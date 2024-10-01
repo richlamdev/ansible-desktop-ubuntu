@@ -26,6 +26,9 @@
 - name: install Microsoft Edge and VS Code from repository
   apt:
     state: latest
-    pkg:
-      - microsoft-edge-stable
-      - code
+    pkg: "{{ item }}"
+  loop:
+    - microsoft-edge-stable
+    - code
+  loop_control:
+    label: "{{ item }}"

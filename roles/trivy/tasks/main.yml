@@ -1,26 +1,26 @@
 ---
-- name: Ensure Trivy dependencies are installed
+- name: ensure Trivy dependencies are installed
   apt:
     state: present
     pkg:
       - apt-transport-https
       - gnupg
 
-- name: Add Trivy apt repository key
+- name: add Trivy apt repository key
   get_url:
     url: https://aquasecurity.github.io/trivy-repo/deb/public.key
     dest: /usr/share/keyrings/trivy.asc
     mode: "0644"
     force: false
 
-- name: Add Trivy repo
+- name: add Trivy repo
   apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb jammy main"
     filename: trivy
     state: present
     update_cache: true
 
-- name: Install Trivy
+- name: install Trivy
   apt:
     name: trivy
     state: present
