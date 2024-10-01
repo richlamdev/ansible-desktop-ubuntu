@@ -156,8 +156,8 @@ autocmd FileType yaml
 
 " ALE {{{
 " https://github.com/dense-analysis/ale
-let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'sh': ['shellcheck'], 'yaml': ['yamllint']}
-let g:ale_fixers = {'python': ['black'], 'sh': ['shfmt']}
+let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'sh': ['shellcheck'], 'yaml': ['yamllint'], 'terraform': ['terraform']}
+let g:ale_fixers = {'json': ['jq'], 'python': ['black'], 'sh': ['shfmt'], 'yaml': ['yamlfmt'], 'terraform': ['terraform']}
 "let g:ale_fixers = {'*': [], 'python': ['black']}
 let g:ale_python_flake8_options = '--max-line-length 79'
 let g:ale_python_black_options = '--line-length 79'
