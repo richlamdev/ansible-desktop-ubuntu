@@ -250,8 +250,7 @@ Eg: `./check_ssh_auth.sh localhost`
                      - open the file for documentation and usage
                      - multipass credentials saved in the file; naturally
                        not a concern given it's an ephemeral VM
-                     - short version: update inventory file, update multipass
-                       vm ip address, then `cd scripts` and `./multipass-test.sh`
+                     - to run: `cd scripts` `./multipass-test.sh`
 
 
 ## Random Notes, General Information & Considerations
