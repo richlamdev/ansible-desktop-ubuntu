@@ -4,6 +4,7 @@
   register: sam_cli_installed
   failed_when: false
   changed_when: false
+  ignore_errors: true
 
 - name: Display current AWS SAM CLI version (if installed)
   debug:
