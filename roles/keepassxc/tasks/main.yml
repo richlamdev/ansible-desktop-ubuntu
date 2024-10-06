@@ -19,10 +19,19 @@
     name: keepassxc
     state: latest
 
+- name: Get user's primary group name
+  command: "id -gn {{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+  register: primary_group
+  changed_when: false
+
+- name: Get user's primary group name
+  set_fact:
+    user_primary_group: "{{ primary_group.stdout }}"
+
 - name: Update KeePassXC preferences
   copy:
     src: "keepassxc.ini"
-    dest: "/home/{{ local_user }}/.config/keepassxc/"
+    dest: "{{ home_dir }}/.config/keepassxc/"
     owner: "{{ local_user }}"
-    group: "{{ local_user_primary_group }}"
+    group: "{{ user_primary_group }}"
     mode: "0664"
