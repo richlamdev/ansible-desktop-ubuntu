@@ -54,8 +54,13 @@
         var: "{{ ansible_distribution_version }}"
 
     - name: Get user's primary group name
+      command: "id -gn {{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+      register: primary_group
+      changed_when: false
+
+    - name: Get user's primary group name
       set_fact:
-        user_primary_group: "{{ lookup('pipe', 'id -gn ' + ansible_env.SUDO_USER) }}"
+        user_primary_group: "{{ primary_group.stdout }}"
 
     - name: Display user's primary group name
       debug:
