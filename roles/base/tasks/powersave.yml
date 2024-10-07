@@ -17,6 +17,11 @@
     owner: root
     group: root
 
+- name: Check if /etc/gdm3 directory exists
+  stat:
+    path: /etc/gdm3
+  register: gdm3_directory
+
 - name: powersave | enable xorg as default - just say no to wayland
   copy:
     src: custom.conf
@@ -24,3 +29,4 @@
     mode: 0644
     owner: root
     group: root
+  when: gdm3_directory.stat.exists
