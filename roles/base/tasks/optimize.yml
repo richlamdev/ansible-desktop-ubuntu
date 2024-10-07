@@ -17,14 +17,21 @@
     autoclean: true
   #when: snaps_found.stdout | length > 0
 
-- name: optimize | prevent evolution from starting (running) in background
-  file:
+- name: Check if Evolution files exist
+  stat:
     path: "{{ item }}"
-    owner: root
-    group: root
-    mode: 0644
   loop:
     - /usr/libexec/evolution-addressbook-factory
     - /usr/libexec/evolution-calendar-factory
     - /usr/libexec/evolution-data-server/evolution-alarm-notify
     - /usr/libexec/evolution-source-registry
+  register: evolution_files
+
+- name: optimize | prevent evolution from starting (running) in background
+  file:
+    path: "{{ item.stat.path }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ evolution_files.results }}"
+  when: item.stat.exists
