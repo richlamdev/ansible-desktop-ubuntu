@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Define the image, and instance parameters
-IMAGE="24.04"
-CPUS="2"
-MEMORY="4G"
+IMAGE="daily:24.10"
+CPUS="4"
+MEMORY="8G"
 DISK="30G"
 
 echo "Starting a multipass instance with $CPUS CPUs, $MEMORY memory, and $DISK disk space, using the $IMAGE image."
@@ -11,8 +11,13 @@ echo
 
 start_time=$(date +%s)
 
-# Launch the VM using the defined image and capture the randomly assigned name
-VM_NAME=$(multipass launch "$IMAGE" --cpus "$CPUS" --memory $MEMORY --disk $DISK --cloud-init cloud-init.yml --timeout 600 | grep Starting | awk '{print $2}')
+# Check if the first argument is "desktop" and adjust the multipass launch command accordingly
+if [[ "$1" == "desktop" ]]; then
+  echo "Using cloud-init.yml for instance setup."
+  VM_NAME=$(multipass launch "$IMAGE" --cpus "$CPUS" --memory $MEMORY --disk $DISK --cloud-init cloud-init.yml --timeout 600 | grep Starting | awk '{print $2}')
+else
+  VM_NAME=$(multipass launch "$IMAGE" --cpus "$CPUS" --memory $MEMORY --disk $DISK --timeout 600 | grep Starting | awk '{print $2}')
+fi
 
 echo "Launched VM: $VM_NAME with image: $IMAGE"
 
@@ -46,17 +51,16 @@ chmod 400 "$HOME/id_rsa"
 
 cd ..
 
-ansible-playbook -i "$IP_ADDRESS," main.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars "ansible_become_pass=ubuntu" --extra-vars "ansible_python_interpreter=/usr/bin/python3"
-#ansible-playbook -i "$IP_ADDRESS," test.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars "ansible_become_pass=ubuntu" --extra-vars "ansible_python_interpreter=/usr/bin/python3"
-
-echo
-echo "Clean up ssh key from home folder."
-echo
-sudo rm "$HOME/id_rsa"
+#ansible-playbook -i "$IP_ADDRESS," main.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars "ansible_become_pass=ubuntu" --extra-vars "ansible_python_interpreter=/usr/bin/python3"
+ansible-playbook -i "$IP_ADDRESS," test.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars "ansible_become_pass=ubuntu" --extra-vars "ansible_python_interpreter=/usr/bin/python3"
 
 echo "Delete the instance with the following commands, when testing is complete:"
 echo
 echo "multipass delete $VM_NAME"
 echo "multipass purge"
+echo
+echo "Clean up the ssh key from home folder, with the following command:"
+echo
+echo "sudo rm \"$HOME/id_rsa\""
 
 exit 0
