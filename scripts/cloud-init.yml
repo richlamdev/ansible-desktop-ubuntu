@@ -5,6 +5,12 @@ package_upgrade: true
 packages:
   - ubuntu-desktop
   - network-manager
+  - xrdp
+
+chpasswd:
+  list: |
+    ubuntu:ubuntu
+  expire: False  # Ensure the password does not expire
 
 runcmd:
   - sudo systemctl set-default graphical.target
