@@ -128,7 +128,9 @@ autocmd FileType sh,yaml
     \ setlocal shiftwidth=2 |
     \ setlocal expandtab |
     \ setlocal autoindent |
+    \ setlocal smartindent |
     \ setlocal smarttab |
+    "\ setlocal colorscheme molokai |
 " }}}
 
 " markdown json {{{
