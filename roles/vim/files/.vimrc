@@ -6,69 +6,67 @@
 " debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous
 " options, so any other options should be set AFTER setting 'compatible'.
 set nocompatible
-set title                      " set title of window
+set title                             " set title of window
 set titlestring=VIM:\ \ %-25.55F\ %a%r%m titlelen=70
 set ttyfast                    " Make the keyboard fast
 "set timeout timeoutlen=1000 ttimeoutlen=50
-set showmode                   " always show what mode we're currently editing in
-set showcmd                    " Show (partial) command in status line.
-set report=1                   " provide a report when any command is executed
-set showmatch                  " Show matching brackets.
-set history=2500               " keep 2500 lines of command line history
-set ruler                      " show the cursor position all the time
-set nowrap                     " NO WRAPPING OF THE LINES! (except for Python, see below)
-set encoding=utf-8             " UTF8 Support
-set backspace=indent,eol,start " allow backspacing over everything in insert mode
-set nu                         " set numbered lines for columns
-set list                       " show all whitespace a character
-set listchars=tab:▸\ ,trail:·,nbsp:␣   " set characters displayed for tab/space
-set mouse=a                    " enable mouse for all modes
-set scrolloff=1                " set number of context lines visible above & below cursor
-set sidescrolloff=5            " make vertical scrolling appear more natural
-set noerrorbells               " disable beep on errors
-set lazyredraw                 " don't redraw while executing macros
-set smoothscroll               " smooth scrolling
+set showmode                          " always show what mode we're currently editing in
+set showcmd                           " Show (partial) command in status line.
+set report=1                          " provide a report when any command is executed
+set showmatch                         " Show matching brackets.
+set history=2500                      " keep 2500 lines of command line history
+set ruler                             " show the cursor position all the time
+set nowrap                            " NO WRAPPING OF THE LINES! (except for Python, see below)
+set encoding=utf-8                    " UTF8 Support
+set backspace=indent,eol,start        " allow backspacing over everything in insert mode
+set nu                                " set numbered lines for columns
+set list                              " show all whitespace a character
+set listchars=tab:▸\ ,trail:·,nbsp:␣  " set characters displayed for tab/space
+set mouse=a                           " enable mouse for all modes
+set scrolloff=1                       " set number of context lines visible above & below cursor
+set sidescrolloff=5                   " make vertical scrolling appear more natural
+set noerrorbells                      " disable beep on errors
+set lazyredraw                        " don't redraw while executing macros
+set smoothscroll                      " smooth scrolling
 
-if has("autocmd")              " Jump to last position when reopening a file
+if has("autocmd")                     " Jump to last position when reopening a file
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
-
-autocmd BufWrite * %s/\s\+$//e " Remove trailing whitespace on save
 " }}}
 
 " file settings {{{
-set autowrite              " Automatically save before commands like :next and :make
-set nobackup               " do not keep a backup file, use versions instead
+set autowrite                         " Automatically save before commands like :next and :make
+set nobackup                          " do not keep a backup file, use versions instead
+autocmd BufWrite * %s/\s\+$//e        " Remove trailing whitespace on save
 " }}}
 
 " file find {{{
-set path=.,**              " relative to current file and everything under :pwd
-set wildmenu               " display matches in command-line mode
-set wildmode=full          " first tab complete as much as possible
-set wildignore+=.pyc,.swp  " ignore these files when opening based on glob pattern
-set wildignorecase         " ignore case when completing file names
-set hidden                 " hide buffers when they are abandoned
+set path=.,**                         " relative to current file and everything under :pwd
+set wildmenu                          " display matches in command-line mode
+set wildmode=full                     " first tab complete as much as possible
+set wildignore+=.pyc,.swp             " ignore these files when opening based on glob pattern
+set wildignorecase                    " ignore case when completing file names
+set hidden                            " hide buffers when they are abandoned
 " }}}
 
 " Python PEP8 {{{
-" To add the proper PEP8 indentation, add the following to your .vimrc:
 autocmd Filetype python
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix |
-    \ set textwidth=0 |
-    \ set smarttab |
-    \ set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with,async,await,match,case |
+    \ setlocal tabstop=4 |
+    \ setlocal softtabstop=4 |
+    \ setlocal shiftwidth=4 |
+    \ setlocal expandtab |
+    \ setlocal autoindent |
+    \ setlocal fileformat=unix |
+    \ setlocal textwidth=0 |
+    \ setlocal smarttab |
+    \ setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with,async,await,match,case |
 
 " highlight a marker at column 80
 highlight ColorColumn ctermbg=red |
 call matchadd('ColorColumn', '\%80v', 100)
 
 " Ensure all types of requirements.txt files get Python syntax highlighting
-autocmd BufNewFile,BufRead requirements*.txt set ft=python
+autocmd BufNewFile,BufRead requirements*.txt setlocal ft=python
 
 " map f9 to excute python script
 " nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
@@ -80,13 +78,12 @@ nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 5/6)<CR>
 nnoremap <silent> <Leader>< :exe "vert resize " . (winwidth(0) * 5/6)<CR>
 nnoremap <silent> <Leader>> :exe "vert resize " . (winwidth(0) * 6/5)<CR>
 
-autocmd VimResized * wincmd = " Auto-resize splits when Vim gets resized.
-set splitright splitbelow     " open splits to the right and below
+autocmd VimResized * wincmd =          " Auto-resize splits when Vim gets resized.
+set splitright splitbelow              " open splits to the right and below
 " }}}
 
 " visual moving text {{{
-" https://vimrcfu.com/snippet/77
-" visual mode moving lines of text
+" https://vimrcfu.com/snippet/77 - visual mode moving lines of text
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
@@ -96,10 +93,10 @@ inoremap <C-k> <Esc>:m .-2<CR>==gi
 " }}}
 
 " search settings {{{
-set ignorecase                " case insensitive matching
-set smartcase                 " smart case matching
-set incsearch                 " show search matches while typing
-set hlsearch                  " highlight all matches after search
+set ignorecase                         " case insensitive matching
+set smartcase                          " smart case matching
+set incsearch                          " show search matches while typing
+set hlsearch                           " highlight all matches after search
 
 highlight Search guibg=purple guifg='NONE'
 highlight Search cterm=none ctermbg=green ctermfg=black
@@ -124,41 +121,32 @@ nnoremap N Nzzzv
 "nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
-" shell {{{
-autocmd FileType sh
-    \ set tabstop=2 |
-    \ set softtabstop=2 |
-    \ set shiftwidth=2 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set smarttab |
+" shell yaml {{{
+autocmd FileType sh,yaml
+    \ setlocal tabstop=2 |
+    \ setlocal softtabstop=2 |
+    \ setlocal shiftwidth=2 |
+    \ setlocal expandtab |
+    \ setlocal autoindent |
+    \ setlocal smarttab |
 " }}}
 
-" markdown {{{
-autocmd FileType markdown
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set smarttab |
-" }}}
-
-" yaml {{{
-autocmd FileType yaml
-    \ set tabstop=2 |
-    \ set softtabstop=2 |
-    \ set shiftwidth=2 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set smarttab |
+" markdown json {{{
+autocmd FileType markdown,json
+    \ setlocal tabstop=4 |
+    \ setlocal softtabstop=4 |
+    \ setlocal shiftwidth=4 |
+    \ setlocal expandtab |
+    \ setlocal autoindent |
+    \ setlocal smartindent |
+    \ setlocal smarttab |
+    \ setlocal foldmethod=manual |
 " }}}
 
 " ALE {{{
 " https://github.com/dense-analysis/ale
 let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'sh': ['shellcheck'], 'yaml': ['yamllint'], 'terraform': ['terraform']}
 let g:ale_fixers = {'json': ['jq'], 'python': ['black'], 'sh': ['shfmt'], 'yaml': ['yamlfmt'], 'terraform': ['terraform']}
-"let g:ale_fixers = {'*': [], 'python': ['black']}
 let g:ale_python_flake8_options = '--max-line-length 79'
 let g:ale_python_black_options = '--line-length 79'
 let g:ale_sh_shfmt_options = '-i 2 -ci'
@@ -167,7 +155,6 @@ let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 0 " if you don't want linters to run on opening a file
-"set foldlevelstart=20
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
@@ -188,14 +175,10 @@ let g:vim_json_conceal=0
 nnoremap <Leader>i :IndentLinesToggle<cr>
 " }}}
 
-" colours {{{
+" screen settings {{{
 syntax on                  " Vim5 and later versions support syntax highlighting.
 set background=dark        " Enable dark background within editing are and syntax highlighting
 set termguicolors
-
-"colorscheme molokai          " Set colorscheme
-"let g:molokai_original = 1
-colorscheme monokai          " Set colorscheme
 " }}}
 
 " statusline {{{
@@ -204,49 +187,49 @@ function! GitBranch()
   return strlen(branch) ? ' '.branch.' ' : ''
 endfunction
 
-" based on gnome-terminal, use XTerm colour palette
-"set fillchars+=vert:\ " change appearance of window split border
-hi VertSplit ctermfg=white guifg=white " change color of window split border
+function! SetStatusLine()
+    " based on gnome-terminal, use XTerm colour palette
+    "set fillchars+=vert:\ " change appearance of window split border
+    hi VertSplit ctermfg=white guifg=white " change color of window split border
 
-hi User1 ctermbg=red ctermfg=white guibg=red guifg=white
-hi User2 ctermbg=214 ctermfg=black guibg=#ffaf00 guifg=black "DarkOrange
-hi User3 ctermbg=yellow ctermfg=black guibg=yellow guifg=black
-hi User4 ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
-hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
-hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
-hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
-hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
-hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
-hi StatusLineNC cterm=italic       " non active windows are italic
+    hi User1 ctermbg=red ctermfg=white guibg=red guifg=white
+    hi User2 ctermbg=214 ctermfg=black guibg=#ffaf00 guifg=black "DarkOrange
+    hi User3 ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+    hi User4 ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
+    hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
+    hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
+    hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
+    hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
+    hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
+    hi StatusLineNC cterm=italic       " non active windows are italic
 
-set laststatus=2                   " always display status line
-set statusline=
+    set laststatus=2                   " always display status line
+    set statusline=
 
-set statusline+=%1*                " set to User1 color
-set statusline+=\b:%n              " buffer number
-set statusline+=%2*                " set to User2 color
-set statusline+=%{getcwd()}/       " current working directory (same as :pwd)
-set statusline+=%4*                " set to User4 color
-set statusline+=%f                 " current directory + file with respect to pwd
-set statusline+=\                  " add space separator
-set statusline+=%3*                " set to User3 color
-set statusline+=\ft:\%y            " file type in [brackets]
-set statusline+=%1*
-set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status
-set statusline+=%8*                " set to User8 color
-set statusline+=%{GitBranch()}
-set statusline+=%9*                " reset color to default blue
-
-set statusline+=\%=                " separator point left/right of statusline
-
-set statusline+=%7*                " set to User7 color
-set statusline+=\row:%l/%L         " line number / line total
-set statusline+=%4*
-set statusline+=\ col:%c           " column number
-set statusline+=%6*
-set statusline+=\ %p%%             " percentage through file
-set statusline+=%5*
-set statusline+=\ hex:%B           " value of char under cursor in hex
+    set statusline+=%1*                " set to User1 color
+    set statusline+=\b:%n              " buffer number
+    set statusline+=%2*                " set to User2 color
+    set statusline+=%{getcwd()}/       " current working directory (same as :pwd)
+    set statusline+=%4*                " set to User4 color
+    set statusline+=%f                 " current directory + file with respect to pwd
+    set statusline+=\                  " add space separator
+    set statusline+=%3*                " set to User3 color
+    set statusline+=\ft:\%y            " file type in [brackets]
+    set statusline+=%1*                " set to User1 color
+    set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status
+    set statusline+=%8*                " set to User8 color
+    set statusline+=%{GitBranch()}
+    set statusline+=%9*                " reset color to default blue
+    set statusline+=\%=                " separator point left/right of statusline
+    set statusline+=%7*                " set to User7 color
+    set statusline+=\row:%l/%L         " line number / line total
+    set statusline+=%4*                " set to User4 color
+    set statusline+=\ col:%c           " column number
+    set statusline+=%6*                " set to User6 color
+    set statusline+=\ %p%%             " percentage through file
+    set statusline+=%5*                " set to User5 color
+    set statusline+=\ hex:%B           " value of char under cursor in hex
+endfunction
 " }}}
 
 " vimwiki {{{
@@ -262,27 +245,11 @@ let g:vimwiki_global_ext = 0
 autocmd filetype vimwiki silent! iunmap <buffer> <Tab>
 " }}}
 
-" netrw {{{
-"inoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
-"nnoremap <c-s> <Esc>:Lex<cr>:vertical resize 30<cr>
-
-" https://www.akhatib.com/making-netrw-clean-and-minimally-disruptive-then-stop-using-it/
-let g:netrw_banner = 0
-"let g:netrw_list_hide = '^\.\.\=/\=$,.DS_Store,.idea,.git,__pycache__,venv,node_modules,*\.o,*\.pyc,.*\.swp'
-let g:netrw_list_hide = '^\.\=/\=$,.DS_Store,.idea,.git,__pycache__,venv,node_modules,*\.o,*\.pyc,.*\.swp'
-let g:netrw_hide = 1
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_liststyle = 4
-"let g:netrw_winsize = 20
-" }}}
-
 " system clipboard {{{
-"vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr>
-"above is unnecessary if clipboard support is compiled with vim,
-"check with :echo has('clipboard') "return 0 = not compiled in, return 1 compiled in)
+"vnoremap <c-y> <esc>:'<,'>w !xclip -selection clipboard<cr><cr> "use this if clipboard support isn't compiled in vim
+
+"check with :echo has('clipboard') "0 = not compiled in, 1 compiled in)
 vnoremap <c-y> "+y
-"set clipboard^=unnamed,unnamedplus "make vim use system clipboard
 " }}}
 
 " fzf {{{
@@ -328,6 +295,10 @@ imap <C-n> <Cmd>call codeium#CycleCompletions(1)<CR>
 imap <C-p> <Cmd>call codeium#CycleCompletions(-1)<CR>
 imap <C-x> <Cmd>call codeium#Clear()<CR>
 imap <C-a> <Cmd>call codeium#Complete()<CR>
+
+" let g:codeium_filetypes = {
+"     \ "json": v:false,
+"     \ }
 
 function! GetLanguageServerVersion()
     let autoload_dir = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium")
@@ -392,6 +363,20 @@ function! Reg()
 endfunction
 
 command! -nargs=0 Reg call Reg()
+" }}}
+
+" startup {{{
+" https://github.com/pR0Ps/molokai-dark
+colorscheme molokai-dark
+call SetStatusLine()
+" let g:molokai_original = 1
+"colorscheme monokai
+
+" Reapply the status line whenever the buffer or window changes
+autocmd BufEnter,WinEnter * call SetStatusLine()
+
+" Reapply status line when the color scheme changes
+autocmd ColorScheme * call SetStatusLine()
 " }}}
 
 " folding {{{
