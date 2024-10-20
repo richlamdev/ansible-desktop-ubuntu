@@ -7,7 +7,11 @@
 " options, so any other options should be set AFTER setting 'compatible'.
 set nocompatible
 set title                             " set title of window
-set titlestring=VIM:\ \ %-25.55F\ %a%r%m titlelen=70
+"set titlestring=VIM:\ \ [DIR:%{getcwd()}]\ \ %-25.55F\ %a%r%m titlelen=70
+"set titlestring=VIM:\ \ [PWD:\ %{getcwd()}]\ \ %-25.55F\ %a%r%m titlelen=80
+"set titlestring=\ \ [PWD:\ %{getcwd()}]\ \ %-25.55F\ %a%r%m titlelen=80
+"set titlestring=\ \ [PWD:\ %{getcwd()}]\ \ %t\ %a%r%m titlelen=80
+set titlestring=\ \ [PWD:\ %{getcwd()}]\ \ %F\ %a%r%m titlelen=80
 set ttyfast                    " Make the keyboard fast
 "set timeout timeoutlen=1000 ttimeoutlen=50
 set showmode                          " always show what mode we're currently editing in
@@ -23,11 +27,16 @@ set nu                                " set numbered lines for columns
 set list                              " show all whitespace a character
 set listchars=tab:▸\ ,trail:·,nbsp:␣  " set characters displayed for tab/space
 set mouse=a                           " enable mouse for all modes
-set scrolloff=1                       " set number of context lines visible above & below cursor
+set scrolloff=3                       " set number of context lines visible above & below cursor
 set sidescrolloff=5                   " make vertical scrolling appear more natural
 set noerrorbells                      " disable beep on errors
 set lazyredraw                        " don't redraw while executing macros
 set smoothscroll                      " smooth scrolling
+"set redrawtime=1000                   " set time in milliseconds for 'updatetime' to work properly
+"set updatetime=200
+"nnoremap <ScrollWheelUp> <C-Y>:redraw!<CR>
+"nnoremap <ScrollWheelDown> <C-E>:redraw!<CR>
+
 
 if has("autocmd")                     " Jump to last position when reopening a file
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -43,7 +52,7 @@ autocmd BufWrite * %s/\s\+$//e        " Remove trailing whitespace on save
 " file find {{{
 set path=.,**                         " relative to current file and everything under :pwd
 set wildmenu                          " display matches in command-line mode
-set wildmode=full                     " first tab complete as much as possible
+set wildmode=list:longest,full                     " first tab complete as much as possible
 set wildignore+=.pyc,.swp             " ignore these files when opening based on glob pattern
 set wildignorecase                    " ignore case when completing file names
 set hidden                            " hide buffers when they are abandoned
@@ -51,22 +60,22 @@ set hidden                            " hide buffers when they are abandoned
 
 " Python PEP8 {{{
 autocmd Filetype python
-    \ setlocal tabstop=4 |
-    \ setlocal softtabstop=4 |
-    \ setlocal shiftwidth=4 |
-    \ setlocal expandtab |
-    \ setlocal autoindent |
-    \ setlocal fileformat=unix |
-    \ setlocal textwidth=0 |
-    \ setlocal smarttab |
-    \ setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with,async,await,match,case |
+  \ setlocal tabstop=4 |
+  \ setlocal softtabstop=4 |
+  \ setlocal shiftwidth=4 |
+  \ setlocal expandtab |
+  \ setlocal autoindent |
+  \ setlocal fileformat=unix |
+  \ setlocal textwidth=0 |
+  \ setlocal smarttab |
+  \ setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with,async,await,match,case |
 
 " highlight a marker at column 80
 highlight ColorColumn ctermbg=red |
 call matchadd('ColorColumn', '\%80v', 100)
 
 " Ensure all types of requirements.txt files get Python syntax highlighting
-autocmd BufNewFile,BufRead requirements*.txt setlocal ft=python
+autocmd BufNewFile,BufRead requirements*.txt set ft=python
 
 " map f9 to excute python script
 " nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
@@ -103,9 +112,11 @@ highlight Search cterm=none ctermbg=green ctermfg=black
 highlight CursorColumn guibg=blue guifg=red
 highlight CursorColumn ctermbg=red ctermfg=blue
 
-" keep search centered
+" keep search centered and open fold in search result
 nnoremap n nzzzv
 nnoremap N Nzzzv
+nnoremap * *zzzv
+nnoremap # #zzzv
 " }}}
 
 " vimspector settings {{{
@@ -121,28 +132,28 @@ nnoremap N Nzzzv
 "nmap <Leader>dj <Plug>VimspectorStepOver
 " }}}
 
-" shell yaml {{{
-autocmd FileType sh,yaml
-    \ setlocal tabstop=2 |
-    \ setlocal softtabstop=2 |
-    \ setlocal shiftwidth=2 |
-    \ setlocal expandtab |
-    \ setlocal autoindent |
-    \ setlocal smartindent |
-    \ setlocal smarttab |
-    "\ setlocal colorscheme molokai |
+" shell yaml vim {{{
+autocmd FileType sh,yaml,vim
+  \ setlocal tabstop=2 |
+  \ setlocal softtabstop=2 |
+  \ setlocal shiftwidth=2 |
+  \ setlocal expandtab |
+  \ setlocal autoindent |
+  \ setlocal smartindent |
+  \ setlocal smarttab |
+  "\ setlocal colorscheme molokai |
 " }}}
 
 " markdown json {{{
 autocmd FileType markdown,json
-    \ setlocal tabstop=4 |
-    \ setlocal softtabstop=4 |
-    \ setlocal shiftwidth=4 |
-    \ setlocal expandtab |
-    \ setlocal autoindent |
-    \ setlocal smartindent |
-    \ setlocal smarttab |
-    \ setlocal foldmethod=manual |
+  \ setlocal tabstop=4 |
+  \ setlocal softtabstop=4 |
+  \ setlocal shiftwidth=4 |
+  \ setlocal expandtab |
+  \ setlocal autoindent |
+  \ setlocal smartindent |
+  \ setlocal smarttab |
+  \ setlocal foldmethod=manual | # disable folding, otherwise large json files take a long time to open!
 " }}}
 
 " ALE {{{
@@ -161,6 +172,9 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
+
+" don't worry about long line length for yaml
+let g:ale_yaml_yamllint_options = '-d "{extends: relaxed, rules: {line-length: {max: disable}}"'
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -190,47 +204,47 @@ function! GitBranch()
 endfunction
 
 function! SetStatusLine()
-    " based on gnome-terminal, use XTerm colour palette
-    "set fillchars+=vert:\ " change appearance of window split border
-    hi VertSplit ctermfg=white guifg=white " change color of window split border
+  " based on gnome-terminal, use XTerm colour palette
+  "set fillchars+=vert:\ " change appearance of window split border
+  hi VertSplit ctermfg=white guifg=white " change color of window split border
 
-    hi User1 ctermbg=red ctermfg=white guibg=red guifg=white
-    hi User2 ctermbg=214 ctermfg=black guibg=#ffaf00 guifg=black "DarkOrange
-    hi User3 ctermbg=yellow ctermfg=black guibg=yellow guifg=black
-    hi User4 ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
-    hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
-    hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
-    hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
-    hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
-    hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
-    hi StatusLineNC cterm=italic       " non active windows are italic
+  hi User1 ctermbg=red ctermfg=white guibg=red guifg=white
+  hi User2 ctermbg=214 ctermfg=black guibg=#ffaf00 guifg=black "DarkOrange
+  hi User3 ctermbg=yellow ctermfg=black guibg=yellow guifg=black
+  hi User4 ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
+  hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
+  hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
+  hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
+  hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
+  hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
+  hi StatusLineNC cterm=italic       " non active windows are italic
 
-    set laststatus=2                   " always display status line
-    set statusline=
+  set laststatus=2                   " always display status line
+  set statusline=
 
-    set statusline+=%1*                " set to User1 color
-    set statusline+=\b:%n              " buffer number
-    set statusline+=%2*                " set to User2 color
-    set statusline+=%{getcwd()}/       " current working directory (same as :pwd)
-    set statusline+=%4*                " set to User4 color
-    set statusline+=%f                 " current directory + file with respect to pwd
-    set statusline+=\                  " add space separator
-    set statusline+=%3*                " set to User3 color
-    set statusline+=\ft:\%y            " file type in [brackets]
-    set statusline+=%1*                " set to User1 color
-    set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status
-    set statusline+=%8*                " set to User8 color
-    set statusline+=%{GitBranch()}
-    set statusline+=%9*                " reset color to default blue
-    set statusline+=\%=                " separator point left/right of statusline
-    set statusline+=%7*                " set to User7 color
-    set statusline+=\row:%l/%L         " line number / line total
-    set statusline+=%4*                " set to User4 color
-    set statusline+=\ col:%c           " column number
-    set statusline+=%6*                " set to User6 color
-    set statusline+=\ %p%%             " percentage through file
-    set statusline+=%5*                " set to User5 color
-    set statusline+=\ hex:%B           " value of char under cursor in hex
+  set statusline+=%1*                " set to User1 color
+  set statusline+=\b:%n              " buffer number
+  set statusline+=%2*                " set to User2 color
+  "set statusline+=%{getcwd()}/       " current working directory (same as :pwd)
+  set statusline+=%4*                " set to User4 color
+  "set statusline+=%f                 " current directory + file with respect to pwd
+  set statusline+=\                  " add space separator
+  set statusline+=%3*                " set to User3 color
+  set statusline+=\ft:\%y            " file type in [brackets]
+  set statusline+=%1*                " set to User1 color
+  set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status
+  set statusline+=%8*                " set to User8 color
+  set statusline+=%{GitBranch()}
+  set statusline+=%9*                " reset color to default blue
+  set statusline+=\%=                " separator point left/right of statusline
+  set statusline+=%7*                " set to User7 color
+  set statusline+=\row:%l/%L         " line number / line total
+  set statusline+=%4*                " set to User4 color
+  set statusline+=\ col:%c           " column number
+  set statusline+=%6*                " set to User6 color
+  set statusline+=\ %p%%             " percentage through file
+  set statusline+=%5*                " set to User5 color
+  set statusline+=\ hex:%B           " value of char under cursor in hex
 endfunction
 " }}}
 
@@ -298,32 +312,28 @@ imap <C-p> <Cmd>call codeium#CycleCompletions(-1)<CR>
 imap <C-x> <Cmd>call codeium#Clear()<CR>
 imap <C-a> <Cmd>call codeium#Complete()<CR>
 
-" let g:codeium_filetypes = {
-"     \ "json": v:false,
-"     \ }
-
 function! GetLanguageServerVersion()
-    let autoload_dir = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium")
-    let script_file = autoload_dir . "/server.vim"
+  let autoload_dir = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium")
+  let script_file = autoload_dir . "/server.vim"
 
-    if filereadable(script_file)
-        let script_contents = readfile(script_file)
-        for line in script_contents
-            if line =~ 'let s:language_server_version'
-                let parts = split(line, "'")
-                return "Codeium version: " . parts[1]
-            endif
-        endfor
-    endif
+  if filereadable(script_file)
+    let script_contents = readfile(script_file)
+    for line in script_contents
+      if line =~ 'let s:language_server_version'
+        let parts = split(line, "'")
+        return "Codeium version: " . parts[1]
+      endif
+    endfor
+  endif
 
-    return "Codeium version: not found"
+  return "Codeium version: not found"
 endfunction
 
 command! CodeiumVersion echo GetLanguageServerVersion()
 " }}}
 
 " nerdtree {{{
-nnoremap <leader>n :NERDTreeToggle<cr>
+nnoremap <leader>n :execute ':NERDTreeToggle ' . getcwd()<cr>
 " }}}
 
 " tagbar {{{

@@ -162,25 +162,27 @@
   when:
     - not vimwiki_help.stat.exists
 
+# relax yaml lint rules via .vimrc instead of below:
+# let g:ale_yaml_yamllint_options = '-d "{extends: relaxed, rules: {line-length: {max: disable}}"'
+#
+# - name: create config yamllint directory
+#   file:
+#     state: directory
+#     path: "{{ home_dir }}/.config/yamllint"
+#     owner: "{{ local_user }}"
+#     group: "{{ local_user_primary_group }}"
+#     mode: "0770"
+#     force: true
 
-- name: create config yamllint directory
-  file:
-    state: directory
-    path: "{{ home_dir }}/.config/yamllint"
-    owner: "{{ local_user }}"
-    group: "{{ local_user_primary_group }}"
-    mode: "0770"
-    force: true
-
-- name: install yammlint config to home .config directory
-# relax some of the yammlint rules with this config
-  copy:
-    src: "config"
-    dest: "{{ home_dir }}/.config/yamllint/config"
-    owner: "{{ local_user }}"
-    group: "{{ local_user_primary_group }}"
-    mode: "0640"
-    force: true
+# - name: install yammlint config to home .config directory
+# # relax some of the yammlint rules with this config
+#   copy:
+#     src: "config"
+#     dest: "{{ home_dir }}/.config/yamllint/config"
+#     owner: "{{ local_user }}"
+#     group: "{{ local_user_primary_group }}"
+#     mode: "0640"
+#     force: true
 
 
 - name: install personal/custom .vimrc to home directory
