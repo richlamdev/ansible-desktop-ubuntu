@@ -7,12 +7,9 @@
 " options, so any other options should be set AFTER setting 'compatible'.
 set nocompatible
 set title                             " set title of window
-"set titlestring=VIM:\ \ [DIR:%{getcwd()}]\ \ %-25.55F\ %a%r%m titlelen=70
-"set titlestring=VIM:\ \ [PWD:\ %{getcwd()}]\ \ %-25.55F\ %a%r%m titlelen=80
-"set titlestring=\ \ [PWD:\ %{getcwd()}]\ \ %-25.55F\ %a%r%m titlelen=80
-"set titlestring=\ \ [PWD:\ %{getcwd()}]\ \ %t\ %a%r%m titlelen=80
+"set titlestring=VIM:\ %-25.55F\ %a%r%m titlelen=70
 set titlestring=\ \ [PWD:\ %{getcwd()}]\ \ %F\ %a%r%m titlelen=80
-set ttyfast                    " Make the keyboard fast
+set ttyfast                           " Make the keyboard fast
 "set timeout timeoutlen=1000 ttimeoutlen=50
 set showmode                          " always show what mode we're currently editing in
 set showcmd                           " Show (partial) command in status line.
@@ -23,7 +20,7 @@ set ruler                             " show the cursor position all the time
 set nowrap                            " NO WRAPPING OF THE LINES! (except for Python, see below)
 set encoding=utf-8                    " UTF8 Support
 set backspace=indent,eol,start        " allow backspacing over everything in insert mode
-set nu                                " set numbered lines for columns
+set number                            " set numbered lines for columns
 set list                              " show all whitespace a character
 set listchars=tab:▸\ ,trail:·,nbsp:␣  " set characters displayed for tab/space
 set mouse=a                           " enable mouse for all modes
@@ -32,11 +29,6 @@ set sidescrolloff=5                   " make vertical scrolling appear more natu
 set noerrorbells                      " disable beep on errors
 set lazyredraw                        " don't redraw while executing macros
 set smoothscroll                      " smooth scrolling
-"set redrawtime=1000                   " set time in milliseconds for 'updatetime' to work properly
-"set updatetime=200
-"nnoremap <ScrollWheelUp> <C-Y>:redraw!<CR>
-"nnoremap <ScrollWheelDown> <C-E>:redraw!<CR>
-
 
 if has("autocmd")                     " Jump to last position when reopening a file
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -250,7 +242,7 @@ endfunction
 
 " vimwiki {{{
 " https://github.com/vimwiki/vimwiki
-filetype plugin on
+filetype plugin indent on
 autocmd BufNewFile,BufReadPost,BufAdd *.wiki set filetype=vimwiki
 let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
                       \ 'syntax': 'default', 'ext': '.wiki',
