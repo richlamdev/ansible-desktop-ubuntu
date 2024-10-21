@@ -150,7 +150,7 @@ autocmd FileType markdown,json
   \ setlocal autoindent |
   \ setlocal smartindent |
   \ setlocal smarttab |
-  \ setlocal foldmethod=manual | # disable folding, otherwise large json files take a long time to open!
+  \ setlocal foldmethod=manual |
 " }}}
 
 " ALE {{{
