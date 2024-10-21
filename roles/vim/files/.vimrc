@@ -29,6 +29,10 @@ set sidescrolloff=5                   " make vertical scrolling appear more natu
 set noerrorbells                      " disable beep on errors
 set lazyredraw                        " don't redraw while executing macros
 set smoothscroll                      " smooth scrolling
+set updatetime=300                    " set updatetime to 300ms
+set background=dark                   " enable dark background within editing
+set termguicolors                     " enable true colors
+syntax on                             " enable syntax highlighting.
 
 if has("autocmd")                     " Jump to last position when reopening a file
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -44,7 +48,7 @@ autocmd BufWrite * %s/\s\+$//e        " Remove trailing whitespace on save
 " file find {{{
 set path=.,**                         " relative to current file and everything under :pwd
 set wildmenu                          " display matches in command-line mode
-set wildmode=list:longest,full                     " first tab complete as much as possible
+set wildmode=list:longest,full        " first tab complete as much as possible
 set wildignore+=.pyc,.swp             " ignore these files when opening based on glob pattern
 set wildignorecase                    " ignore case when completing file names
 set hidden                            " hide buffers when they are abandoned
@@ -98,6 +102,7 @@ set ignorecase                         " case insensitive matching
 set smartcase                          " smart case matching
 set incsearch                          " show search matches while typing
 set hlsearch                           " highlight all matches after search
+set matchtime=5                        " time in tenths of a second to show matching
 
 highlight Search guibg=purple guifg='NONE'
 highlight Search cterm=none ctermbg=green ctermfg=black
@@ -181,12 +186,6 @@ let g:indentLine_bufTypeExclude = ["vimwiki", "help", "json", "markdown"] "disab
 let g:markdown_syntax_conceal=0
 let g:vim_json_conceal=0
 nnoremap <Leader>i :IndentLinesToggle<cr>
-" }}}
-
-" screen settings {{{
-syntax on                  " Vim5 and later versions support syntax highlighting.
-set background=dark        " Enable dark background within editing are and syntax highlighting
-set termguicolors
 " }}}
 
 " statusline {{{
@@ -326,6 +325,15 @@ command! CodeiumVersion echo GetLanguageServerVersion()
 
 " nerdtree {{{
 nnoremap <leader>n :execute ':NERDTreeToggle ' . getcwd()<cr>
+
+let NERDShutUp = 1
+let NERDTreeHijackNetrw=1
+let NERDTreeQuitOnOpen=1    " quit NERDTree after openning a file
+let NERDChristmasTree = 1   " colored NERD Tree
+let NERDTreeHighlightCursorline = 1
+let NERDTreeShowHidden = 1
+" let NERDTreeMapActivateNode='<CR>' " map enter to activating a node
+let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '\.pyc$']
 " }}}
 
 " tagbar {{{
@@ -342,6 +350,9 @@ nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
 " tree view from current working directory
 nnoremap <Leader>tr :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
+
+" clear search
+" nnoremap <cr> :noh<cr><cr>
 " }}}
 
 " vimrc {{{
@@ -350,7 +361,7 @@ nnoremap ,v :edit   $MYVIMRC<cr>
 nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
 " }}}
 
-" sudo write {{{
+"are and syntax highlighting sudo write {{{
 " Save a file with sudo (sw => sudo write)
 noremap <leader>sw :w !sudo tee % > /dev/null<CR>
 " }}}
