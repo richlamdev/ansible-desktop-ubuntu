@@ -22,6 +22,22 @@
 #    repo: "https://github.com/github/copilot.vim.git"
 #    dest: "/home/{{ local_user }}/.vim/pack/github/start/copilot.vim"
 
+- name: install vim-gitgutter plugin
+  git:
+    repo: "git@github.com:airblade/vim-gitgutter.git"
+    dest: "{{ home_dir }}/.vim/pack/airblade/start"
+
+- name: check if vim-gitgutter help plugin is installed
+  stat:
+    path: "{{ home_dir }}/.vim/pack/airblade/start/vim-gitgutter/doc/tags"
+  register: vim_gitgutter_help
+
+- name: install vim-gitgutter plugin help
+  shell:
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/airblade/start/vim-gitgutter/doc" -c quit
+  when:
+    - not vim_gitgutter_help.stat.exists
+
 
 - name: install hashivim plugin
   git:
@@ -124,6 +140,23 @@
     vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/tpope/start/commentary/doc" -c quit
   when:
     - not vim_commentary_help.stat.exists
+
+
+- name: install vim-fugitive plugin
+  git:
+    repo: "git@github.com:tpope/vim-fugitive.git"
+    dest: "{{ home_dir }}/.vim/pack/tpope/start/fugitive"
+
+- name: check if vim-fugitive help plugin is installed
+  stat:
+    path: "{{ home_dir }}/.vim/pack/tpope/start/fugitive/doc/tags"
+  register: vim_fugitive_help
+
+- name: install vim-fugitive plugin help
+  shell:
+    vim -u NONE -c "helptags  {{ home_dir }}/.vim/pack/tpope/start/fugitive/doc" -c quit
+  when:
+    - not vim_fugitive_help.stat.exists
 
 
 - name: install vim-unimpaired plugin
