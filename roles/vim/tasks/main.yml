@@ -24,8 +24,8 @@
 
 - name: install vim-gitgutter plugin
   git:
-    repo: "git@github.com:airblade/vim-gitgutter.git"
-    dest: "{{ home_dir }}/.vim/pack/airblade/start"
+    repo: "https://github.com/airblade/vim-gitgutter.git"
+    dest: "{{ home_dir }}/.vim/pack/airblade/start/vim-gitgutter"
 
 - name: check if vim-gitgutter help plugin is installed
   stat:
@@ -144,7 +144,7 @@
 
 - name: install vim-fugitive plugin
   git:
-    repo: "git@github.com:tpope/vim-fugitive.git"
+    repo: "https://github.com/tpope/vim-fugitive.git"
     dest: "{{ home_dir }}/.vim/pack/tpope/start/fugitive"
 
 - name: check if vim-fugitive help plugin is installed
