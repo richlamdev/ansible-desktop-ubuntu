@@ -31,7 +31,7 @@
     - aws
     - brave
     - chrome
-    - docker-cli-only
+      #- docker-cli-only
     - docker-desktop-dependency
     - gh_cli
     - hashicorp
