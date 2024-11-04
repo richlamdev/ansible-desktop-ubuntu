@@ -31,7 +31,8 @@
     - aws
     - brave
     - chrome
-    - docker
+    - docker-cli-only
+    - docker-desktop-dependency
     - gh_cli
     - hashicorp
     - keepassxc
