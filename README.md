@@ -129,7 +129,20 @@ Additional information for the following roles:
     (a delay could be added, but that adds unnecessary execution time for the
     playbook)
 
-* docker
+*NB: install either docker-cli-only OR docker-desktop depending on your
+requirements*
+
+* docker-cli-only
+  * installs all docker engine requirements for CLI use only.  You may
+    experience conflicts if you install docker-desktop as well.
+  * installs following:
+    * docker-ce-cli
+    * containerd.io
+    * docker-compose
+    * docker-compose-plugin
+  * creates docker group and adds the current user to it
+
+* docker-desktop-dependency
   * installs docker-ce-cli (required for Docker Desktop)
   * creates docker group and adds the current user to it
   * install [docker-desktop](https://docs.docker.com/desktop/install/linux-install/) for remainder of local docker setup

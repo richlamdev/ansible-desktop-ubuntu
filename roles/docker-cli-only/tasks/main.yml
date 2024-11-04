@@ -1,0 +1,51 @@
+---
+- name: install docker dependencies
+  apt:
+    state: present
+    pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+
+- name: install docker GPG key
+  get_url:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+    dest: /usr/share/keyrings/docker.asc
+    mode: 0644
+    force: true
+
+- name: add docker repo
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
+    filename: docker
+    state: present
+    update_cache: true
+
+- name: install docker
+  apt:
+    state: present
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+
+- name: create the docker group
+  group:
+    name: docker
+    state: present
+
+- name: add current user to the docker group
+  user:
+    name: "{{ local_user }}"
+    groups: docker
+    append: true
+
+- name: disable apparmor restriction for unprivileged users
+  sysctl:
+    name: kernel.apparmor_restrict_unprivileged_userns
+    value: 0
+    state: present
+    sysctl_file: /etc/sysctl.d/99-docker.conf
+    reload: yes
