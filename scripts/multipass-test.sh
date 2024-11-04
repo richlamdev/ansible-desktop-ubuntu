@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Define color codes
+ORANGE='\033[0;33m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 # Define the image, and instance parameters
 IMAGE="daily:24.10"
 CPUS="4"
@@ -51,16 +58,26 @@ chmod 400 "$HOME/id_rsa"
 
 cd ..
 
+# Define and echo the Ansible command
+ANSIBLE_CMD="ansible-playbook -i \"$IP_ADDRESS,\" test.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars \"ansible_become_pass=ubuntu\" --extra-vars \"ansible_python_interpreter=/usr/bin/python3\""
+
+# Run the Ansible playbook
+eval "$ANSIBLE_CMD"
+
 #ansible-playbook -i "$IP_ADDRESS," main.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars "ansible_become_pass=ubuntu" --extra-vars "ansible_python_interpreter=/usr/bin/python3"
-ansible-playbook -i "$IP_ADDRESS," test.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars "ansible_become_pass=ubuntu" --extra-vars "ansible_python_interpreter=/usr/bin/python3"
+#ansible-playbook -i "$IP_ADDRESS," test.yml --become-user root --user ubuntu --private-key ~/id_rsa --extra-vars "ansible_become_pass=ubuntu" --extra-vars "ansible_python_interpreter=/usr/bin/python3"
 
 echo "Delete the instance with the following commands, when testing is complete:"
 echo
-echo "multipass delete $VM_NAME"
-echo "multipass purge"
+echo -e "${RED}multipass delete $VM_NAME${NC}"
+echo -e "${RED}multipass purge${NC}"
 echo
 echo "Clean up the ssh key from home folder, with the following command:"
 echo
-echo "sudo rm \"$HOME/id_rsa\""
+echo -e "${GREEN}sudo rm \"$HOME/id_rsa\"${NC}"
+
+echo "To rerun the Ansible playbook, use the following command at root of the repo:"
+echo -e "${ORANGE}${ANSIBLE_CMD}${NC}"
+echo
 
 exit 0
