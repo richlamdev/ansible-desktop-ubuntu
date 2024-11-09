@@ -213,9 +213,9 @@ function! SetStatusLine()
   set laststatus=2                   " always display status line
   set statusline=
 
-  set statusline+=%1*                " set to User1 color
+  set statusline+=%2*                " set to User1 color
   set statusline+=\b:%n              " buffer number
-  set statusline+=%2*                " set to User2 color
+  "set statusline+=%2*                " set to User2 color
   "set statusline+=%{getcwd()}/       " current working directory (same as :pwd)
   set statusline+=%4*                " set to User4 color
   "set statusline+=%f                 " current directory + file with respect to pwd
@@ -223,9 +223,9 @@ function! SetStatusLine()
   set statusline+=%3*                " set to User3 color
   set statusline+=\ft:\%y            " file type in [brackets]
   set statusline+=%1*                " set to User1 color
-  set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status
+  set statusline+=\ {Codeium:\ %3{codeium#GetStatusString()}} " codeium status
   set statusline+=%8*                " set to User8 color
-  set statusline+=%{GitBranch()}
+  set statusline+=%{GitBranch()}     " display git branch name
   set statusline+=%9*                " reset color to default blue
   set statusline+=\%=                " separator point left/right of statusline
   set statusline+=%7*                " set to User7 color
@@ -247,6 +247,8 @@ let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
                       \ 'syntax': 'default', 'ext': '.wiki',
                       \ 'links_space_char': '-'}]
 let g:vimwiki_global_ext = 0
+
+
 
 " disable tab for vimwiki filetypes, to allow autocompletion via codeium
 autocmd filetype vimwiki silent! iunmap <buffer> <Tab>
@@ -278,7 +280,7 @@ nnoremap <Leader>r :Rg<cr>
 nnoremap <Leader>a :Ag<cr>
 nnoremap <Leader>mk :Marks<cr>
 nnoremap <Leader>ma :Maps<cr>
-nnoremap <Leader>c :Changes<cr>
+nnoremap <Leader>ch :Changes<cr>
 nnoremap <Leader>l :Lines<cr>
 " }}}
 
@@ -296,12 +298,15 @@ nnoremap <silent> <leader>g :Grep <c-r>=expand("<cWORD>")<cr><cr>
 
 " codeium {{{
 " https://github.com/Exafunction/codeium.vim
+let g:codeium_idle_delay = 500
 let g:codeium_disable_bindings = 1
 imap <script><silent><nowait><expr> <Tab> codeium#Accept()
 imap <C-n> <Cmd>call codeium#CycleCompletions(1)<CR>
 imap <C-p> <Cmd>call codeium#CycleCompletions(-1)<CR>
 imap <C-x> <Cmd>call codeium#Clear()<CR>
 imap <C-a> <Cmd>call codeium#Complete()<CR>
+
+nnoremap <Leader>ct :CodeiumToggle<cr>
 
 function! GetLanguageServerVersion()
   let autoload_dir = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium")
@@ -361,7 +366,7 @@ nnoremap ,v :edit   $MYVIMRC<cr>
 nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
 " }}}
 
-"are and syntax highlighting sudo write {{{
+" sudo write {{{
 " Save a file with sudo (sw => sudo write)
 noremap <leader>sw :w !sudo tee % > /dev/null<CR>
 " }}}
