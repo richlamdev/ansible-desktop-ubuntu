@@ -309,22 +309,18 @@ imap <C-a> <Cmd>call codeium#Complete()<CR>
 nnoremap <Leader>ct :CodeiumToggle<cr>
 
 function! GetLanguageServerVersion()
-  let autoload_dir = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium")
-  let script_file = autoload_dir . "/server.vim"
+  let script_file = expand("~/.vim/pack/Exafunction/start/codeium.vim/autoload/codeium/server.vim")
 
   if filereadable(script_file)
-    let script_contents = readfile(script_file)
-    for line in script_contents
+    for line in readfile(script_file)
       if line =~ 'let s:language_server_version'
-        let parts = split(line, "'")
-        return "Codeium version: " . parts[1]
+        return "Codeium version, based on language server: " . split(line, "'")[1]
       endif
     endfor
   endif
 
-  return "Codeium version: not found"
+  return "Codeium version, based on language server: not found"
 endfunction
-
 command! CodeiumVersion echo GetLanguageServerVersion()
 " }}}
 
