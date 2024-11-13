@@ -9,6 +9,11 @@ HISTIGNORE="&:[ ]*:exit:ls *:bg:fg:history:clear:pwd:cd *"
 alias cbc='xclip -sel clip'
 alias cbp='xclip -sel clip -o'
 alias dateu='date && date -u'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
+
 # google search from the command line
 google() {
   xdg-open "https://www.google.com/search?q=$*" >/dev/null 2>&1 &
@@ -29,7 +34,7 @@ complete -C '/usr/local/bin/aws_completer' aws
 complete -C /usr/bin/terraform terraform
 
 # vagrant command completion (start)
-. /opt/vagrant/embedded/gems/gems/vagrant-2.4.1/contrib/bash/completion.sh
+. /opt/vagrant/embedded/gems/gems/vagrant-2.4.2/contrib/bash/completion.sh
 
 # pipx autocomplete
 eval "$(register-python-argcomplete pipx)"
