@@ -83,8 +83,8 @@ manage_aws_cli
 # Uninstallation instructions
 echo
 echo "To uninstall AWS SAM CLI:"
-echo "  sudo rm -rf /usr/local/aws-sam-cli"
 echo "  sudo rm /usr/local/bin/sam"
+echo "  sudo rm -rf /usr/local/aws-sam-cli"
 echo
 echo "To uninstall AWS CLI:"
 echo "  sudo rm /usr/local/bin/aws"
