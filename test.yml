@@ -1,67 +1,53 @@
 ---
 - name: "Playbook to test various variables"
   hosts: all
-  #become: false
   become: true
   become_method: sudo
   gather_facts: true
- # vars_files example
-  #vars_files:
-    #- "./tf_ansible_vars/ansible_vars.yml"
+
   tasks:
-    - name: group_names
+    - name: host information
       debug:
-        msg: "{{ group_names }}"
+        msg: |
+          ansible_host: {{ ansible_host }}
+          ansible_hostname: {{ ansible_hostname }}
+          playbook_dir: {{ playbook_dir }}
+          group_names: {{ group_names }}
+          ansible_python_version: {{ ansible_python_version }}
 
-    - name: ansible_hostname
+    - name: os information
       debug:
-        msg: "{{ ansible_hostname }}"
+        msg: |
+          ansible_os_family: {{ ansible_os_family }}
+          ansible_distribution: {{ ansible_distribution }}
+          ansible_distribution_version: {{ ansible_distribution_version }}
 
-    - name: ansible_user
+    - name: network information
       debug:
-        msg: "{{ ansible_user }}"
-
-    - name: playbook_dir
-      debug:
-        msg: "{{ playbook_dir }}"
-
-    - name: ansible_env['HOME']
-      debug:
-        msg: "{{ ansible_env['HOME'] }}"
-
-    - name: ansible_os_family
-      debug:
-        msg: "{{ ansible_os_family }}"
-
-    - name: ansible_env['PWD']
-      debug:
-        msg: "{{ ansible_env['PWD'] }}"
-
-    - name: ansible_default_ipv4[address]
-      debug:
-        msg: "{{ ansible_default_ipv4['address'] }}"
-
-    - name: ansible_env['USER']
-      debug:
-        var: ansible_env['USER']
-
-    - name: ansible_env['SUDO_USER']
-      debug:
-        var: ansible_env['SUDO_USER']
-
-    - name: Distribution version
-      debug:
-        var: "{{ ansible_distribution_version }}"
+        msg: |
+          Primary Interface: {{ ansible_default_ipv4.interface }}
+          IP Address: {{ ansible_default_ipv4.address }}
+          Subnet: {{ ansible_default_ipv4.network }}
+          Netmask: {{ ansible_default_ipv4.netmask }}
+          All Interfaces: {{ ansible_interfaces }}
 
     - name: Get user's primary group name
       command: "id -gn {{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
       register: primary_group
       changed_when: false
 
-    - name: Get user's primary group name
+    - name: Get user's primary group name - set fact (custom var)
       set_fact:
         user_primary_group: "{{ primary_group.stdout }}"
 
-    - name: Display user's primary group name
+    - name: user information
       debug:
-        var: user_primary_group
+        msg: |
+          ansible_env['USER']: {{ ansible_env['USER'] }}
+          ansible_env['SUDO_USER']: {{ ansible_env['SUDO_USER'] }}
+          ansible_env['SHELL']: {{ ansible_env['SHELL'] }}
+          ansible_env['PWD']: {{ ansible_env['PWD'] }}
+          ansible_env['HOME']: {{ ansible_env['HOME'] }}
+          ansible_user: {{ ansible_user }}
+          ansible_user_id: {{ ansible_user_id }}
+          ansible_user primary group (custom var): {{ user_primary_group }}
