@@ -36,6 +36,8 @@
     owner: root
     group: root
     mode: '0644'
+    modification_time: preserve
+    access_time: preserve
 
 - name: create apt-updates.log file
   file:
@@ -44,3 +46,5 @@
     owner: root
     group: root
     mode: '0644'
+    modification_time: preserve
+    access_time: preserve
