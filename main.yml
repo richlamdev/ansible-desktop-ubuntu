@@ -5,25 +5,8 @@
   become_user: root
   become_method: sudo
   gather_facts: true
-  #tasks:
-  #- include_tasks: tasks/main.yml
-  pre_tasks:
-  - name: Set home directory fact
-    set_fact:
-      home_dir: "{{ ansible_env['PWD'] }}"
-
-  - name: Set local user fact
-    set_fact:
-      local_user: "{{ ansible_user }}"
-
-  - name: Get user's primary group name
-    command: "id -gn {{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
-    register: global_primary_group
-    changed_when: false
-
-  - name: Set user's primary group fact
-    set_fact:
-      local_user_primary_group: "{{ global_primary_group.stdout }}"
+  vars_files:
+    - vars.yml
 
   roles:
     - auto-update
