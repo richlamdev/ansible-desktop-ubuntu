@@ -26,6 +26,14 @@
     state: restarted
   when: dns_default_status.changed
 
+- name: Ensure DNS resolution is functional before continuing
+  command: "dig example.com +short"
+  register: dns_check
+  retries: 10
+  delay: 3
+  until: dns_check.rc == 0
+  when: dns_default_status.changed
+
 # Remove comments below at later date, just in case I any of this...
 #
 # - name: add dns=default to /etc/NetworkManager/NetworkManager.conf
