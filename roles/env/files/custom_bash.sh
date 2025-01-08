@@ -13,6 +13,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias ipa='ip -c a'
 
 # google search from the command line
 google() {
@@ -34,7 +35,7 @@ complete -C '/usr/local/bin/aws_completer' aws
 complete -C /usr/bin/terraform terraform
 
 # vagrant command completion (start)
-. /opt/vagrant/embedded/gems/gems/vagrant-2.4.2/contrib/bash/completion.sh
+. /opt/vagrant/embedded/gems/gems/vagrant-2.4.3/contrib/bash/completion.sh
 
 # pipx autocomplete
 eval "$(register-python-argcomplete pipx)"
