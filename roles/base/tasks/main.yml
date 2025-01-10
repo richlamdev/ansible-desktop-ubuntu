@@ -25,3 +25,6 @@
 
 - name: autostart tasks
   import_tasks: autostart.yml
+
+- name: configure ufw
+  import_tasks: ufw.yml
