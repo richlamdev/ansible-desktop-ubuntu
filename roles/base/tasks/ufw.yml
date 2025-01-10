@@ -1,0 +1,7 @@
+---
+- name: Limit inbound SSH traffic on port 22 for 192.168.0.0/16 network
+  ansible.builtin.ufw:
+    rule: limit
+    port: 22
+    proto: tcp
+    from_ip: 192.168.0.0/16
