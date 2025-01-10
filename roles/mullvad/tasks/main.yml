@@ -1,0 +1,19 @@
+---
+- name: Add Mullvad apt repository key
+  get_url:
+    url: https://repository.mullvad.net/deb/mullvad-keyring.asc
+    dest: /usr/share/keyrings/mullvad-keyring.asc
+    mode: "0644"
+    force: false
+
+- name: Add Mullvad repo
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=amd64] https://repository.mullvad.net/deb/stable {{ ansible_lsb.codename }} main"
+    filename: mullvad-browser
+    state: present
+    update_cache: true
+
+- name: Install Mullvad
+  apt:
+    name: "mullvad-browser"
+    state: present
