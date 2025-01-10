@@ -10,7 +10,7 @@
 
   roles:
     # - auto-update
-    - base
+    # - base
     # - aws
     # - brave
     # - chrome
@@ -21,6 +21,7 @@
     # - keepassxc
     # - kubectl
     # - microsoft
+    - mullvad
     # - opera
     # - signal-desktop
     # - sublime-text
