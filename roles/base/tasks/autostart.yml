@@ -7,13 +7,13 @@
     owner: "{{ local_user }}"
     group: "{{ local_user_primary_group }}"
 
-- name: enable firefox autostart
-  copy:
-    src: autostart/firefox.desktop
-    dest: "/home/{{ local_user }}/.config/autostart/"
-    mode: 0644
-    owner: "{{ local_user }}"
-    group: "{{ local_user_primary_group }}"
+# - name: enable firefox autostart
+#   copy:
+#     src: autostart/firefox.desktop
+#     dest: "/home/{{ local_user }}/.config/autostart/"
+#     mode: 0644
+#     owner: "{{ local_user }}"
+#     group: "{{ local_user_primary_group }}"
 
 - name: enable gnome-keyring-ssh autostart
   copy:
