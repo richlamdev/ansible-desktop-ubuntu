@@ -8,8 +8,8 @@
 - name: snap packages
   import_tasks: snap.yml
 
-- name: authentication tasks
-  import_tasks: authentication.yml
+- name: ssh tasks
+  import_tasks: ssh.yml
 
 - name: security tasks
   import_tasks: security.yml
