@@ -1,18 +1,58 @@
 ---
-# SSH server and client config changes
-- name: authentication | sshd_config
-  template:
-    src: "sshd_config.j2"
-    dest: "/etc/ssh/sshd_config"
-    mode: 0644
-    owner: root
-    group: root
-  notify: reload sshd
+- name: Find all files in /etc/ssh/sshd_config.d/
+  ansible.builtin.find:
+    paths: /etc/ssh/sshd_config.d/
+    file_type: file
+  register: sshd_config_files
 
-- name: authentication | ssh_config
-  template:
-    src: "ssh_config.j2"
-    dest: "/etc/ssh/ssh_config"
-    mode: 0644
+- name: Remove all files in /etc/ssh/sshd_config.d/
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ sshd_config_files.files }}"
+  when: sshd_config_files.matched > 0
+
+- name: Ensure /etc/ssh/sshd_config.d/ directory exists
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/
+    state: directory
     owner: root
     group: root
+    mode: '0755'
+
+- name: Copy custom sshd_config.conf to /etc/ssh/sshd_config.d/
+  ansible.builtin.copy:
+    src: "sshd_config.conf"
+    dest: /etc/ssh/sshd_config.d/
+    owner: root
+    group: root
+    mode: '0644'
+
+
+- name: Remove all files in /etc/ssh/ssh_config.d but keep the directory
+  ansible.builtin.find:
+    paths: /etc/ssh/ssh_config.d/
+    file_type: file
+  register: files_to_remove
+
+- name: Delete files in /etc/ssh/ssh_config.d
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ files_to_remove.files }}"
+
+- name: Ensure /etc/ssh/ssh_config.d/ directory exists
+  ansible.builtin.file:
+    path: /etc/ssh/ssh_config.d/
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy ssh_config to /etc/ssh/ssh_config.d/
+  ansible.builtin.copy:
+    src: "ssh_config.conf"
+    dest: /etc/ssh/ssh_config.d/
+    owner: root
+    group: root
+    mode: '0644'
