@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./colours.sh
+
 # Function to display the current version of AWS SAM CLI
 function display_sam_version() {
   sam --version 2>/dev/null
@@ -13,8 +15,8 @@ function display_aws_version() {
 # Function to install or update AWS SAM CLI
 function manage_sam_cli() {
   if command -v sam &>/dev/null; then
-    echo "AWS SAM CLI is already installed. Current version:"
-    display_sam_version
+    echo -e "${GREEN}AWS SAM CLI is already installed. Current version:${NC}"
+    echo -e "${YELLOW}$(display_sam_version)${NC}"
 
     echo "Updating to the latest version..."
     # Download the latest version of AWS SAM CLI
@@ -38,15 +40,15 @@ function manage_sam_cli() {
   rm -rf aws-sam-cli-linux-x86_64.zip sam-installation/
 
   # Display the installed version of AWS SAM CLI
-  echo "AWS SAM CLI installation or update completed. Installed version:"
-  display_sam_version
+  echo -e "${GREEN}AWS SAM CLI installation or update completed. Installed version:${NC}"
+  echo -e "${YELLOW}$(display_sam_version)${NC}"
 }
 
 # Function to install or update AWS CLI
 function manage_aws_cli() {
   if command -v aws &>/dev/null; then
-    echo "AWS CLI is already installed. Current version: $(display_aws_version)"
-    echo "Updating to the latest version..."
+    echo -e "${GREEN}AWS CLI is already installed. Current version: $(display_aws_version)${NC}"
+    echo -e "${YELLOW}Updating to the latest version...${NC}"
 
     # Download the latest version of AWS CLI
     curl -L "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -69,8 +71,8 @@ function manage_aws_cli() {
   rm -rf awscliv2.zip aws/
 
   # Display the installed version of AWS CLI
-  echo "AWS CLI installation or update completed."
-  echo "Installed version: $(display_aws_version)"
+  echo -e "${GREEN}AWS CLI installation or update completed.${NC}"
+  echo -e "${YELLOW}Installed version: $(display_aws_version)${NC}"
 }
 
 # Main script execution
