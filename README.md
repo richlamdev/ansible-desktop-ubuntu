@@ -49,9 +49,10 @@ Alternatively, if password authentication is preferred, install sshpass.\
 
 ** *Limit use of sshpass for setup only, due to potential security issues. * **
 
-Note: Be aware the /role/base/tasks/authentication.yml will update the
-/etc/ssh/sshd_config, which will disable SSH password authentication;
-consequently, making SSH key authentication a hard requirement.
+Note: Be aware /role/base/tasks/ssh.yml will update the sshd_config indirectly
+by the configuration file placed in /etc/ssh/sshd_config.d/, this will disable
+SSH password authentication; consequently, making SSH key-based authentication
+a hard requirement.
 
 4. Amend inventory file if needed, default target is localhost.
 
@@ -117,8 +118,8 @@ Additional information for the following roles:
        * [yamlfmt](https://github.com/google/yamlfmt) (needed for VIM ALE plugin)
   * keychron.yml - enables keychron keyboard shortcuts
   * autostart.yml - enables autostart of applications
-  * authentication.yml - configures ssh server and client.
-                         disables password authentication
+  * ssh.yml - configures ssh server & client; disables password authentication
+  * ufw - disables incoming ports, except port 22 (limit) from 192.168.0.0/16
 
 * disable-local-dns
   * disables local dns on the target host
@@ -168,14 +169,14 @@ requirements*
 
 * env
   * setups personal preferences for bash shell
+    * configures .bashrc to read all shell scripts from /home/{USER}/.bashrc.d/
+      to set environment
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * .bashrc -bash function `se` is for fast directory navigation at the CLI
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
     (this is slightly different from the built in alt-c command provided with fzf)
   * refer to System Updates section for manual (script) updating of fzf
 
-* ufw
-  * disables incoming ports, except port 22 (limit inbound connections port 22)
 
 * vim
   * installs customization only, does not install vim
@@ -227,10 +228,9 @@ and convenience...
 Upgrade specific packages, not upraded via apt or snap:
 
 1. `execute scripts/aws_upgrade.sh`
-2. `execute scripts/sam_upgrade.sh`
-3. `execute scripts/fzf_upgrade.sh`
+2. `execute scripts/fzf_upgrade.sh`
    (alternatively delete the ~/.fzf folder and re-run ansible)
-4. If Docker Desktop, is installed.  Start Docker Desktop, click "Settings",
+3. If Docker Desktop, is installed.  Start Docker Desktop, click "Settings",
    then "Software updates", then "Check for updates", then Download and install
    updated Docker Desktop.
    `sudo apt update && sudo apt install ./docker-desktop-<version>-<arch>.deb`
