@@ -218,7 +218,7 @@ function! SetStatusLine()
   "set statusline+=%2*                " set to User2 color
   "set statusline+=%{getcwd()}/       " current working directory (same as :pwd)
   set statusline+=%4*                " set to User4 color
-  "set statusline+=%f                 " current directory + file with respect to pwd
+  set statusline+=%f                 " current directory + file with respect to pwd
   set statusline+=\                  " add space separator
   set statusline+=%3*                " set to User3 color
   set statusline+=\ft:\%y            " file type in [brackets]
