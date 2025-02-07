@@ -48,3 +48,18 @@
     mode: '0644'
     modification_time: preserve
     access_time: preserve
+
+- name: Copy the reboot check script to the server
+  copy:
+    src: "check_reboot.sh"
+    dest: /usr/local/bin/check_reboot.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Schedule cron job to run the reboot check at 0400hrs daily
+  cron:
+    name: "Check if reboot is required"
+    minute: "0"
+    hour: "4"
+    job: "/usr/local/bin/check_reboot.sh"
