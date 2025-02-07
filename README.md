@@ -89,9 +89,10 @@ Additional information for the following roles:
   * technically there are built-in methods to run apt and snap update daily
     (unattended-upgrades), however, none of those methods seem to work.
     This primitive implementation achieves a similar effect.
-  * This role is for any desktop/laptop that requires operating 24/7.
-  * unfortunately there is no method to ensure reboots are triggered when
-    required
+  * This role is for any desktop/laptop that operates 24/7.
+  * There is a basic script to check if a reboot is required,
+    which is scheduled to run daily at 0400hrs.(checks for presence of
+    /var/run/reboot-required)
 
 * aws
   * installs [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
