@@ -90,7 +90,7 @@ Additional information for the following roles:
     (unattended-upgrades), however, none of those methods seem to work.
     This primitive implementation achieves a similar effect.
   * This role is for any desktop/laptop that operates 24/7.
-  * There is a basic script to check if a reboot is required,
+  * There is a basic script (check_reboot.sh) to check if a reboot is required,
     which is scheduled to run daily at 0400hrs.(checks for presence of
     /var/run/reboot-required)
 
