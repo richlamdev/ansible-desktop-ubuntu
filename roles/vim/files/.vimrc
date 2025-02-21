@@ -7,8 +7,7 @@
 " options, so any other options should be set AFTER setting 'compatible'.
 set nocompatible
 set title                             " set title of window
-"set titlestring=VIM:\ %-25.55F\ %a%r%m titlelen=70
-set titlestring=\ \ [PWD:\ %{getcwd()}]\ \ %F\ %a%r%m titlelen=80
+set titlestring=\ [CWD:\ %{getcwd()}]\ \ \ \ [%t]%a%r%m%h%w%q titlelen=80
 set ttyfast                           " Make the keyboard fast
 "set timeout timeoutlen=1000 ttimeoutlen=50
 set showmode                          " always show what mode we're currently editing in
