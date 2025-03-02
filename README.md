@@ -253,8 +253,13 @@ Refer to above System Updates section for updates beyond package management.
 1. gen_ssh_keys.sh - generates a new SSH key pair for localhost and copies
 the public key to ~/.ssh/authorized_keys.
 
-2. desktop-setup.sh - restore dconf settings.  (instructions within this file
-to save dconf settings)
+2. desktop-setup.sh - restore dconf settings.
+  - this script essentially saves/loads desktop settings using dconf, things
+    like terminal settings, icons, keyboard shortcuts etc.
+  - this could be configured via ansible, but this way is quick and easy,
+    and I just haven't gotten around to porting it to ansible
+  - `./desktop-setup.sh save` - save current dconf settings to dconf-settings.ini
+  - `./desktop-setup.sh load` - load current dconf settings from dconf-settings.ini
 
 3. check_ssh_auth.sh - checks for SSH authentication methods against a host
 Eg: `./check_ssh_auth.sh localhost`
