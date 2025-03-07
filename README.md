@@ -113,7 +113,7 @@ Additional information for the following roles:
        * [glances](https://github.com/nicolargo/glances)
        * [pre-commit](https://github.com/pre-commit/pre-commit)
        * [pytest](https://github.com/pytest-dev/pytest)
-       * [ruff](https://github.com/charliermarsh/ruff) (needed for VIM ALE plugin)
+       * [ruff](https://github.com/astral-sh/ruff) (needed for VIM ALE plugin)
        * [uv](https://github.com/astral-sh/uv)
        * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
        * [yamlfix](https://github.com/lyz-code/yamlfix) (needed for VIM ALE plugin)
