@@ -39,6 +39,7 @@
     - pre-commit
     - pytest
     - ruff
+    - uv
     - yamlfmt
     - yamllint
   become: false
