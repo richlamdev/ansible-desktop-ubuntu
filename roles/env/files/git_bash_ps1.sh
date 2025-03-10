@@ -92,27 +92,54 @@ PathFull="\w"
 NewLine="\n"
 Jobs="\j"
 
+# Function to get the current git branch
+get_git_branch() {
+  # Check if we're inside a git repository
+  if git rev-parse --is-inside-work-tree &>/dev/null; then
+    # If yes, return the branch name
+    echo "($(git rev-parse --abbrev-ref HEAD))"
+  fi
+}
+
+# Color options (can be customized)
+COLOR_USER="\[\033[1;36m\]"       # Cyan for username
+COLOR_AT="\[\033[1;33m\]"         # Yellow for @ symbol
+COLOR_HOST="\[\033[1;35m\]"       # Magenta for hostname
+COLOR_GIT_BRANCH="\[\033[0;31m\]" # White (or grey) for git branch
+COLOR_DIR="\[\033[1;32m\]"        # Green for the current directory
+COLOR_RESET="\[\033[0m\]"         # Reset color
+
+Yellow226="\[\033[01;38;5;226m\]"
+LightPink207="\[\033[01;38;5;207m\]"
+Blue027="\[\033[01;38;5;027m\]"
+
+# Custom PS1 prompt with color
+PS1="${COLOR_USER}${USER}${COLOR_AT}@${COLOR_HOST}${HOSTNAME}\$ ${Yellow226}\$(get_git_branch)${COLOR_RESET} : ${COLOR_DIR}\w${COLOR_RESET} $ "
+
 # This PS1 snippet was adopted from code for MAC/BSD I saw from: http://allancraig.net/index.php?option=com_content&view=article&id=108:ps1-export-command-for-git&catid=45:general&Itemid=96
 # I tweaked it to work on UBUNTU 11.04 & 11.10 plus made it mo' better
 
-MyPS1=$Blue027$Username$IPurple@$IGreen$ShortHost$Color_Off'$(git branch &>/dev/null;\
-if [ $? -eq 0 ]; then \
-  echo "$(echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
-  HEADREV=$(git log --pretty=%h -n 1 2>/dev/null || echo "no-commits")
+# MyPS1="$Blue027$Username$IPurple@$IGreen$ShortHost$Color_Off$(
+#   git branch &>/dev/null
+#   if [ $? -eq 0 ]; then
+#     HEADREV=$(git log --pretty=%h -n 1 2>/dev/null || echo "no-commits")
+#     if git status | grep -q "nothing to commit"; then
+#       # @4 - Clean repository - nothing to commit
+#       echo "'$BWhite'|$HEADREV|$BGreen$(__git_ps1 "(%s)")$Color_Off"
+#     else
+#       # @5 - Changes to working tree
+#       echo "'$BWhite'|$HEADREV|$BIRed$(__git_ps1 "{%s}")$Color_Off"
+#     fi
+#   else
+#     # @2 - Prompt when not in GIT repo
+#     echo "'$Yellow226$PathFull$Color_Off'"
+#   fi
+# )"
 
-  echo "'$BWhite'|$HEADREV" | tr -d "\n"; \
-  if [ "$?" -eq "0" ]; then \
-    # @4 - Clean repository - nothing to commit
-    echo "|'$BGreen'"$(__git_ps1 "(%s)"); \
-  else \
-    # @5 - Changes to working tree
-    echo "|'$BIRed'"$(__git_ps1 "{%s}"); \
-  fi)'$BWhite'|'$IYellow$PathFull$Color_Off'"; \
-else \
-  # @2 - Prompt when not in GIT repo
-  echo "|'$Yellow226$PathFull$Color_Off'"; \
-fi)'
+# export PS1="${IPurple}[${Color_Off} ${MyPS1} \$ ${IPurple}]${Color_Off} "
+# # without bracket
+# export PS1="${MyPS1} \$ "
 
-export PS1="$IPurple[$Color_Off $MyPS1 \$ $IPurple]$Color_Off "
+# export PS1="$IPurple[$Color_Off $MyPS1 \$ $IPurple]$Color_Off "
 # without bracket
-export PS1="$MyPS1 \$ "
+# export PS1="$MyPS1 \$ "
