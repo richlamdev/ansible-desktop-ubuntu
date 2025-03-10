@@ -102,19 +102,20 @@ get_git_branch() {
 }
 
 # Color options (can be customized)
-COLOR_USER="\[\033[1;36m\]"       # Cyan for username
-COLOR_AT="\[\033[1;33m\]"         # Yellow for @ symbol
-COLOR_HOST="\[\033[1;35m\]"       # Magenta for hostname
-COLOR_GIT_BRANCH="\[\033[0;31m\]" # White (or grey) for git branch
-COLOR_DIR="\[\033[1;32m\]"        # Green for the current directory
-COLOR_RESET="\[\033[0m\]"         # Reset color
+CYAN="\[\033[1;36m\]"    # Cyan for username
+YELLOW="\[\033[1;33m\]"  # Yellow for @ symbol
+MAGENTA="\[\033[1;35m\]" # Magenta for hostname
+GREEN="\[\033[1;32m\]"   # Green for the current directory
+RED="\033[0;31m\]"
+BLUE="\033[0;34m\]"
+NC="\[\033[0m\]" # Reset color
 
 Yellow226="\[\033[01;38;5;226m\]"
 LightPink207="\[\033[01;38;5;207m\]"
 Blue027="\[\033[01;38;5;027m\]"
 
 # Custom PS1 prompt with color
-PS1="${COLOR_USER}${USER}${COLOR_AT}@${COLOR_HOST}${HOSTNAME}\$ ${Yellow226}\$(get_git_branch)${COLOR_RESET} : ${COLOR_DIR}\w${COLOR_RESET} $ "
+PS1="${CYAN}${USER}${YELLOW}@${RED}${HOSTNAME}\$${Yellow226}\$(get_git_branch)${COLOR_RESET}:${GREEN}\w${NC} $ "
 
 # This PS1 snippet was adopted from code for MAC/BSD I saw from: http://allancraig.net/index.php?option=com_content&view=article&id=108:ps1-export-command-for-git&catid=45:general&Itemid=96
 # I tweaked it to work on UBUNTU 11.04 & 11.10 plus made it mo' better
