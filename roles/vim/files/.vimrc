@@ -177,7 +177,7 @@ let g:ale_yaml_yamllint_options = '-d "{extends: relaxed, rules: {line-length: {
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
-# clear ALE highlights
+" clear ALE highlights
 function! ClearALEHighlights()
     call ale#highlight#RemoveHighlights()
     echo "ALE highlights cleared"
