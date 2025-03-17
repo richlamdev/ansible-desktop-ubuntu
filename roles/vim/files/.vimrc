@@ -159,6 +159,7 @@ let g:ale_fixers = {'json': ['jq'], 'python': ['black'], 'sh': ['shfmt'], 'yaml'
 let g:ale_python_flake8_options = '--max-line-length 79'
 let g:ale_python_black_options = '--line-length 79'
 let g:ale_sh_shfmt_options = '-i 2 -ci'
+let g:ale_sh_shellcheck_options = '--exclude=SC2034' " ignore unused shell variables
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
@@ -169,11 +170,20 @@ let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
 
+
 " don't worry about long line length for yaml
 let g:ale_yaml_yamllint_options = '-d "{extends: relaxed, rules: {line-length: {max: disable}}"'
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+# clear ALE highlights
+function! ClearALEHighlights()
+    call ale#highlight#RemoveHighlights()
+    echo "ALE highlights cleared"
+endfunction
+
+nnoremap <silent> <leader>ca :call ClearALEHighlights()<CR>
 " }}}
 
 " indentLine {{{
@@ -280,7 +290,7 @@ nnoremap <Leader>a :Ag<cr>
 nnoremap <Leader>mk :Marks<cr>
 nnoremap <Leader>ma :Maps<cr>
 nnoremap <Leader>ch :Changes<cr>
-nnoremap <Leader>l :Lines<cr>
+nnoremap <Leader>li :Lines<cr>
 " }}}
 
 " vimgrep & grep {{{
@@ -352,7 +362,10 @@ nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 nnoremap <Leader>tr :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
 
 " clear search
-" nnoremap <cr> :noh<cr><cr>
+nnoremap <Leader>no :noh<cr>
+
+" show all leader mapped keys
+nnoremap <Leader>ml :map <Leader><cr>
 " }}}
 
 " vimrc {{{
