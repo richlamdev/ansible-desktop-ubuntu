@@ -289,7 +289,7 @@ nnoremap <Leader>a :Ag<cr>
 nnoremap <Leader>mk :Marks<cr>
 nnoremap <Leader>ma :Maps<cr>
 nnoremap <Leader>ch :Changes<cr>
-nnoremap <Leader>l :Lines<cr>
+nnoremap <Leader>li :Lines<cr>
 " }}}
 
 " vimgrep & grep {{{
@@ -361,7 +361,10 @@ nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 nnoremap <Leader>tr :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
 
 " clear search
-" nnoremap <cr> :noh<cr><cr>
+nnoremap <Leader>no :noh<cr><cr>
+
+" show all leader mapped keys
+nnoremap <Leader>li :Lines<cr>
 " }}}
 
 " vimrc {{{
