@@ -376,7 +376,7 @@ nnoremap ,u :source $MYVIMRC<cr> :edit $MYVIMRC<cr>
 
 " sudo write {{{
 " Save a file with sudo (sw => sudo write)
-noremap <leader>sw :w !sudo tee % > /dev/null<CR>
+nnoremap <leader>sw :w !sudo tee % > /dev/null<CR>
 " }}}
 
 " view/paste register {{{
