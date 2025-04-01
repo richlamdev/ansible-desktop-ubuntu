@@ -183,7 +183,8 @@ function! ClearALEHighlights()
     echo "ALE highlights cleared"
 endfunction
 
-nnoremap <silent> <leader>ca :call ClearALEHighlights()<CR>
+" clear ALE highlights and search results
+nnoremap <silent> <leader>ca :call ClearALEHighlights()<CR>:noh<CR>
 " }}}
 
 " indentLine {{{
@@ -237,8 +238,10 @@ function! SetStatusLine()
   set statusline+=%{GitBranch()}     " display git branch name
   set statusline+=%9*                " reset color to default blue
   set statusline+=\%=                " separator point left/right of statusline
+  set statusline+=%1*                " set to User3 color
+  set statusline+=\search:\ %{searchcount().current}/%{searchcount().total}
   set statusline+=%7*                " set to User7 color
-  set statusline+=\row:%l/%L         " line number / line total
+  set statusline+=\ row:%l/%L         " line number / line total
   set statusline+=%4*                " set to User4 color
   set statusline+=\ col:%c           " column number
   set statusline+=%6*                " set to User6 color
@@ -337,9 +340,9 @@ command! CodeiumVersion echo GetLanguageServerVersion()
 nnoremap <leader>n :execute ':NERDTreeToggle ' . getcwd()<cr>
 
 let NERDShutUp = 1
-let NERDTreeHijackNetrw=1
-let NERDTreeQuitOnOpen=1    " quit NERDTree after openning a file
-let NERDChristmasTree = 1   " colored NERD Tree
+let NERDTreeHijackNetrw = 1
+let NERDTreeQuitOnOpen = 1    " quit NERDTree after openning a file
+let NERDChristmasTree = 1     " colored NERD Tree
 let NERDTreeHighlightCursorline = 1
 let NERDTreeShowHidden = 1
 " let NERDTreeMapActivateNode='<CR>' " map enter to activating a node
@@ -360,12 +363,6 @@ nnoremap <leader>ew :e <C-R>=expand("%:.:h") . "/"<CR>
 
 " tree view from current working directory
 nnoremap <Leader>tr :!clear && echo "Working Directory:" && pwd && tree \| less<cr>
-
-" clear search
-nnoremap <Leader>no :noh<cr>
-
-" show all leader mapped keys
-nnoremap <Leader>ml :map <Leader><cr>
 " }}}
 
 " vimrc {{{
