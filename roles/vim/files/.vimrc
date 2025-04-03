@@ -156,10 +156,26 @@ autocmd FileType markdown,json
 " https://github.com/dense-analysis/ale
 let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'sh': ['shellcheck'], 'yaml': ['yamllint'], 'terraform': ['terraform']}
 let g:ale_fixers = {'json': ['jq'], 'python': ['black'], 'sh': ['shfmt'], 'yaml': ['yamlfmt'], 'terraform': ['terraform']}
+
 let g:ale_python_flake8_options = '--max-line-length 79'
 let g:ale_python_black_options = '--line-length 79'
+
 let g:ale_sh_shfmt_options = '-i 2 -ci'
 let g:ale_sh_shellcheck_options = '--exclude=SC2034' " ignore unused shell variables
+
+" ignore long line length for yaml
+let g:ale_yaml_yamllint_options = '-d "{extends: relaxed, rules: {line-length: {max: disable}}"'
+
+let g:ale_terraform_trivy_options = 'config --exit-code 0'
+let g:ale_terraform_trivy_use_global = 1
+let g:ale_terraform_trivy_linter = {
+    \ 'name': 'trivy',
+    \ 'executable': 'trivy',
+    \ 'command': 'trivy config --exit-code 0 -f json -o /dev/stdout %t',
+    \ 'callback': 'ale#handlers#json#Handle',
+    \ 'output_stream': 'both',
+    \ 'language': 'terraform',
+    \ }
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
@@ -170,17 +186,13 @@ let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_text_changed = 'never'
 
-
-" don't worry about long line length for yaml
-let g:ale_yaml_yamllint_options = '-d "{extends: relaxed, rules: {line-length: {max: disable}}"'
-
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
-" clear ALE highlights
+" clear ALE and search highlights
 function! ClearALEHighlights()
     call ale#highlight#RemoveHighlights()
-    echo "ALE highlights cleared"
+    echo "ALE and search highlights cleared"
 endfunction
 
 " clear ALE highlights and search results
@@ -238,7 +250,7 @@ function! SetStatusLine()
   set statusline+=%{GitBranch()}     " display git branch name
   set statusline+=%9*                " reset color to default blue
   set statusline+=\%=                " separator point left/right of statusline
-  set statusline+=%1*                " set to User3 color
+  set statusline+=%1*                " set to User1 color
   set statusline+=\search:\ %{searchcount().current}/%{searchcount().total}
   set statusline+=%7*                " set to User7 color
   set statusline+=\ row:%l/%L         " line number / line total
