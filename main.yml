@@ -9,26 +9,27 @@
     - vars.yml
 
   roles:
-    - auto-update
-    - base
-    - aws
-    - brave
-    - chrome
+    # - auto-update
+    # - base
+    # - aws
+    # - brave
+    # - chrome
     # - docker-cli-only
-    - docker-desktop-dependency
-    - gh_cli
-    - hashicorp
-    - keepassxc
-    - kubectl
-    - microsoft
-    - mullvad
-    - opera
-    - signal-desktop
-    - sublime-text
-    - trivy
-    - role: vim
-      become: false
-    - role: env
-      become: false
-    - disable-local-dns
+    # - docker-desktop-dependency
+    # - gh_cli
+    # - hashicorp
+    # - keepassxc
+    # - kubectl
+    # - microsoft
+    # - mullvad
+    - ntp-via-dhcp
+    # - opera
+    # - signal-desktop
+    # - sublime-text
+    # - trivy
+    # - role: vim
+    #   become: false
+    # - role: env
+    #   become: false
+    # - disable-local-dns
     # - yubico
