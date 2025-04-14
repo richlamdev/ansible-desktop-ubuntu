@@ -179,6 +179,10 @@ requirements*
     (this is slightly different from the built in alt-c command provided with fzf)
   * refer to System Updates section for manual (script) updating of fzf
 
+* ntp-via-dhcp
+  * configures NTP to use DHCP to obtain NTP server IP address for each interface found
+    * attempts to obtain all physical local ethernet and wireless interfaces
+    * attempts to disregard any loopback interfaces and virtual interfaces
 
 * vim
   * installs customization only, does not install vim
