@@ -180,6 +180,9 @@ requirements*
   * refer to System Updates section for manual (script) updating of fzf
 
 * ntp-via-dhcp
+  * This role _mostly_ works, however, it requires restarting of systemd-networkd and timesyncd\
+    after reboot AND after a DHCP IP lease has been issued to the client.  Naturally,
+    it would be preferred this is automatic, however that has not been resolved yet.
   * configures NTP to use DHCP to obtain NTP server IP address for each interface found
     * attempts to obtain all physical local ethernet and wireless interfaces
     * attempts to disregard any loopback interfaces and virtual interfaces
