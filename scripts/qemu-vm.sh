@@ -9,8 +9,18 @@ fi
 
 INPUT="$1"
 MODE="$2"
-VM_NAME=$(basename "$INPUT" | cut -d. -f1)
+
+# Extract VM base name (strip off .iso, .img, .qcow2 etc.)
+VM_BASE=$(basename "$INPUT")
+VM_BASE="${VM_BASE%%.[a-zA-Z0-9][a-zA-Z0-9]*}"
+
+# Generate 6-character random alphanumeric suffix
+RAND_SUFFIX=$(tr -dc 'a-z0-9' </dev/urandom | head -c6)
+
+# Full VM name
+VM_NAME="${VM_BASE}-${RAND_SUFFIX}"
 DISK_IMAGE="${VM_NAME}.qcow2"
+
 RAM="4096"
 CPUS="2"
 
@@ -26,7 +36,7 @@ else
     exit 1
 fi
 
-# VM start command shared by both modes
+# VM launch function
 run_vm() {
     echo "Launching VM: $VM_NAME"
     qemu-system-x86_64 \
@@ -64,6 +74,7 @@ elif [[ "$MODE" == "start" ]]; then
     fi
 
     DISK_IMAGE="$INPUT"
+    VM_NAME="${DISK_IMAGE%%.qcow2}"
     run_vm
 
 else
