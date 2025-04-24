@@ -11,8 +11,6 @@
     state: present
   loop:
     - chromium
-    - multipass
-    - onefetch
     - slack
   loop_control:
     label: "{{ item }}"
