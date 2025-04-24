@@ -35,7 +35,7 @@ complete -C '/usr/local/bin/aws_completer' aws
 complete -C /usr/bin/terraform terraform
 
 # vagrant command completion (start)
-. /opt/vagrant/embedded/gems/gems/vagrant-2.4.4/contrib/bash/completion.sh
+. /opt/vagrant/embedded/gems/gems/vagrant-2.4.5/contrib/bash/completion.sh
 
 # pipx autocomplete
 eval "$(register-python-argcomplete pipx)"
