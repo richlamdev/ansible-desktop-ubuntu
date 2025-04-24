@@ -23,6 +23,7 @@
     - net-tools
     - nmap
     - p7zip
+    - qemu-system-x86
     - ranger
     - ripgrep
     - rtorrent
