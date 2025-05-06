@@ -29,17 +29,15 @@
     - rtorrent
     - silversearcher-ag
     - sshfs
-    - termshark
     - tcpdump
     - tmux
     - tree
     - ufw
     - unrar
     - unzip
-    # - vim-gtk3  # install by github and compile
+    - vim-gtk3  # install by github and compile
     - virtualbox
     - vlc
-    - whois
     - xclip
   loop_control:
     label: "{{ item }}"
