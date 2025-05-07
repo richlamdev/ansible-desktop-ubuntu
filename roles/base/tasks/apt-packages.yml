@@ -18,7 +18,7 @@
     - gimp
     - graphviz
     - htop
-    - iperf
+    - iperf3
     - meld
     - net-tools
     - nmap
@@ -33,7 +33,6 @@
     - tmux
     - tree
     - ufw
-    - unrar
     - unzip
     - vim-gtk3  # install by github and compile
     - virtualbox
