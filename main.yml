@@ -22,7 +22,6 @@
     - kubectl
     - microsoft
     - mullvad
-    - ntp-via-dhcp
     - opera
     - signal-desktop
     - sublime-text
