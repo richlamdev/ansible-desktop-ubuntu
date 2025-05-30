@@ -1,12 +1,5 @@
 ---
 - name: add opera apt key
-  apt_key:
-    url: https://deb.opera.com/archive.key
-    #id: 9FBDE02F55F254D700821CCCDD3C368A8DE1B7A0
-    id: 9701D4A1B4D92E261C8C66FE24A1004B1F11DCC9
-    state: present
-
-- name: add opera apt key
   get_url:
     url: https://deb.opera.com/archive.key
     dest: /usr/share/keyrings/opera-browser.asc
