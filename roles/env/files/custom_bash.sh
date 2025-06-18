@@ -2,7 +2,7 @@ HISTSIZE=100000
 HISTFILESIZE=100000
 HISTFILE=/home/$USER/.bash_history
 HISTCONTROL=ignoreboth:erasedups
-HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:pwd:cd *"
+HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:pwd:cd *:export AWS_*"
 
 # cbc/cbp=cliboard; similar to pbcopy/pbpaste on MacOS
 alias cbc='xclip -sel clip'
@@ -21,6 +21,14 @@ google() {
   xdg-open "https://www.google.com/search?q=$*" >/dev/null 2>&1 &
 }
 
+acg() {
+  . ~/.local/bin/sandbox-creds.sh
+}
+
+acg-clear() {
+  . ~/.local/bin/sandbox-creds-delete.sh
+}
+
 # minikube autocomplete
 #source <(minikube completion bash)
 
@@ -36,7 +44,12 @@ complete -C '/usr/local/bin/aws_completer' aws
 complete -C /usr/bin/terraform terraform
 
 # vagrant command completion (start)
-. /opt/vagrant/embedded/gems/gems/vagrant-2.4.5/contrib/bash/completion.sh
+# . /opt/vagrant/embedded/gems/gems/vagrant-2.4.6/contrib/bash/completion.sh
+VAGRANT_COMPLETION=$(find /opt/vagrant/embedded/gems/gems/ -type f -path "*/vagrant-*/contrib/bash/completion.sh" | sort -V | tail -n 1)
+
+if [ -f "$VAGRANT_COMPLETION" ]; then
+  . "$VAGRANT_COMPLETION"
+fi
 
 # pipx autocomplete
 eval "$(register-python-argcomplete pipx)"
