@@ -1,0 +1,18 @@
+---
+- name: Ensure {{ home_dir }}/.local/bin/{{ local_user }} directory exists
+  file:
+    path: "{{ home_dir }}/.local/bin/{{ local_user }}"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: install sandbox-creds.sh / sandbox-creds-delete.sh to  {{ home_dir }}.local/bin/{{ local_user }}
+  copy:
+    src: "{{ item }}"
+    dest: "/{{ home_dir }}/.local/bin/{{ local_user }}"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
+    mode: "0640"
+  loop:
+    - sandbox-creds.sh
+    - sandbox-creds-delete.sh
