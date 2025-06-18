@@ -4,3 +4,6 @@
 
 - name: install aws sam cli
   import_tasks: aws-sam-cli.yml
+
+- name: install aws acg scripts
+  import_tasks: aws-acg.yml
