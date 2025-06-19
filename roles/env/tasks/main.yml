@@ -9,6 +9,7 @@
   loop:
     - custom_bash.sh
     - git_bash_ps1.sh
+    - pyenv.sh
 
 - name: deploy .bashrc / .dircolors to home directory
   copy:

@@ -50,3 +50,49 @@
   command: pipx ensurepath
   when: pipx_ensurepath_output.rc != 0
   become: false
+
+
+- name: Ensure pyenv is installed
+  ansible.builtin.debug:
+    msg: |
+      Pyenv will be installed, via equivalent of:
+      curl -fsSL https://pyenv.run | bash
+
+      reference url: https://github.com/pyenv/pyenv
+
+- name: Download pyenv installer script
+  get_url:
+    url: https://pyenv.run
+    dest: "{{ home_dir }}/pyenv-installer.sh"
+    mode: '0755'
+  become: false
+
+- name: Run pyenv installer script
+  ansible.builtin.shell: |
+    bash "{{ home_dir }}/pyenv-installer.sh"
+  args:
+    creates: "{{ home_dir }}/.pyenv"
+    executable: /bin/bash
+  environment:
+    HOME: "{{ home_dir }}"
+  become: false
+
+- name: Remove pyenv installer script
+  file:
+    path: "{{ home_dir }}/pyenv-installer.sh"
+    state: absent
+  become: false
+
+- name: pyenv information message
+  ansible.builtin.debug:
+    msg: |
+      Pyenv has been installed successfully.
+
+      The following will be added to your ~/.bashrc environment via env role in this playbook:
+
+        export PYENV_ROOT="$HOME/.pyenv"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init --path)"
+        eval "$(pyenv init -)"
+
+      Then restart your shell or run: exec "$SHELL"
