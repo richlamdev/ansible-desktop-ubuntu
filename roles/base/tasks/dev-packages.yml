@@ -30,6 +30,7 @@
     - black
     - flake8
     - glances
+    - mypy
     - pre-commit
     - pytest
     - ruff

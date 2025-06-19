@@ -23,6 +23,7 @@ set number                            " set numbered lines for columns
 set list                              " show all whitespace a character
 set listchars=tab:▸\ ,trail:·,nbsp:␣  " set characters displayed for tab/space
 set mouse=a                           " enable mouse for all modes
+set ttymouse=sgr
 set scrolloff=3                       " set number of context lines visible above & below cursor
 set sidescrolloff=5                   " make vertical scrolling appear more natural
 set noerrorbells                      " disable beep on errors
@@ -154,7 +155,7 @@ autocmd FileType markdown,json
 
 " ALE {{{
 " https://github.com/dense-analysis/ale
-let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit'], 'sh': ['shellcheck'], 'yaml': ['yamllint'], 'terraform': ['terraform']}
+let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit', 'mypy'], 'sh': ['shellcheck'], 'yaml': ['yamllint'], 'terraform': ['terraform']}
 let g:ale_fixers = {'json': ['jq'], 'python': ['black'], 'sh': ['shfmt'], 'yaml': ['yamlfmt'], 'terraform': ['terraform']}
 
 let g:ale_python_flake8_options = '--max-line-length 79'
