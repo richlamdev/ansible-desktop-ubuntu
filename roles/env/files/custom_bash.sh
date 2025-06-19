@@ -22,11 +22,11 @@ google() {
 }
 
 acg() {
-  . ~/.local/bin/sandbox-creds.sh
+  . ~/.local/bin/$USER/sandbox-creds.sh
 }
 
 acg-clear() {
-  . ~/.local/bin/sandbox-creds-delete.sh
+  . ~/.local/bin/$USER/sandbox-creds-delete.sh
 }
 
 # minikube autocomplete
