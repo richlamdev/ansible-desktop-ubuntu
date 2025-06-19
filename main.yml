@@ -10,7 +10,7 @@
 
   roles:
     # - auto-update
-    - base
+    # - base
     # - aws
     # - brave
     # - chrome
@@ -28,7 +28,7 @@
     # - trivy
     # - role: vim
     #   become: false
-    # - role: env
-    #   become: false
+    - role: env
+      become: false
     # - disable-local-dns
     # - yubico
