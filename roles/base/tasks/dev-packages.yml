@@ -28,6 +28,7 @@
   loop:
     - bandit
     - black
+    - coverage
     - flake8
     - glances
     - mypy
