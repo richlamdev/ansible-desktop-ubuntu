@@ -8,6 +8,7 @@
     mode: "0640"
   loop:
     - custom_bash.sh
+    - fzf_config.sh
     - git_bash_ps1.sh
     - pyenv.sh
 
