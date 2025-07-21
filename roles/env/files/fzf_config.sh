@@ -34,28 +34,48 @@ export FZF_ALT_C_OPTS="
 
 export EDITOR=vim
 
-# this function obtained from:
+# original function obtained from:
 # https://thevaluable.dev/practical-guide-fzf-example/
 se() {
-  if [ -z "$1" ]; then
-    search_folder="$HOME"
-  else
-    search_folder="$1"
-  fi
+  local search_folder="${1:-$HOME}"
+
+  # Common folders to exclude from traversal
+  local exclude_paths=(
+    "$HOME/.cache"
+    "$HOME/.config"
+    "$HOME/.local"
+    "$HOME/.codeium"
+    "$HOME/.git"
+    "$HOME/.vscode"
+    "$HOME/.npm"
+    "$HOME/.cargo"
+    "$HOME/.rustup"
+    "$HOME/.mozilla"
+    "$HOME/.snap"
+  )
+
+  # Build prune expression for find
+  local prune_expr=""
+  for path in "${exclude_paths[@]}"; do
+    prune_expr+=" -path \"$path\" -o"
+  done
+  # Remove trailing -o
+  prune_expr="${prune_expr::-3}"
 
   selection=$(
-    find "$search_folder" -type d | fzf \
-      --preview='tree -C {}' --preview-window='50%' \
+    eval "find \"$search_folder\" \( $prune_expr \) -prune -o -type d -print" | fzf \
+      --preview='command -v tree >/dev/null && tree -C {} || ls -la {}' \
+      --preview-window='50%' \
       --prompt='Dirs > ' \
       --bind='del:execute(rm -ri {+})' \
       --bind='ctrl-p:toggle-preview' \
       --bind='ctrl-d:change-prompt(Dirs > )' \
-      --bind="ctrl-d:+reload(find $search_folder -type d)" \
-      --bind='ctrl-d:+change-preview(tree -C {})' \
+      --bind="ctrl-d:+reload(eval \"find '$search_folder' \\( ${prune_expr//\"/\\\"} \\) -prune -o -type d -print\")" \
+      --bind='ctrl-d:+change-preview(command -v tree >/dev/null && tree -C {} || ls -la {})' \
       --bind='ctrl-d:+refresh-preview' \
       --bind='ctrl-f:change-prompt(Files > )' \
-      --bind="ctrl-f:+reload(find $search_folder -type f)" \
-      --bind='ctrl-f:+change-preview(batcat --color=always {})' \
+      --bind="ctrl-f:+reload(eval \"find '$search_folder' \\( ${prune_expr//\"/\\\"} \\) -prune -o -type f -print\")" \
+      --bind='ctrl-f:+change-preview(command -v batcat >/dev/null && batcat --color=always {} || cat {})' \
       --bind='ctrl-f:+refresh-preview' \
       --bind='ctrl-a:select-all' \
       --bind='ctrl-x:deselect-all' \
@@ -64,22 +84,18 @@ se() {
 CTRL-D to display directories
 CTRL-F to display files
 CTRL-A/CTRL-X to select/deselect all
-ENTER to edit | DEL to delete
+ENTER to navigate | DEL to delete
 CTRL-P to toggle preview
-
 '
   )
 
   if [ -d "$selection" ]; then
     cd "$selection" || return
   elif [ -f "$selection" ]; then
-    # Change to the directory containing the file
     cd "$(dirname "$selection")" || return
+  elif [ -n "$selection" ]; then
+    ${EDITOR:-vim} "$selection"
   fi
-  # alternatively edit selection via EDITOR
-  # else
-  #     eval "$EDITOR $selection"
-  # fi
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
