@@ -29,6 +29,11 @@ acg-clear() {
   . ~/.local/bin/$USER/sandbox-creds-delete.sh
 }
 
+# Function to pretty-print CSV files
+function pretty_csv {
+  perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' "$@" | column -t -s, | batcat -S
+}
+
 # minikube autocomplete
 #source <(minikube completion bash)
 
