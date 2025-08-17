@@ -1,3 +1,37 @@
 *.log
 *.swp
+
+# OS images and installers
+*.iso
+*.img
+*.dmg
+*.vhd*
+*.vmdk
+*.qcow*
+*.vdi
+*.wim
+*.esd
+
+# Installer packages
+*.msi
+*.exe
+*.pkg
+*.deb
+*.rpm
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.bz2
+*.xz
+*.7z
+
+# QEMU / KVM disk images
+*.img
+*.raw
+*.qcow
 *.qcow2
+*.qed
+*.cow
