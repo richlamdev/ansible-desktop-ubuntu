@@ -103,7 +103,13 @@ Additional information for the following roles:
 
 * base
   * packages.yml - list of packages to install via apt
-  * dev-packages.yml - list of development packages to install via apt and pipx
+  * keychron.yml - enables keychron keyboard shortcuts
+  * autostart.yml - enables autostart of applications
+  * ssh.yml - configures ssh server & client; disables password authentication
+  * ufw - disables incoming ports, except port 22 (limit) from 192.168.0.0/16
+
+* dev-tools
+  * list of development packages to install via apt and pipx
     * some of the development packages are installed using pipx where possible
       due to [PEP 668](https://peps.python.org/pep-0668/)
     * primarily installs pipx binary packages for coding/development
@@ -118,10 +124,18 @@ Additional information for the following roles:
        * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
        * [yamlfix](https://github.com/lyz-code/yamlfix) (needed for VIM ALE plugin)
        * [yamlfmt](https://github.com/google/yamlfmt) (needed for VIM ALE plugin)
-  * keychron.yml - enables keychron keyboard shortcuts
-  * autostart.yml - enables autostart of applications
-  * ssh.yml - configures ssh server & client; disables password authentication
-  * ufw - disables incoming ports, except port 22 (limit) from 192.168.0.0/16
+
+   * Installs [pyenv](https://github.com/pyenv/pyenv) using the official installer script.
+       * Downloads the `pyenv.run` installer script into the user’s home directory.
+       * Executes the installer to create the `~/.pyenv` directory.
+       * Removes the installer script after installation for cleanliness.
+       * Adds environment variables to `~/.bashrc` through the `env` role:
+   ```bash
+   export PYENV_ROOT="$HOME/.pyenv"
+   export PATH="$PYENV_ROOT/bin:$PATH"
+   eval "$(pyenv init --path)"
+   eval "$(pyenv init -)"
+
 
 * disable-local-dns
   * disables local dns on the target host
