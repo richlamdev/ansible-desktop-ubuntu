@@ -130,13 +130,12 @@ Additional information for the following roles:
        * Executes the installer to create the `~/.pyenv` directory.
        * Removes the installer script after installation for cleanliness.
        * Adds environment variables to `~/.bashrc` through the `env` role:
-```bash
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-```
-
+         ```bash
+         export PYENV_ROOT="$HOME/.pyenv"
+         export PATH="$PYENV_ROOT/bin:$PATH"
+         eval "$(pyenv init --path)"
+         eval "$(pyenv init -)"
+         ```
 * disable-local-dns
   * disables local dns on the target host
     (again this is a personal preference, as my network DNS server handles
