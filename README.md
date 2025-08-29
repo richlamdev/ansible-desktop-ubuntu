@@ -123,7 +123,6 @@ Additional information for the following roles:
        * [ruff](https://github.com/astral-sh/ruff) (needed for VIM ALE plugin)
        * [uv](https://github.com/astral-sh/uv)
        * [yamllint](https://github.com/adrienverge/yamllint) (needed for VIM ALE plugin)
-       * [yamlfix](https://github.com/lyz-code/yamlfix) (needed for VIM ALE plugin)
        * [yamlfmt](https://github.com/google/yamlfmt) (needed for VIM ALE plugin)
 
    * Installs [pyenv](https://github.com/pyenv/pyenv) using the official installer script.
@@ -131,12 +130,12 @@ Additional information for the following roles:
        * Executes the installer to create the `~/.pyenv` directory.
        * Removes the installer script after installation for cleanliness.
        * Adds environment variables to `~/.bashrc` through the `env` role:
-   ```bash
-   export PYENV_ROOT="$HOME/.pyenv"
-   export PATH="$PYENV_ROOT/bin:$PATH"
-   eval "$(pyenv init --path)"
-   eval "$(pyenv init -)"
-
+```bash
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+```
 
 * disable-local-dns
   * disables local dns on the target host
