@@ -14,6 +14,7 @@
     - aws
     - brave
     - chrome
+    - dev-tools
     # - docker-cli-only
     - docker-desktop-dependency
     - gh_cli
