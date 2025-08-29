@@ -117,6 +117,7 @@ Additional information for the following roles:
        * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
        * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
        * [glances](https://github.com/nicolargo/glances)
+       * [mypy](https://github.com/python/mypy)
        * [pre-commit](https://github.com/pre-commit/pre-commit)
        * [pytest](https://github.com/pytest-dev/pytest)
        * [ruff](https://github.com/astral-sh/ruff) (needed for VIM ALE plugin)
