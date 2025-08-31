@@ -129,13 +129,17 @@ Additional information for the following roles:
        * Downloads the `pyenv.run` installer script into the user’s home directory.
        * Executes the installer to create the `~/.pyenv` directory.
        * Removes the installer script after installation for cleanliness.
-       * Adds environment variables to `~/.bashrc` through the `env` role:
+       * Adds environment variables to `~/.bashrc` through the `env` role
+         via pyenv.sh file that is read from $HOME/.bashrc.d/:
          ```bash
          export PYENV_ROOT="$HOME/.pyenv"
-         export PATH="$PYENV_ROOT/bin:$PATH"
-         eval "$(pyenv init --path)"
-         eval "$(pyenv init -)"
+         [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+         eval "$(pyenv init - bash)"
          ```
+       * To install a Python version, use the `pyenv install` command or
+       * To compile and install an optimized verision of Python, execute
+         `scripts/install_optimized_pyenv_latest.sh`
+
 * disable-local-dns
   * disables local dns on the target host
     (again this is a personal preference, as my network DNS server handles
@@ -191,19 +195,6 @@ requirements*
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
     (this is slightly different from the built in alt-c command provided with fzf)
   * refer to System Updates section for manual (script) updating of fzf
-
-* ntp-via-dhcp
-  * This role _mostly_ works, however, it requires restarting of systemd-networkd and timesyncd\
-    after reboot AND after a DHCP IP lease has been issued to the client.  Naturally,
-    it would be preferred this is automatic, however that has not been resolved yet.
-  * configures NTP to use DHCP to obtain NTP server IP address for each interface found
-    * attempts to obtain all physical local ethernet and wireless interfaces
-    * attempts to disregard any loopback interfaces and virtual interfaces
-    * assumes that DHCP is sending NTP server IP address to the subnet the interface is assigned to
-  * confirm NTP server with any of the following commands:
-    * `timedatectl timesync-status`
-    * `timedatectl show-timesync --all`
-    * `journalctl -u systemd-timesyncd -n 20 | grep -A5 "Network Time Synchronization"`
 
 * vim
   * installs customization only, does not install vim
