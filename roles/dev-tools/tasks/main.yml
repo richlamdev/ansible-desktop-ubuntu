@@ -106,8 +106,7 @@
       Pyenv has been installed successfully.
       The following will be added to your ~/.bashrc environment via env role in this playbook:
         export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init --path)"
-        eval "$(pyenv init -)"
+        [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init - bash)"
       Then restart your shell or run: exec "$SHELL"
   when: not pyenv_binary.stat.exists or pyenv_install_result is defined
