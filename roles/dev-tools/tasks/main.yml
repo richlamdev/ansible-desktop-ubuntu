@@ -58,42 +58,55 @@
     msg: |
       Pyenv will be installed, via equivalent of:
       curl -fsSL https://pyenv.run | bash
-
       reference url: https://github.com/pyenv/pyenv
 
+- name: Check if pyenv binary exists
+  ansible.builtin.stat:
+    path: "{{ home_dir }}/.pyenv/bin/pyenv"
+  register: pyenv_binary
+  become: false
+
 - name: Download pyenv installer script
-  get_url:
+  ansible.builtin.get_url:
     url: https://pyenv.run
     dest: "{{ home_dir }}/pyenv-installer.sh"
     mode: '0755'
+    timeout: 30
   become: false
+  when: not pyenv_binary.stat.exists
 
 - name: Run pyenv installer script
-  ansible.builtin.shell: |
-    bash "{{ home_dir }}/pyenv-installer.sh"
-  args:
-    creates: "{{ home_dir }}/.pyenv"
-    executable: /bin/bash
+  ansible.builtin.command: bash "{{ home_dir }}/pyenv-installer.sh"
   environment:
     HOME: "{{ home_dir }}"
   become: false
+  when: not pyenv_binary.stat.exists
+  register: pyenv_install_result
+
+- name: Verify pyenv installation was successful
+  ansible.builtin.command:
+    argv:
+      - "{{ home_dir }}/.pyenv/bin/pyenv"
+      - --version
+  register: pyenv_verify
+  become: false
+  when: not pyenv_binary.stat.exists
+  failed_when: pyenv_verify.rc != 0
 
 - name: Remove pyenv installer script
-  file:
+  ansible.builtin.file:
     path: "{{ home_dir }}/pyenv-installer.sh"
     state: absent
   become: false
+  when: not pyenv_binary.stat.exists
 
 - name: pyenv information message
   ansible.builtin.debug:
     msg: |
       Pyenv has been installed successfully.
-
       The following will be added to your ~/.bashrc environment via env role in this playbook:
-
         export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init --path)"
-        eval "$(pyenv init -)"
-
+        [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init - bash)"
       Then restart your shell or run: exec "$SHELL"
+  when: not pyenv_binary.stat.exists or pyenv_install_result is defined
