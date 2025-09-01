@@ -138,7 +138,8 @@ Additional information for the following roles:
          ```
        * To install a Python version, use the `pyenv install` command or
        * To compile and install an optimized verision of Python, execute
-         `scripts/install_optimized_pyenv_latest.sh`
+         `scripts/install_optimized_pyenv_latest.sh` - be aware that this
+         script will take a long time to complete.
 
 * disable-local-dns
   * disables local dns on the target host
