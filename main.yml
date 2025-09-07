@@ -9,6 +9,7 @@
     - vars.yml
 
   roles:
+    - apt-sources-ubc
     - auto-update
     - base
     - aws
