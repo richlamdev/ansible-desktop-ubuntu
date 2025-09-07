@@ -9,8 +9,8 @@
     - vars.yml
 
   roles:
-    - auto-update
     - apt-sources-ubc
+    - auto-update
     - base
     - aws
     - brave
