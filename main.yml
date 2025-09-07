@@ -10,6 +10,7 @@
 
   roles:
     - auto-update
+    - apt-sources-ubc
     - base
     - aws
     - brave
