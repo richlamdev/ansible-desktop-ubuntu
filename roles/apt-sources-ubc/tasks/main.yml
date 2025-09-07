@@ -1,12 +1,10 @@
 ---
-# Step 1: Ensure the Ubuntu keyring is installed
 - name: Ensure ubuntu-keyring is installed
   ansible.builtin.apt:
     name: ubuntu-keyring
     state: present
     update_cache: yes
 
-# Step 2: Copy the dual-source ubuntu.sources file
 - name: Ensure codename aware and dual-source ubuntu.sources is in place
   ansible.builtin.template:
     src: ubuntu.sources.j2
@@ -16,7 +14,6 @@
     mode: '0644'
     backup: yes
 
-# Step 3: Refresh apt cache to pick up new sources
 - name: Update apt cache
   ansible.builtin.apt:
     update_cache: yes
