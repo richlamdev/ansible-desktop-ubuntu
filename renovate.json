@@ -2,7 +2,6 @@
   "extends": [
     "config:base",
     ":enablePreCommit",
-    ":enableGitHubActions",
     ":enableDocker"
   ],
   "packageRules": [
