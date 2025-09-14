@@ -2,5 +2,9 @@
   "extends": [
     "config:base",
     ":enablePreCommit"
-  ]
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Dependency Dashboard",
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.",
+  "dependencyDashboardFooter": "- [ ] Check this box to trigger a request for Renovate to run again on this repository"
 }
