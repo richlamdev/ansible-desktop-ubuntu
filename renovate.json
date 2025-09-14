@@ -1,14 +1,5 @@
 {
-  "extends": [
-    "config:base",
-    ":enablePreCommit",
-    ":enableDocker"
-  ],
-  "packageRules": [
-    {
-      "matchManagers": ["pre-commit"],
-      "groupName": "pre-commit hooks",
-      "automerge": true
-    }
-  ]
+  "pre-commit": {
+    "enabled": true
+  }
 }
