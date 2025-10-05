@@ -1,0 +1,7 @@
+- name: remind_private_config
+  debug:
+    msg: >
+      A new ~/.gitconfig-private-example has been created.
+      Please edit it with your real [user] name, email, signingkey,
+      and [gpg "ssh"] allowedSignersFile. Then copy or rename it
+      to ~/.gitconfig-private.
