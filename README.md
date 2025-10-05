@@ -84,6 +84,7 @@ Additional information for the following roles:
 
 * apt-sources-ubc
   * adds University of BC (UBC) as primary apt source
+  * default apt source is fallback apt source
   * this is a personal preference for me
   * find your fastest/closest mirror [here](https://launchpad.net/ubuntu/+archivemirrors)
 
@@ -201,6 +202,11 @@ requirements*
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
     (this is slightly different from the built in alt-c command provided with fzf)
   * refer to System Updates section for manual (script) updating of fzf
+  * adds modular gitconfig configuration to separate public vs sensitive git
+    information
+      * adds .gitconfig-private-example to $HOME
+        * change contents to include your user name and email and rename this
+          file to .gitconfig-private
 
 * vim
   * installs customization only, does not install vim

@@ -1,0 +1,36 @@
+[include] path = ~/.gitconfig-private
+
+[core]
+	editor = vim
+[color]
+	ui = auto
+[alias]
+	st = status
+	co = checkout
+	sw = switch
+	br = branch
+	df = diff
+	aa = add --all
+	ci = commit
+	cm = commit -m
+	pu = push
+	pl = pull
+	rv = remote -v
+	dv = difftool -t vimdiff -y
+	se = "!git rev-list --all | xargs git grep -F"
+	last = log -1 HEAD
+	unstage = reset HEAD --
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(\nbold blue)<%an>%Creset' --abbrev-commit
+	hist = log --graph --abbrev-commit --decorate --date=short --branches --remotes --tags --format=format:'%C(bold cyan)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)%an%C(reset) %C(bold yellow)%d%C(reset)'
+	amend = commit --amend
+	alias = "!git config --get-regexp '^alias\\.' | sed 's/^alias\\.//'"
+	gl = config --global -l
+
+[commit]
+	gpgSign = true
+[gpg]
+	format = ssh
+[diff]
+	tool = vimdiff
+[push]
+	autoSetupRemote = true

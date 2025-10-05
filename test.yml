@@ -4,6 +4,8 @@
   become: true
   become_method: sudo
   gather_facts: true
+  vars_files:
+    - vars.yml
 
   tasks:
     - name: host information
@@ -52,3 +54,10 @@
           ansible_user: {{ ansible_user }}
           ansible_user_id: {{ ansible_user_id }}
           ansible_user primary group (custom var): {{ user_primary_group }}
+
+    - name: variables from vars.yaml
+      debug:
+        msg: |
+          home_dir: {{ home_dir }}
+          local_user: {{ local_user }}
+          local_user_primary_group: {{ local_user_primary_group }}
