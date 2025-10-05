@@ -42,3 +42,35 @@
 - name: run fzf install
   shell: "/{{ home_dir }}/.fzf/install --key-bindings --completion --no-update-rc"
   when: fzf_installed.rc != 0
+
+- name: copy .gitconfig
+  copy:
+    src: gitconfig
+    dest: "{{ home_dir }}/.gitconfig"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
+    mode: '0644'
+
+- name: copy .gitconfig-public
+  copy:
+    src: gitconfig-public
+    dest: "{{ home_dir }}/.gitconfig-public"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
+    mode: '0644'
+
+- name: check if .gitconfig-private exists
+  stat:
+    path: "{{ home_dir }}/.gitconfig-private"
+  register: private_config
+
+- name: copy .gitconfig-private-example if no private config exists
+  copy:
+    src: gitconfig-private-example
+    dest: "{{ home_dir }}/.gitconfig-private-example"
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
+    mode: '0644'
+    force: no
+  when: not private_config.stat.exists
+  notify: remind_private_config
