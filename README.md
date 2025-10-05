@@ -207,7 +207,6 @@ requirements*
       * adds .gitconfig-private-example to $HOME
         * change contents to include your user name and email and rename this
           file to .gitconfig-private
-      * adds .gitconfig-public to $HOME
 
 * vim
   * installs customization only, does not install vim
