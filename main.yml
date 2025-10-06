@@ -9,28 +9,28 @@
     - vars.yml
 
   roles:
-    - apt-sources-ubc
-    - auto-update
-    - base
-    - aws
-    - brave
-    - chrome
-    - dev-tools
-    # - docker-cli-only
-    - docker-desktop-dependency
-    - gh_cli
-    - hashicorp
-    - keepassxc
-    - kubectl
-    - microsoft
-    - mullvad
-    - opera
-    - signal-desktop
-    - sublime-text
-    - trivy
-    - role: vim
-      become: false
-    - role: env
-      become: false
+    # - apt-sources-ubc
+    # - base
+    # - aws
+    # - brave
+    # - chrome
+    # - dev-tools
+    # # - docker-cli-only
+    # - docker-desktop-dependency
+    # - gh_cli
+    # - hashicorp
+    # - keepassxc
+    # - kubectl
+    # - microsoft
+    # - mullvad
+    # - opera
+    # - signal-desktop
+    # - sublime-text
+    # - trivy
+    - unattended-upgrade-override
+    # - role: vim
+    #   become: false
+    # - role: env
+    #   become: false
     # - disable-local-dns
     # - yubico

@@ -1,0 +1,36 @@
+// Override default unattended-upgrades to update ALL packages from ALL repos
+// Place this file at: /etc/apt/apt.conf.d/51unattended-upgrades-override
+// This makes unattended-upgrades behave like: apt update && apt dist-upgrade -y
+
+// Update packages from ALL origins (including PPAs, Google Chrome, Docker, etc.)
+Unattended-Upgrade::Origins-Pattern {
+    "origin=*";
+};
+
+Unattended-Upgrade::Allow-New-Dependencies "true";
+
+// Allow installing new dependencies when upgrading packages
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+
+// Automatically remove unused kernel packages
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+
+// Automatically reboot if required (set to "false" if you want manual reboots)
+Unattended-Upgrade::Automatic-Reboot "false";
+
+// If automatic reboot is enabled, reboot at a specific time (2am)
+Unattended-Upgrade::Automatic-Reboot-Time "02:00";
+
+// Enable verbose logging
+Unattended-Upgrade::Verbose "true";
+
+// Send email reports on errors (configure mail system separately)
+// Unattended-Upgrade::Mail "root";
+// Unattended-Upgrade::MailReport "on-change";
+
+// Keep debs in cache after installation (useful for rollback)
+Unattended-Upgrade::Keep-Debs-After-Install "false";
+
+# vim: set filetype=aptconf :
