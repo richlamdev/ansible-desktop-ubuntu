@@ -66,6 +66,10 @@ commenting/uncommenting roles in main.yml at the root level of the repo.
 `ansible-playbook main.yml -bKu <username> --private-key ~/.ssh/<ssh-key>`
   * enter SUDO password. (assumes user is a member of the sudo user group)
 
+To run the playbook via local connection, use the following command:\
+`ansible-playbook main.yml -K -c local`
+  * enter SUDO password. (assumes user is a member of the sudo user group)
+
 To run the playbook using SSH password authentication, use the following
 command:\
 `ansible-playbook main.yml -bkKu <username>`

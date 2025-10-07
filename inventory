@@ -6,11 +6,5 @@ local
 
 [multi:vars]
 ansible_python_interpreter=/usr/bin/python3
-#local_username="{{ ansible_env.SUDO_USER }}"
-
-# set privilege escalation via main.yml in root of repository
-#ansible_become=True
-#ansible_become_method=sudo
-#ansible_become_user=root
 
 # vim: set filetype=dosini :
