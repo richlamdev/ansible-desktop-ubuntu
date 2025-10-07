@@ -51,7 +51,6 @@
           ansible_env['SHELL']: {{ ansible_env['SHELL'] }}
           ansible_env['PWD']: {{ ansible_env['PWD'] }}
           ansible_env['HOME']: {{ ansible_env['HOME'] }}
-          ansible_user: {{ ansible_user }}
           ansible_user_id: {{ ansible_user_id }}
           ansible_user primary group (custom var): {{ user_primary_group }}
 
