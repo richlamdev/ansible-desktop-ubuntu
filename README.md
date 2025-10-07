@@ -94,11 +94,17 @@ Additional information for the following roles:
   * add cron to run snap update daily
   * technically there are built-in methods to run apt and snap update daily
     (unattended-upgrades), however, none of those methods seem to work.
+    * see below testing of role unattended-upgrade-override
     This primitive implementation achieves a similar effect.
   * This role is for any desktop/laptop that operates 24/7.
   * There is a basic script (check_reboot.sh) to check if a reboot is required,
     which is scheduled to run daily at 0400hrs.(checks for presence of
     /var/run/reboot-required)
+
+* unattended-upgrade-override
+  * attempt to make unattended-upgrades work similar to
+    `sudo apt update && sudo apt dist-upgrade -y`
+  * not fully tested; once confirmed auto-update will be deleted
 
 * aws
   * installs [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
