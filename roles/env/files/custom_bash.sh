@@ -14,6 +14,9 @@ alias ....='cd ../../..'
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias ipa='ip -4 a | awk '\''BEGIN {print ""} /^[0-9]+:/ {iface=$2; sub(":", "", iface); print "\033[1;33m" iface "\033[0m"} /inet / {split($2, ip, "/"); printf "  \033[1;36m%-15s\033[0m\n", ip[1]} END {print ""}'\'
 alias update='sudo apt update && sudo apt dist-upgrade -y && sudo snap refresh && sudo apt autoremove -y && sudo apt clean'
+alias check-apt-update='sudo apt update && apt list --upgradeable'
+alias check-unattended='sudo apt update && sudo unattended-upgrade --dry-run'
+alias check-snap='sudo snap refresh --list'
 alias g='git'
 
 # google search from the command line
