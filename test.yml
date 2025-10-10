@@ -53,6 +53,7 @@
           ansible_env['HOME']: {{ ansible_env['HOME'] }}
           ansible_user_id: {{ ansible_user_id }}
           ansible_user primary group (custom var): {{ user_primary_group }}
+          ansible_lsb['codename']: {{ ansible_lsb.codename }}
 
     - name: variables from vars.yaml
       debug:
