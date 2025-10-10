@@ -18,6 +18,7 @@
     # - docker-cli-only
     - docker-desktop-dependency
     - gh_cli
+    - git
     - hashicorp
     - keepassxc
     - kubectl
