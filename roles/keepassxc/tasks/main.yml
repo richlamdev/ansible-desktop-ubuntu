@@ -9,7 +9,7 @@
 
 - name: add keepassxc repo
   apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/keepassxc_master_signing_key.asc] https://ppa.launchpadcontent.net/phoerious/keepassxc/ubuntu jammy main"
+    repo: "deb [signed-by=/usr/share/keyrings/keepassxc_master_signing_key.asc] https://ppa.launchpadcontent.net/phoerious/keepassxc/ubuntu noble main"
     filename: keepassxc
     update_cache: true
     state: present
