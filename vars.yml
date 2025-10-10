@@ -1,26 +1,13 @@
 # vars.yml
-home_dir: "{{ ansible_env['PWD'] }}"
-local_user: "{{ ansible_env['SUDO_USER'] }}"
 
-# Use a fact gathering approach here to avoid redundancy
-local_user_primary_group: "{{ lookup('pipe', 'id -gn ' + ansible_env.SUDO_USER | default(ansible_user_id)) }}"
+# Determine the effective user to use (original sudo user if present, else the current ansible user, else ssh user)
+local_user: >-
+  {{ ansible_env.SUDO_USER
+     | default(ansible_user_id)
+     | default(ansible_ssh_user) }}
 
-### For future reference. Previously in main.yml ###
+# Determine the home directory of that user
+home_dir: "{{ lookup('pipe', 'eval echo ~' + local_user) }}"
 
-# pre_tasks:
-# - name: Set home directory fact
-#   set_fact:
-#     home_dir: "{{ ansible_env['PWD'] }}"
-
-# - name: Set local user fact
-#   set_fact:
-#     local_user: "{{ ansible_user }}"
-
-# - name: Get user's primary group name
-#   command: "id -gn {{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
-#   register: global_primary_group
-#   changed_when: false
-
-# - name: Set user's primary group fact
-#   set_fact:
-#     local_user_primary_group: "{{ global_primary_group.stdout }}"
+# Determine the primary group of that user
+local_user_primary_group: "{{ lookup('pipe', 'id -gn ' + local_user) }}"
