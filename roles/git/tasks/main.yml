@@ -1,0 +1,27 @@
+---
+- name: remove and purge git package
+  ansible.builtin.apt:
+    name: git
+    state: absent
+    purge: true
+    autoremove: true
+
+# Use the fingerprint and matching key from: https://launchpad.net/~git-core/+archive/ubuntu/ppa
+- name: install git signing key
+  get_url:
+    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xe363c90f8f1b6217"
+    dest: /usr/share/keyrings/git-archive-keyring.asc
+    mode: 0644
+    force: false
+
+- name: add git repo
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/git-archive-keyring.asc] https://ppa.launchpadcontent.net/git-core/ppa/ubuntu noble main"
+    filename: git
+    update_cache: true
+    state: present
+
+- name: install git package
+  apt:
+    name: git
+    state: latest
