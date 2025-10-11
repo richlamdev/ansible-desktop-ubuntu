@@ -1,4 +1,5 @@
 ---
+# https://launchpad.net/~git-core/+archive/ubuntu/ppa
 - name: check if git keyring exists
   stat:
     path: /usr/share/keyrings/git-archive-keyring.asc
@@ -14,7 +15,7 @@
 
 - name: add git repo
   apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/git-archive-keyring.asc] https://ppa.launchpadcontent.net/git-core/ppa/ubuntu noble main"
+    repo: "deb [signed-by=/usr/share/keyrings/git-archive-keyring.asc] https://ppa.launchpadcontent.net/git-core/ppa/ubuntu {{ ansible_lsb['codename'] }} main"
     filename: git
     state: present
     update_cache: yes

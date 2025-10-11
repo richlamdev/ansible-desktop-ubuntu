@@ -1,4 +1,5 @@
 ---
+# https://mullvad.net/en/download/vpn/linux
 - name: Add Mullvad apt repository key
   get_url:
     url: https://repository.mullvad.net/deb/mullvad-keyring.asc
@@ -8,7 +9,7 @@
 
 - name: Add Mullvad repo
   apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=amd64] https://repository.mullvad.net/deb/stable {{ ansible_lsb.codename }} main"
+    repo: "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=amd64] https://repository.mullvad.net/deb/stable {{ ansible_lsb['codename'] }} main"
     filename: mullvad-browser
     state: present
     update_cache: true

@@ -1,10 +1,4 @@
 ---
-#- name: Add Vivaldi apt key
-#  apt_key:
-#    url: https://repo.vivaldi.com/archive/linux_signing_key.pub
-#    id: CB63144F1BA31BC39E2779A8FEB6023DC27AA466
-#    state: present
-
 - name: Add Vivaldi apt key
   get_url:
     url: https://repo.vivaldi.com/archive/linux_signing_key.pub
