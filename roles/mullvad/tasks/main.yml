@@ -1,4 +1,5 @@
 ---
+# https://mullvad.net/en/download/vpn/linux
 - name: Add Mullvad apt repository key
   get_url:
     url: https://repository.mullvad.net/deb/mullvad-keyring.asc

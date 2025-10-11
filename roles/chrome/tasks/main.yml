@@ -1,7 +1,8 @@
 ---
+# https://www.google.com/linuxrepositories/
 - name: Add Chrome apt repository key
   get_url:
-    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    url: https://dl.google.com/linux/linux_signing_key.pub
     dest: /usr/share/keyrings/googlechrome-keyring.asc
     mode: "0644"
     force: false
