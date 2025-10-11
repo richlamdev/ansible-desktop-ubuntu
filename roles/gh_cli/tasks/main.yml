@@ -1,4 +1,5 @@
 ---
+# https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian
 - name: add gh cli signing key
   get_url:
     url: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"

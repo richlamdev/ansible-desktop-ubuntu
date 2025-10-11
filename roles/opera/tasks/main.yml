@@ -1,4 +1,5 @@
 ---
+# https://deb.opera.com/manual.html
 - name: add opera apt key
   get_url:
     url: https://deb.opera.com/archive.key
