@@ -15,6 +15,7 @@
     update_cache: yes
   when: microsoft_key_result.changed
 
+# https://code.visualstudio.com/docs/setup/linux
 - name: add Microsoft VS Code repository
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/code stable main"

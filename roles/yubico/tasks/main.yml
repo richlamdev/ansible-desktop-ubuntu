@@ -1,4 +1,6 @@
 ---
+# https://support.yubico.com/hc/en-us/articles/360016649039-Installing-Yubico-Software-on-Linux
+# todo: add signing key to ensure it works properly
 - name: Add Yubico repo
   apt_repository:
     repo: ppa:yubico/stable

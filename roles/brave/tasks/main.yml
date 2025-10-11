@@ -1,19 +1,20 @@
 ---
-- name: Add Brave apt repository key
+# https://brave.com/linux/
+- name: add Brave apt repository key
   get_url:
     url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
     dest: /usr/share/keyrings/brave-browser-archive-keyrings.gpg
     mode: 0644
     force: true
 
-- name: Add Brave apt repository
+- name: add Brave apt repository
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/brave-browser-archive-keyrings.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
     filename: brave-browser
     state: present
     update_cache: True
 
-- name: Install Brave from repository
+- name: install Brave from repository
   apt:
     name: brave-browser
     state: latest

@@ -1,4 +1,5 @@
 ---
+# https://signal.org/download/linux/
 - name: install signal-desktop dependencies
   apt:
     name: "{{ signal_desktop_apt_dependencies }}"
@@ -11,6 +12,7 @@
     mode: 0644
     force: true
 
+# xenial is the only available version/codename as of OCT2025
 - name: add signal repo
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.asc] https://updates.signal.org/desktop/apt xenial main"

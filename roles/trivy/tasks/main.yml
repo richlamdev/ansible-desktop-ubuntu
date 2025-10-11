@@ -1,4 +1,5 @@
 ---
+# https://trivy.dev/v0.67/getting-started/installation/
 - name: ensure Trivy dependencies are installed
   apt:
     state: present
@@ -15,7 +16,7 @@
 
 - name: add Trivy repo
   apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb jammy main"
+    repo: "deb [signed-by=/usr/share/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb {{ ansible_lsb['codename'] }} main"
     filename: trivy
     state: present
     update_cache: true
