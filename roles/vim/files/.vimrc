@@ -198,7 +198,7 @@ function! ClearALEHighlights()
 endfunction
 
 " clear ALE highlights and search results
-nnoremap <silent> <leader>ca :call ClearALEHighlights()<CR>:noh<CR>
+nnoremap <silent> <leader>ca :call ClearALEHighlights()<CR>:noh<CR>:redraw!<CR>
 " }}}
 
 " indentLine {{{
@@ -273,8 +273,6 @@ let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
                       \ 'syntax': 'default', 'ext': '.wiki',
                       \ 'links_space_char': '-'}]
 let g:vimwiki_global_ext = 0
-
-
 
 " disable tab for vimwiki filetypes, to allow autocompletion via codeium
 autocmd filetype vimwiki silent! iunmap <buffer> <Tab>
