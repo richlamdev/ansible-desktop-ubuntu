@@ -9,6 +9,7 @@
   loop:
     - 21auto-upgrades-autoclean
     - 51unattended-upgrades-override
+    - 52unattended-upgrades-reboot
 
 - name: Ensure systemd override directory exists
   ansible.builtin.file:

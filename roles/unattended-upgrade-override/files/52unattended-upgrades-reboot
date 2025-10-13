@@ -1,0 +1,14 @@
+// Core settings
+Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-Time "04:00";
+Unattended-Upgrade::Automatic-Reboot-WithUsers "false";
+
+// Optional: Send email notification before rebooting
+// Unattended-Upgrade::Mail "root";
+// Unattended-Upgrade::MailReport "only-on-error";
+
+// Optional: Skip rebooting on specific days (not commonly used)
+// Unattended-Upgrade::Automatic-Reboot-Days { "Mon"; "Tue"; "Wed"; "Thu"; "Fri"; };
+
+// Optional: Install updates during shutdown instead of scheduled time
+// Unattended-Upgrade::InstallOnShutdown "false";
