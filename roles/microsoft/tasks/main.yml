@@ -1,28 +1,60 @@
 ---
-- name: install Microsoft Linux signing key
+- name: download Microsoft Linux signing key (ASCII format)
   get_url:
     url: "https://packages.microsoft.com/keys/microsoft.asc"
-    dest: /usr/share/keyrings/microsoft.asc
-    mode: 0644
-    force: no
-  register: microsoft_key_result
+    dest: /tmp/microsoft.asc
+    mode: '0644'
+    force: yes
 
-- name: add Microsoft Edge repository
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/edge stable main"
-    filename: microsoft-edge
-    state: present
-    update_cache: yes
-  when: microsoft_key_result.changed
+- name: convert Microsoft key to GPG binary format
+  shell: |
+    gpg --dearmor < /tmp/microsoft.asc > /usr/share/keyrings/microsoft.gpg
+    chmod 644 /usr/share/keyrings/microsoft.gpg
+  args:
+    creates: /usr/share/keyrings/microsoft.gpg
+
+- name: remove temporary ASCII key file
+  file:
+    path: /tmp/microsoft.asc
+    state: absent
+
+- name: remove old Microsoft key and repo files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /usr/share/keyrings/microsoft.asc
+    - /etc/apt/sources.list.d/microsoft-edge.list
+    - /etc/apt/sources.list.d/vscode.list
+
+- name: configure Microsoft Edge repository (.sources format)
+  copy:
+    dest: /etc/apt/sources.list.d/microsoft-edge.sources
+    mode: '0644'
+    content: |
+      Types: deb
+      URIs: https://packages.microsoft.com/repos/edge
+      Suites: stable
+      Components: main
+      Architectures: amd64
+      Signed-By: /usr/share/keyrings/microsoft.gpg
 
 # https://code.visualstudio.com/docs/setup/linux
-- name: add Microsoft VS Code repository
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
-    filename: vscode
-    state: present
+- name: configure Microsoft VS Code repository (.sources format)
+  copy:
+    dest: /etc/apt/sources.list.d/vscode.sources
+    mode: '0644'
+    content: |
+      Types: deb
+      URIs: https://packages.microsoft.com/repos/code
+      Suites: stable
+      Components: main
+      Architectures: amd64
+      Signed-By: /usr/share/keyrings/microsoft.gpg
+
+- name: update apt cache
+  apt:
     update_cache: yes
-  when: microsoft_key_result.changed
 
 - name: install Microsoft Edge and VS Code from repository
   apt:
