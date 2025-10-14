@@ -26,8 +26,9 @@
 - name: install fzf
   git:
     repo: "https://github.com/junegunn/fzf.git"
-    dest: "/{{ home_dir }}/.fzf"
+    dest: "{{ home_dir }}/.fzf"
     depth: "1"
+    version: "master"
 
 - name: check if fzf install script has been executed
   shell: "/{{ home_dir }}/.fzf/bin/fzf --version"
