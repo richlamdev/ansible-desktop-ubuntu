@@ -1,4 +1,6 @@
 #!/bin/bash
+# macOS-compatible: use sed instead of grep -Po
+# alternatively use brew to install and manage fzf
 set -e
 
 # --- Optional colours ---
@@ -13,22 +15,21 @@ else
   NC="\033[0m"
 fi
 
-# --- Step 1: Get current fzf version ---
+# --- Get current fzf version ---
 echo -e "${CYAN}Current fzf version:${NC}"
 CURRENT_VERSION=""
 if command -v fzf >/dev/null 2>&1; then
   CURRENT_VERSION_FULL=$(fzf --version)
   echo "$CURRENT_VERSION_FULL"
   # Extract version number (e.g., "0.56.3 (brew)" -> "0.56.3")
-  CURRENT_VERSION=$(echo "$CURRENT_VERSION_FULL" | grep -Po '^[0-9]+\.[0-9]+\.[0-9]+')
+  CURRENT_VERSION=$(echo "$CURRENT_VERSION_FULL" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
 else
   echo -e "${YELLOW}fzf not currently installed.${NC}"
 fi
 echo
 
-# --- Step 2: Fetch latest release via GitHub API ---
+# --- Fetch latest release via GitHub API ---
 echo -e "${GREEN}Fetching latest fzf release...${NC}"
-
 API_URL="https://api.github.com/repos/junegunn/fzf/releases/latest"
 
 if command -v jq >/dev/null 2>&1; then
@@ -36,9 +37,9 @@ if command -v jq >/dev/null 2>&1; then
   RELEASE_DATA=$(curl -Ls "$API_URL")
   LATEST_VERSION=$(echo "$RELEASE_DATA" | jq -r '.tag_name' | sed 's/^v//')
 else
-  # Fallback: parse JSON with grep/sed
+  # Fallback: parse JSON with sed (macOS-compatible)
   RELEASE_DATA=$(curl -Ls "$API_URL")
-  LATEST_VERSION=$(echo "$RELEASE_DATA" | grep -Po '"tag_name":\s*"\K[^"]+' | sed 's/^v//')
+  LATEST_VERSION=$(echo "$RELEASE_DATA" | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"v\{0,1\}\([^"]*\)".*/\1/p' | head -n 1)
 fi
 
 if [ -z "$LATEST_VERSION" ]; then
@@ -49,7 +50,7 @@ fi
 echo -e "${CYAN}Latest stable version:${NC} ${LATEST_VERSION}"
 echo
 
-# --- Step 3: Compare versions ---
+# --- Compare versions ---
 if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
   echo -e "${GREEN}You already have the latest version (${LATEST_VERSION}) installed!${NC}"
   echo -e "${YELLOW}No update needed.${NC}"
@@ -64,7 +65,7 @@ else
 fi
 echo
 
-# --- Step 4: Install/Upgrade fzf ---
+# --- Install/Upgrade fzf ---
 INSTALL_DIR="$HOME/.fzf"
 
 # Remove existing installation if it exists
@@ -81,7 +82,7 @@ git clone --depth 1 --branch "v${LATEST_VERSION}" https://github.com/junegunn/fz
 echo -e "${GREEN}Running fzf installation script...${NC}"
 "$INSTALL_DIR/install" --key-bindings --completion --no-update-rc
 
-# --- Step 5: Verify ---
+# --- Verify ---
 echo
 echo -e "${MAGENTA}fzf upgraded successfully!${NC}"
 echo
