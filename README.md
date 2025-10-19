@@ -217,10 +217,7 @@ requirements*
 
 * vim
   * installs customization only, does not install vim
-    * compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
-    * Note: Vim >9.0 is required for codeium plugin below, at the time of the
-    writing of this playbook, Vim 9.x was not available in the official Ubuntu
-    repos
+    * optional: compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
 
   * if codeium is not needed, disable codeium in the status line within .vimrc
     that is deployed with this role:
@@ -265,8 +262,11 @@ and convenience...
 Upgrade specific packages, not upraded via apt or snap:
 
 1. `execute scripts/aws_upgrade.sh` or `ansible-playbook main.yml --ask-become-pass -c local --tags aws`
-2. `execute scripts/fzf_upgrade.sh`
-   (alternatively delete the ~/.fzf folder and re-run ansible)
+2. `execute scripts/fzf_upgrade.sh` or `ansible-playbook main.yml --ask-become-pass -c local --tags fzf`
+  - aws and fzf roles have been tagged with upgrade, to simplify playbook, upgrade both with:
+    `ansible-playbook main.yml --ask-become-pass -c local --tags upgrade`
+    This will allow future roles that are not update with apt/snap/pipx to be updated via upgrade tag
+
 3. If Docker Desktop, is installed.  Start Docker Desktop, click "Settings",
    then "Software updates", then "Check for updates", then Download and install
    updated Docker Desktop.
@@ -277,11 +277,6 @@ Upgrade specific packages, not upraded via apt or snap:
 
 The majority of this playbook is idempotent.  Minimal use of Ansible shell or
 command is used.
-
-fzf is not idempotent(yet).
-While fzf could be installed and maintained via apt, I prefer to update fzf
-more frequently and therefore perform the upgrades manually (by script).
-Refer to above System Updates section for updates beyond package management.
 
 
 ## Scripts

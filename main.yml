@@ -10,8 +10,8 @@
 
   roles:
     - apt-sources-ubc
-    - aws
     - base
+    - aws
     - brave
     - chrome
     - dev-tools

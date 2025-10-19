@@ -2,7 +2,7 @@
 - name: Include SAM CLI tasks
   include_tasks: aws-sam-cli.yml
   # when: aws_manage_sam_cli | bool
-  tags: ['aws', 'sam_cli']
+  tags: ['aws', 'sam_cli', 'upgrade']
 
 - name: Display AWS SAM CLI uninstallation instructions
   debug:
@@ -11,12 +11,12 @@
       To uninstall AWS SAM CLI:
         sudo rm /usr/local/bin/sam
         sudo rm -rf /usr/local/aws-sam-cli
-  tags: ['aws', 'sam_cli']
+  tags: ['aws', 'sam_cli', 'upgrade']
 
 - name: Include AWS CLI tasks
   include_tasks: aws-cli.yml
   # when: aws_manage_aws_cli | bool
-  tags: ['aws', 'aws_cli']
+  tags: ['aws', 'aws_cli', 'upgrade']
 
 - name: Display AWS CLI uninstallation instructions
   debug:
@@ -25,8 +25,8 @@
       To uninstall AWS CLI:
         sudo rm /usr/local/bin/aws
         sudo rm -rf /usr/local/aws-cli
-  tags: ['aws', 'aws_cli']
+  tags: ['aws', 'aws_cli', 'upgrade']
 
 - name: Add acloudguru bash functions
   include_tasks: aws-acg.yml
-  tags: ['aws', 'aws_cli']
+  tags: ['aws', 'aws_cli', 'upgrade']
