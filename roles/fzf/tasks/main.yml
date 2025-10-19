@@ -60,3 +60,4 @@
           To uninstall fzf:
             rm -rf {{ home_dir }}/.fzf
   tags: ['fzf', 'upgrade']
+  become: false

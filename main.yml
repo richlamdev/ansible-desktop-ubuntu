@@ -18,6 +18,7 @@
     - dev-tools
     # - docker-cli-only
     - docker-desktop-dependency
+    - fzf
     - gh_cli
     - git
     - hashicorp
