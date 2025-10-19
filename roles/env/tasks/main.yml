@@ -1,48 +1,34 @@
 ---
-- name: install custom_bash.sh / git_bash_ps1.sh to home .bashrc.d directory
+- name: ensure .bashrc.d directory exists in user's home
+  file:
+    path: "{{ home_dir }}/.bashrc.d"
+    state: directory
+    owner: "{{ local_user }}"
+    group: "{{ local_user_primary_group }}"
+    mode: "0750"
+
+- name: install custom_bash.sh / git_bash_ps1.sh to {{ home_dir}}/.bashrc.d/
   copy:
     src: "{{ item }}"
-    dest: "/{{ home_dir }}/.bashrc.d/"
+    dest: "{{ home_dir }}/.bashrc.d/"
     owner: "{{ local_user }}"
     group: "{{ local_user_primary_group }}"
     mode: "0640"
   loop:
     - custom_bash.sh
-    - fzf_config.sh
     - git_bash_ps1.sh
     - pyenv.sh
 
-- name: deploy .bashrc / .dircolors to home directory
+- name: ensure .bashrc sources from {{ home_dir }}/.bashrc.d / .dircolors to home directory
   copy:
     src: "{{ item }}"
-    dest: "/{{ home_dir }}/"
+    dest: "{{ home_dir }}/"
     owner: "{{ local_user }}"
     group: "{{ local_user_primary_group }}"
     mode: "0640"
   loop:
     - .bashrc
     - .dircolors
-
-- name: install fzf
-  git:
-    repo: "https://github.com/junegunn/fzf.git"
-    dest: "{{ home_dir }}/.fzf"
-    depth: "1"
-    version: "master"
-
-- name: check if fzf install script has been executed
-  shell: "/{{ home_dir }}/.fzf/bin/fzf --version"
-  register: fzf_installed
-  failed_when: false
-  changed_when: false
-
-#- name: fzf_installed
-  #debug:
-    #msg: "{{ fzf_installed }}"
-
-- name: run fzf install
-  shell: "/{{ home_dir }}/.fzf/install --key-bindings --completion --no-update-rc"
-  when: fzf_installed.rc != 0
 
 - name: copy .gitconfig
   copy:

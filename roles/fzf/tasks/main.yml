@@ -1,0 +1,63 @@
+---
+- block:
+    - name: ensure .bashrc.d directory exists in user's home
+      file:
+        path: "{{ home_dir }}/.bashrc.d"
+        state: directory
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0750"
+
+    - name: ensure .bashrc sources scripts from .bashrc.d
+      ansible.builtin.blockinfile:
+        path: "/{{ home_dir }}/.bashrc"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK: source .bashrc.d scripts"
+        block: |
+          # customize prompt
+          for file in /home/$USER/.bashrc.d/*.sh; do
+            [ -r "$file" ] && source "$file"
+          done
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0640"
+
+    - name: install fzf_config.sh to {{ home_dir}}/.bashrc.d/
+      copy:
+        src: "{{ item }}"
+        dest: "{{ home_dir }}/.bashrc.d/"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0640"
+      loop:
+        - fzf_config.sh
+
+    - name: install fzf
+      git:
+        repo: "https://github.com/junegunn/fzf.git"
+        dest: "{{ home_dir }}/.fzf"
+        depth: "1"
+        version: "master"
+
+    - name: check if fzf install script has been executed
+      shell: "{{ home_dir }}/.fzf/bin/fzf --version"
+      register: fzf_installed
+      failed_when: false
+      changed_when: false
+
+    - name: display fzf version if installed
+      debug:
+        msg: "fzf version installed: {{ fzf_installed.stdout }}"
+      when: fzf_installed.rc == 0
+
+    - name: run fzf install
+      shell: "{{ home_dir }}/.fzf/install --key-bindings --completion --no-update-rc"
+      when: fzf_installed.rc != 0
+
+    - name: display fzf uninstallation instructions
+      debug:
+        msg: |
+          === Uninstallation Instructions ===
+          To uninstall fzf:
+            rm -rf {{ home_dir }}/.fzf
+  tags: ['fzf', 'upgrade']
+  become: false
