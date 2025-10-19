@@ -1,26 +1,28 @@
 ---
 # https://signal.org/download/linux/
-- name: install signal-desktop dependencies
-  apt:
-    name: "{{ signal_desktop_apt_dependencies }}"
-    state: present
+- block:
+    - name: install signal-desktop dependencies
+      apt:
+        name: "{{ signal_desktop_apt_dependencies }}"
+        state: present
 
-- name: install signal gpg key
-  get_url:
-    url: "https://updates.signal.org/desktop/apt/keys.asc"
-    dest: /usr/share/keyrings/signal-desktop-keyring.asc
-    mode: 0644
-    force: true
+    - name: install signal gpg key
+      get_url:
+        url: "https://updates.signal.org/desktop/apt/keys.asc"
+        dest: /usr/share/keyrings/signal-desktop-keyring.asc
+        mode: 0644
+        force: true
 
-# xenial is the only available version/codename as of OCT2025
-- name: add signal repo
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.asc] https://updates.signal.org/desktop/apt xenial main"
-    filename: signal-desktop
-    state: present
-    update_cache: true
+    # xenial is the only available version/codename as of OCT2025
+    - name: add signal repo
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.asc] https://updates.signal.org/desktop/apt xenial main"
+        filename: signal-desktop
+        state: present
+        update_cache: true
 
-- name: install signal desktop
-  apt:
-    name: signal-desktop
-    state: present
+    - name: install signal desktop
+      apt:
+        name: signal-desktop
+        state: present
+  tags: ['signal-desktop']
