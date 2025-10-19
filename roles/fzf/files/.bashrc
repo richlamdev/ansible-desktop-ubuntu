@@ -115,9 +115,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# BEGIN ANSIBLE MANAGED BLOCK: source .bashrc.d scripts
 # customize prompt
 for file in /home/$USER/.bashrc.d/*.sh; do
   [ -r "$file" ] && source "$file"
 done
-# END ANSIBLE MANAGED BLOCK: source .bashrc.d scripts
