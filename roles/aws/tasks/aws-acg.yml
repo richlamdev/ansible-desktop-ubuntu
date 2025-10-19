@@ -9,7 +9,7 @@
 - name: install sandbox-creds.sh / sandbox-creds-delete.sh to  {{ home_dir }}.local/bin/{{ local_user }}
   copy:
     src: "{{ item }}"
-    dest: "/{{ home_dir }}/.local/bin/{{ local_user }}"
+    dest: "{{ home_dir }}/.local/bin/{{ local_user }}"
     owner: "{{ local_user }}"
     group: "{{ local_user_primary_group }}"
     mode: "0640"

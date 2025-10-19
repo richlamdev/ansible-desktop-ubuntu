@@ -1,9 +1,32 @@
 ---
-- name: install aws cli
-  import_tasks: aws-cli.yml
+- name: Include SAM CLI tasks
+  include_tasks: aws-sam-cli.yml
+  # when: aws_manage_sam_cli | bool
+  tags: ['sam_cli']
 
-- name: install aws sam cli
-  import_tasks: aws-sam-cli.yml
+- name: Display AWS SAM CLI uninstallation instructions
+  debug:
+    msg: |
+      === Uninstallation Instructions ===
+      To uninstall AWS SAM CLI:
+        sudo rm /usr/local/bin/sam
+        sudo rm -rf /usr/local/aws-sam-cli
+  tags: ['sam_cli']
 
-- name: install aws acg scripts
-  import_tasks: aws-acg.yml
+- name: Include AWS CLI tasks
+  include_tasks: aws-cli.yml
+  # when: aws_manage_aws_cli | bool
+  tags: ['aws_cli']
+
+- name: Display AWS CLI uninstallation instructions
+  debug:
+    msg: |
+      === Uninstallation Instructions ===
+      To uninstall AWS CLI:
+        sudo rm /usr/local/bin/aws
+        sudo rm -rf /usr/local/aws-cli
+  tags: ['aws_cli']
+
+- name: Add acloudguru bash functions
+  include_tasks: aws-acg.yml
+  tags: ['aws_cli']

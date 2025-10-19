@@ -1,56 +1,97 @@
 ---
-- name: Check if AWS CLI is installed
+- name: "AWS CLI | Check if installed"
   command: aws --version
-  register: aws_cli_installed
+  register: aws_current_version_raw
+  changed_when: false
   failed_when: false
-  changed_when: false
-  ignore_errors: true
 
-- name: Display current AWS CLI version (if installed)
+- name: "AWS CLI | Extract current version"
+  set_fact:
+    aws_current_version: "{{ aws_current_version_raw.stdout | regex_search('aws-cli/([0-9]+\\.[0-9]+\\.[0-9]+)', '\\1') | first }}"
+  when:
+    - aws_current_version_raw.rc == 0
+    - aws_current_version_raw.stdout is defined
+
+- name: "AWS CLI | Display current version"
   debug:
-    msg: "Current AWS CLI version: {{ aws_cli_installed.stdout }}"
-  when: aws_cli_installed.rc == 0
+    msg: "Current AWS CLI version: {{ aws_current_version | default('Not installed') }}"
 
-- name: Download the latest AWS CLI
-  get_url:
-    url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-    dest: "/tmp/awscliv2.zip"
-    mode: '0644'
+- name: "AWS CLI | Fetch latest v2 tags from GitHub"
+  uri:
+    url: "https://api.github.com/repos/aws/aws-cli/tags"
+    return_content: yes
+  register: aws_github_tags
   changed_when: false
 
-- name: Unzip AWS CLI installer
-  ansible.builtin.unarchive:
-    src: "/tmp/awscliv2.zip"
-    dest: "/tmp/"
-    remote_src: yes
-  changed_when: false
+- name: "AWS CLI | Extract latest v2 version"
+  set_fact:
+    aws_latest_version: "{{ aws_github_tags.json | map(attribute='name') | select('match', '^2\\..*') | first }}"
 
-- name: Update AWS CLI if already installed
-  command: "/tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update"
-  when: aws_cli_installed.rc == 0
-  changed_when: false
-
-- name: Install AWS CLI if not installed
-  command: "/tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli"
-  when: aws_cli_installed.rc != 0
-
-- name: Remove temporary files
-  file:
-    path: "/tmp/awscliv2.zip"
-    state: absent
-  changed_when: false
-
-- name: Remove AWS CLI installation directory
-  file:
-    path: "/tmp/aws/"
-    state: absent
-  changed_when: false
-
-- name: Display installed or updated AWS CLI version
-  command: aws --version
-  register: aws_cli_version
-  changed_when: false
-
-- name: Show AWS CLI version
+- name: "AWS CLI | Display latest version"
   debug:
-    msg: "AWS CLI installation or update completed. Current version: {{ aws_cli_version.stdout }}"
+    msg: "Latest AWS CLI v2 version: {{ aws_latest_version }}"
+  when: aws_latest_version is defined
+
+- name: "AWS CLI | Check if update needed"
+  set_fact:
+    aws_update_needed: "{{ aws_current_version | default('') != aws_latest_version }}"
+  when: aws_latest_version is defined
+
+- name: "AWS CLI | Display update status"
+  debug:
+    msg: "{{ 'Update needed: ' + (aws_current_version | default('none')) + ' -> ' + aws_latest_version if aws_update_needed else 'Already up-to-date (' + aws_latest_version + ')' }}"
+  when: aws_latest_version is defined
+
+- name: "AWS CLI | Download and install"
+  when:
+    - aws_latest_version is defined
+    - aws_update_needed
+  block:
+    - name: "AWS CLI | Create temp directory"
+      tempfile:
+        state: directory
+        suffix: aws_cli
+      register: aws_temp_dir
+
+    - name: "AWS CLI | Download from official AWS endpoint"
+      get_url:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: "{{ aws_temp_dir.path }}/awscliv2.zip"
+        mode: '0644'
+
+    - name: "AWS CLI | Extract archive"
+      unarchive:
+        src: "{{ aws_temp_dir.path }}/awscliv2.zip"
+        dest: "{{ aws_temp_dir.path }}"
+        remote_src: yes
+
+    - name: "AWS CLI | Run installation script (update)"
+      command: "{{ aws_temp_dir.path }}/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update"
+      become: yes
+      when: aws_current_version is defined
+
+    - name: "AWS CLI | Run installation script (fresh install)"
+      command: "{{ aws_temp_dir.path }}/aws/install"
+      become: yes
+      when: aws_current_version is not defined
+
+    - name: "AWS CLI | Verify installation"
+      command: aws --version
+      register: aws_new_version
+      changed_when: false
+
+    - name: "AWS CLI | Display installed version"
+      debug:
+        msg: "✓ AWS CLI installed successfully: {{ aws_new_version.stdout }}"
+
+  always:
+    - name: "AWS CLI | Clean up temp directory"
+      file:
+        path: "{{ aws_temp_dir.path }}"
+        state: absent
+      when: aws_temp_dir.path is defined
+
+- name: "AWS CLI | Handle version fetch failure"
+  debug:
+    msg: "Failed to fetch AWS CLI version from GitHub. Skipping installation."
+  when: aws_latest_version is not defined

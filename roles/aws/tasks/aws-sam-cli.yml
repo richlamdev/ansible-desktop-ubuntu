@@ -1,63 +1,93 @@
 ---
-- name: Check if AWS SAM CLI is installed
+- name: "SAM CLI | Check if installed"
   command: sam --version
-  register: sam_cli_installed
+  register: sam_current_version_raw
+  changed_when: false
   failed_when: false
-  changed_when: false
-  ignore_errors: true
 
-- name: Display current AWS SAM CLI version (if installed)
+- name: "SAM CLI | Extract current version"
+  set_fact:
+    sam_current_version: "{{ sam_current_version_raw.stdout | regex_search('[0-9]+\\.[0-9]+\\.[0-9]+') }}"
+  when:
+    - sam_current_version_raw.rc == 0
+    - sam_current_version_raw.stdout is defined
+
+- name: "SAM CLI | Display current version"
   debug:
-    msg: "Current AWS SAM CLI version: {{ sam_cli_installed.stdout }}"
-  when: sam_cli_installed.rc == 0
+    msg: "Current SAM CLI version: {{ sam_current_version | default('Not installed') }}"
 
-- name: Download the latest AWS SAM CLI
-  get_url:
-    url: "https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip"
-    dest: "/tmp/aws-sam-cli-linux-x86_64.zip"
-    mode: '0644'
+- name: "SAM CLI | Fetch latest release from GitHub"
+  uri:
+    url: "https://api.github.com/repos/aws/aws-sam-cli/releases/latest"
+    return_content: yes
+  register: sam_github_release
   changed_when: false
 
-- name: Ensure AWS SAM CLI installation directory exists
-  file:
-    path: "/tmp/sam-installation/"
-    state: directory
-    mode: '0755'
-  changed_when: false
+- name: "SAM CLI | Extract latest version"
+  set_fact:
+    sam_latest_version: "{{ sam_github_release.json.tag_name | regex_replace('^v', '') }}"
 
-- name: Unzip AWS SAM CLI installer
-  ansible.builtin.unarchive:
-    src: "/tmp/aws-sam-cli-linux-x86_64.zip"
-    dest: "/tmp/sam-installation/"
-    remote_src: yes
-  changed_when: false
-
-- name: Update AWS SAM CLI if already installed
-  command: "/tmp/sam-installation/install --update"
-  when: sam_cli_installed.rc == 0
-  changed_when: false
-
-- name: Install AWS SAM CLI if not installed
-  command: "/tmp/sam-installation/install"
-  when: sam_cli_installed.rc != 0
-
-- name: Remove temporary files
-  file:
-    path: "/tmp/aws-sam-cli-linux-x86_64.zip"
-    state: absent
-  changed_when: false
-
-- name: Remove AWS SAM CLI installation directory
-  file:
-    path: "/tmp/sam-installation/"
-    state: absent
-  changed_when: false
-
-- name: Display installed or updated AWS SAM CLI version
-  command: sam --version
-  register: sam_cli_version
-  changed_when: false
-
-- name: Show AWS SAM CLI version
+- name: "SAM CLI | Display latest version"
   debug:
-    msg: "AWS SAM CLI installation or update completed. Current version: {{ sam_cli_version.stdout }}"
+    msg: "Latest SAM CLI version: {{ sam_latest_version }}"
+
+- name: "SAM CLI | Check if update needed"
+  set_fact:
+    sam_update_needed: "{{ sam_current_version | default('') != sam_latest_version }}"
+
+- name: "SAM CLI | Display update status"
+  debug:
+    msg: "{{ 'Update needed: ' + (sam_current_version | default('none')) + ' -> ' + sam_latest_version if sam_update_needed else 'Already up-to-date (' + sam_latest_version + ')' }}"
+
+- name: "SAM CLI | Download and install"
+  when: sam_update_needed
+  block:
+    - name: "SAM CLI | Create temp directory"
+      tempfile:
+        state: directory
+        suffix: sam_cli
+      register: sam_temp_dir
+
+    - name: "SAM CLI | Download from GitHub releases"
+      get_url:
+        url: "https://github.com/aws/aws-sam-cli/releases/download/v{{ sam_latest_version }}/aws-sam-cli-linux-x86_64.zip"
+        dest: "{{ sam_temp_dir.path }}/aws-sam-cli-linux-x86_64.zip"
+        mode: '0644'
+
+    - name: "SAM CLI | Create extraction directory"
+      file:
+        path: "{{ sam_temp_dir.path }}/sam-installation"
+        state: directory
+        mode: '0755'
+
+    - name: "SAM CLI | Extract archive"
+      unarchive:
+        src: "{{ sam_temp_dir.path }}/aws-sam-cli-linux-x86_64.zip"
+        dest: "{{ sam_temp_dir.path }}/sam-installation"
+        remote_src: yes
+
+    - name: "SAM CLI | Run installation script (update)"
+      command: "{{ sam_temp_dir.path }}/sam-installation/install --update"
+      become: yes
+      when: sam_current_version is defined
+
+    - name: "SAM CLI | Run installation script (fresh install)"
+      command: "{{ sam_temp_dir.path }}/sam-installation/install"
+      become: yes
+      when: sam_current_version is not defined
+
+    - name: "SAM CLI | Verify installation"
+      command: sam --version
+      register: sam_new_version
+      changed_when: false
+
+    - name: "SAM CLI | Display installed version"
+      debug:
+        msg: "✓ SAM CLI installed successfully: {{ sam_new_version.stdout }}"
+
+  always:
+    - name: "SAM CLI | Clean up temp directory"
+      file:
+        path: "{{ sam_temp_dir.path }}"
+        state: absent
+      when: sam_temp_dir.path is defined
