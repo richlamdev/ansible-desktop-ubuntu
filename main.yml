@@ -18,6 +18,7 @@
     - dev-tools
     # - docker-cli-only
     - docker-desktop-dependency
+    - env
     - fzf
     - gh_cli
     - git
@@ -33,7 +34,6 @@
     - unattended-upgrade-override
     - role: vim
       become: false
-    - role: env
-      become: false
+        #- env
     - disable-local-dns
     # - yubico

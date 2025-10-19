@@ -1,27 +1,29 @@
 ---
-- name: apt packages tasks
-  import_tasks: apt-packages.yml
+- block:
+    - name: apt packages tasks
+      import_tasks: apt-packages.yml
 
-- name: snap packages
-  import_tasks: snap.yml
+    - name: snap packages
+      import_tasks: snap.yml
 
-- name: ssh tasks
-  import_tasks: ssh.yml
+    - name: ssh tasks
+      import_tasks: ssh.yml
 
-- name: security tasks
-  import_tasks: security.yml
+    - name: security tasks
+      import_tasks: security.yml
 
-- name: optimize tasks
-  import_tasks: optimize.yml
+    - name: optimize tasks
+      import_tasks: optimize.yml
 
-- name: powersave tasks
-  import_tasks: powersave.yml
+    - name: powersave tasks
+      import_tasks: powersave.yml
 
-- name: keychron tasks
-  import_tasks: keychron.yml
+    - name: keychron tasks
+      import_tasks: keychron.yml
 
-- name: autostart tasks
-  import_tasks: autostart.yml
+    - name: autostart tasks
+      import_tasks: autostart.yml
 
-- name: configure ufw
-  import_tasks: ufw.yml
+    - name: configure ufw
+      import_tasks: ufw.yml
+  tags: ['base']

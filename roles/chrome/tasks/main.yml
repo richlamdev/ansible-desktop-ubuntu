@@ -1,20 +1,22 @@
 ---
 # https://www.google.com/linuxrepositories/
-- name: Add Chrome apt repository key
-  get_url:
-    url: https://dl.google.com/linux/linux_signing_key.pub
-    dest: /usr/share/keyrings/googlechrome-keyring.asc
-    mode: "0644"
-    force: false
+- block:
+    - name: Add Chrome apt repository key
+      get_url:
+        url: https://dl.google.com/linux/linux_signing_key.pub
+        dest: /usr/share/keyrings/googlechrome-keyring.asc
+        mode: "0644"
+        force: false
 
-- name: Add Google chrome repo
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-keyring.asc] http://dl.google.com/linux/chrome/deb/ stable main"
-    filename: google-chrome
-    state: present
-    update_cache: true
+    - name: Add Google chrome repo
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-keyring.asc] http://dl.google.com/linux/chrome/deb/ stable main"
+        filename: google-chrome
+        state: present
+        update_cache: true
 
-- name: Install Google chrome
-  apt:
-    name: "{{ chrome_package }}"
-    state: present
+    - name: Install Google chrome
+      apt:
+        name: "{{ chrome_package }}"
+        state: present
+  tags: ['chrome']
