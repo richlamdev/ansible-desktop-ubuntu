@@ -113,9 +113,6 @@ Additional information for the following roles:
 * aws
   * installs [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
     and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) via zip archive from aws
-  * this majority of this role ignores changes; it's not truly idempotent,
-    due to not using a built-in ansible module to handle installation
-  * refer to System Updates section for manual (script) updating
 
 * base
   * packages.yml - list of packages to install via apt
@@ -267,7 +264,7 @@ and convenience...
 
 Upgrade specific packages, not upraded via apt or snap:
 
-1. `execute scripts/aws_upgrade.sh`
+1. `execute scripts/aws_upgrade.sh` or `ansible-playbook main.yml --ask-become-pass -c local --tags aws`
 2. `execute scripts/fzf_upgrade.sh`
    (alternatively delete the ~/.fzf folder and re-run ansible)
 3. If Docker Desktop, is installed.  Start Docker Desktop, click "Settings",
@@ -281,7 +278,7 @@ Upgrade specific packages, not upraded via apt or snap:
 The majority of this playbook is idempotent.  Minimal use of Ansible shell or
 command is used.
 
-AWS CLI, AWS SAM CLI, and fzf are not idempotent.
+fzf is not idempotent(yet).
 While fzf could be installed and maintained via apt, I prefer to update fzf
 more frequently and therefore perform the upgrades manually (by script).
 Refer to above System Updates section for updates beyond package management.
