@@ -1,19 +1,21 @@
 ---
-- name: Ensure ubuntu-keyring is installed
-  ansible.builtin.apt:
-    name: ubuntu-keyring
-    state: present
-    update_cache: yes
+- block:
+    - name: Ensure ubuntu-keyring is installed
+      ansible.builtin.apt:
+        name: ubuntu-keyring
+        state: present
+        update_cache: yes
 
-- name: Ensure codename aware and dual-source ubuntu.sources is in place
-  ansible.builtin.template:
-    src: ubuntu.sources.j2
-    dest: /etc/apt/sources.list.d/ubuntu.sources
-    owner: root
-    group: root
-    mode: '0644'
-    backup: yes
+    - name: Ensure codename aware and dual-source ubuntu.sources is in place
+      ansible.builtin.template:
+        src: ubuntu.sources.j2
+        dest: /etc/apt/sources.list.d/ubuntu.sources
+        owner: root
+        group: root
+        mode: '0644'
+        backup: yes
 
-- name: Update apt cache
-  ansible.builtin.apt:
-    update_cache: yes
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+  tags: ['apt-sources-ubc']

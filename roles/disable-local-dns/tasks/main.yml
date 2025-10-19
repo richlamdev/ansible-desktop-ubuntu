@@ -1,81 +1,37 @@
 ---
-- name: add DNSStubListener=no to /etc/systemd/resolved.conf
-  lineinfile:
-    firstmatch: true
-    path: "/etc/systemd/resolved.conf"
-    insertafter: "EOF"
-    line: "DNSStubListener=no"
-    state: present
-  register: dns_default_status
+- block:
+    - name: add DNSStubListener=no to /etc/systemd/resolved.conf
+      lineinfile:
+        firstmatch: true
+        path: "/etc/systemd/resolved.conf"
+        insertafter: "EOF"
+        line: "DNSStubListener=no"
+        state: present
+      register: dns_default_status
 
-- name: print dns_default_status
-  debug:
-    var: dns_default_status.changed
+    - name: print dns_default_status
+      debug:
+        var: dns_default_status.changed
 
-- name: restart network manager
-  systemd:
-    name: NetworkManager.service
-    enabled: true
-    state: restarted
-  when: dns_default_status.changed
+    - name: restart network manager
+      systemd:
+        name: NetworkManager.service
+        enabled: true
+        state: restarted
+      when: dns_default_status.changed
 
-- name: restart systemd resolved
-  systemd:
-    name: systemd-resolved.service
-    enabled: true
-    state: restarted
-  when: dns_default_status.changed
+    - name: restart systemd resolved
+      systemd:
+        name: systemd-resolved.service
+        enabled: true
+        state: restarted
+      when: dns_default_status.changed
 
-- name: Ensure DNS resolution is functional before continuing
-  command: "dig example.com +short"
-  register: dns_check
-  retries: 10
-  delay: 3
-  until: dns_check.rc == 0
-  when: dns_default_status.changed
-
-# Remove comments below at later date, just in case I any of this...
-#
-# - name: add dns=default to /etc/NetworkManager/NetworkManager.conf
-#   lineinfile:
-#     firstmatch: true
-#     path: "/etc/NetworkManager/NetworkManager.conf"
-#     insertafter: '[main]'
-#     line: "dns=default"
-#   register: dns_default_status
-
-# - name: disable systemd-resolved
-#   systemd:
-#     name: systemd-resolved.service
-#     enabled: false
-#     state: stopped
-#   when: dns_default_status.changed
-
-# - name: Check if /etc/resolv.conf is a symbolic link or a static file
-#   stat:
-#     path: /etc/resolv.conf
-#   register: resolv_conf_info
-
-# - name: Print the type of /etc/resolv.conf
-#   debug:
-#     msg: "/etc/resolv.conf is {{ 'a symbolic link' if resolv_conf_info.stat.islnk else 'a static file' }}"
-
-# - name: Remove /etc/resolv.conf if it's a symbolic link
-#   file:
-#     path: /etc/resolv.conf
-#     state: absent
-#   when: resolv_conf_info.stat.islnk
-
-# - name: Pause 20 seconds, ensure proper restart of network manager or systemd-resolved
-#   pause:
-#     seconds: 20
-#   when:
-#     - resolv_conf_info.stat.islnk
-#     - ansible_distribution_version == "24.04"
-
-# for testing, to revert to default setting
-# edit /etc/NetworkManager/NetworkManager.conf and remove dns=default under [main]
-# sudo rm /etc/resolv.conf
-# sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
-# sudo systemctl start systemd-resolved
-# sudo systemctl enable systemd-resolved
+    - name: Ensure DNS resolution is functional before continuing
+      command: "dig example.com +short"
+      register: dns_check
+      retries: 10
+      delay: 3
+      until: dns_check.rc == 0
+      when: dns_default_status.changed
+  tags: ['disable-local-dns']

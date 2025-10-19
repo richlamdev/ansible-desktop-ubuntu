@@ -11,14 +11,14 @@
   roles:
     - apt-sources-ubc
     - base
-    - role: aws
-      tags: ['aws', 'upgrade']
+    - aws
     - brave
     - chrome
     - dev-tools
     # - docker-cli-only
     - docker-desktop-dependency
-    - fzf
+    - env        # executes as local user, not root
+    - fzf        # executes as local user, not root
     - gh_cli
     - git
     - hashicorp
@@ -31,9 +31,6 @@
     - sublime-text
     - trivy
     - unattended-upgrade-override
-    - role: vim
-      become: false
-    - role: env
-      become: false
+    - vim        # executes as local user, not root
     - disable-local-dns
     # - yubico

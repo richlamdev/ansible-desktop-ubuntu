@@ -1,27 +1,29 @@
 ---
 # https://trivy.dev/v0.67/getting-started/installation/
-- name: ensure Trivy dependencies are installed
-  apt:
-    state: present
-    pkg:
-      - apt-transport-https
-      - gnupg
+- block:
+    - name: ensure Trivy dependencies are installed
+      apt:
+        state: present
+        pkg:
+          - apt-transport-https
+          - gnupg
 
-- name: add Trivy apt repository key
-  get_url:
-    url: https://aquasecurity.github.io/trivy-repo/deb/public.key
-    dest: /usr/share/keyrings/trivy.asc
-    mode: "0644"
-    force: false
+    - name: add Trivy apt repository key
+      get_url:
+        url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+        dest: /usr/share/keyrings/trivy.asc
+        mode: "0644"
+        force: false
 
-- name: add Trivy repo
-  apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb {{ ansible_lsb['codename'] }} main"
-    filename: trivy
-    state: present
-    update_cache: true
+    - name: add Trivy repo
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/trivy.asc] https://aquasecurity.github.io/trivy-repo/deb {{ ansible_lsb['codename'] }} main"
+        filename: trivy
+        state: present
+        update_cache: true
 
-- name: install Trivy
-  apt:
-    name: trivy
-    state: present
+    - name: install Trivy
+      apt:
+        name: trivy
+        state: present
+  tags: ['trivy']

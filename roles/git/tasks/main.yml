@@ -1,27 +1,29 @@
 ---
 # https://launchpad.net/~git-core/+archive/ubuntu/ppa
-- name: check if git keyring exists
-  stat:
-    path: /usr/share/keyrings/git-archive-keyring.asc
-  register: git_key_stat
+- block:
+    - name: check if git keyring exists
+      stat:
+        path: /usr/share/keyrings/git-archive-keyring.asc
+      register: git_key_stat
 
-- name: install git signing key
-  get_url:
-    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xe363c90f8f1b6217"
-    dest: /usr/share/keyrings/git-archive-keyring.asc"
-    mode: 0644
-  register: git_key_download
-  when: not git_key_stat.stat.exists
+    - name: install git signing key
+      get_url:
+        url: "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xe363c90f8f1b6217"
+        dest: /usr/share/keyrings/git-archive-keyring.asc"
+        mode: 0644
+      register: git_key_download
+      when: not git_key_stat.stat.exists
 
-- name: add git repo
-  apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/git-archive-keyring.asc] https://ppa.launchpadcontent.net/git-core/ppa/ubuntu {{ ansible_lsb['codename'] }} main"
-    filename: git
-    state: present
-    update_cache: yes
-  when: git_key_stat.stat.exists or (git_key_download is defined and git_key_download.changed)
+    - name: add git repo
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/git-archive-keyring.asc] https://ppa.launchpadcontent.net/git-core/ppa/ubuntu {{ ansible_lsb['codename'] }} main"
+        filename: git
+        state: present
+        update_cache: yes
+      when: git_key_stat.stat.exists or (git_key_download is defined and git_key_download.changed)
 
-- name: install git package
-  apt:
-    name: git
-    state: latest
+    - name: install git package
+      apt:
+        name: git
+        state: latest
+  tags: ['git']

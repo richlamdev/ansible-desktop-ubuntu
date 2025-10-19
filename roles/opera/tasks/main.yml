@@ -1,20 +1,22 @@
 ---
 # https://deb.opera.com/manual.html
-- name: add opera apt key
-  get_url:
-    url: https://deb.opera.com/archive.key
-    dest: /usr/share/keyrings/opera-browser.asc
-    mode: 0644
-    force: true
+- block:
+    - name: add opera apt key
+      get_url:
+        url: https://deb.opera.com/archive.key
+        dest: /usr/share/keyrings/opera-browser.asc
+        mode: 0644
+        force: true
 
-- name: add opera apt repository
-  apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/opera-browser.asc] https://deb.opera.com/opera-stable/ stable non-free"
-    filename: opera-stable
-    state: present
-    update_cache: true
+    - name: add opera apt repository
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/opera-browser.asc] https://deb.opera.com/opera-stable/ stable non-free"
+        filename: opera-stable
+        state: present
+        update_cache: true
 
-- name: install opera from repository
-  apt:
-    name: opera-stable
-    state: latest
+    - name: install opera from repository
+      apt:
+        name: opera-stable
+        state: latest
+  tags: ['opera']
