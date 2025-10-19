@@ -11,7 +11,8 @@
   roles:
     - apt-sources-ubc
     - base
-    - aws
+    - role: aws
+      tags: ['aws', 'upgrade']
     - brave
     - chrome
     - dev-tools
