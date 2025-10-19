@@ -1,26 +1,28 @@
 ---
 # https://developer.hashicorp.com/vault/install#linux
-- name: add hashicorp key
-  get_url:
-    url: "https://apt.releases.hashicorp.com/gpg"
-    dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
-    mode: 0644
-    force: true
+- block:
+    - name: add hashicorp key
+      get_url:
+        url: "https://apt.releases.hashicorp.com/gpg"
+        dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
+        mode: 0644
+        force: true
 
-- name: add hashicorp repo
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_lsb['codename'] }} main"
-    filename: hashicorp
-    state: present
-    update_cache: true
+    - name: add hashicorp repo
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_lsb['codename'] }} main"
+        filename: hashicorp
+        state: present
+        update_cache: true
 
-- name: install terraform, vagrant, and vault
-  apt:
-    state: present
-    pkg: "{{ item }}"
-  loop:
-    - terraform
-    - vagrant
-    - vault
-  loop_control:
-    label: "{{ item }}"
+    - name: install terraform, vagrant, and vault
+      apt:
+        state: present
+        pkg: "{{ item }}"
+      loop:
+        - terraform
+        - vagrant
+        - vault
+      loop_control:
+        label: "{{ item }}"
+  tags: ['hashicorp']
