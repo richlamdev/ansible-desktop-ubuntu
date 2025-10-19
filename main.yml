@@ -10,9 +10,8 @@
 
   roles:
     - apt-sources-ubc
+    - aws
     - base
-    - role: aws
-      tags: ['aws', 'upgrade']
     - brave
     - chrome
     - dev-tools
@@ -32,8 +31,6 @@
     - sublime-text
     - trivy
     - unattended-upgrade-override
-    - role: vim
-      become: false
-        #- env
+    - vim
     - disable-local-dns
     # - yubico
