@@ -7,10 +7,9 @@
         owner: "{{ local_user }}"
         group: "{{ local_user_primary_group }}"
         mode: "0750"
-
     - name: ensure .bashrc sources scripts from .bashrc.d
       ansible.builtin.blockinfile:
-        path: "/{{ home_dir }}/.bashrc"
+        path: "{{ home_dir }}/.bashrc"
         marker: "# {mark} ANSIBLE MANAGED BLOCK: source .bashrc.d scripts"
         block: |
           # customize prompt
@@ -20,7 +19,6 @@
         owner: "{{ local_user }}"
         group: "{{ local_user_primary_group }}"
         mode: "0640"
-
     - name: install fzf_config.sh to {{ home_dir}}/.bashrc.d/
       copy:
         src: "{{ item }}"
@@ -30,29 +28,61 @@
         mode: "0640"
       loop:
         - fzf_config.sh
-
-    - name: install fzf
+    - name: Ensure jq is installed (optional, improves JSON parsing)
+      package:
+        name: jq
+        state: present
+      ignore_errors: true  # fallback to sed if jq is missing
+    - name: Get current fzf version
+      command: fzf --version
+      register: fzf_current
+      failed_when: false
+      changed_when: false
+    - name: Parse current fzf version
+      set_fact:
+        fzf_current_version: "{{ fzf_current.stdout | regex_search('[0-9]+\\.[0-9]+\\.[0-9]+') | default('', true) }}"
+      when: fzf_current.rc == 0
+    - name: Set empty version if fzf not found
+      set_fact:
+        fzf_current_version: ""
+      when: fzf_current.rc != 0
+    - name: Fetch latest fzf release info from GitHub
+      uri:
+        url: "https://api.github.com/repos/junegunn/fzf/releases/latest"
+        return_content: yes
+      register: fzf_release
+    - name: Parse latest fzf version
+      set_fact:
+        fzf_latest_version: "{{ (fzf_release.json.tag_name | default('')) | regex_replace('^v', '') }}"
+    - name: Debug current and latest versions
+      debug:
+        msg: "Current fzf version: {{ fzf_current_version | default('none') }}, Latest: {{ fzf_latest_version }}"
+    - name: Remove old fzf installation if outdated
+      file:
+        path: "{{ home_dir }}/.fzf"
+        state: absent
+      when:
+        - fzf_current_version != ''
+        - fzf_current_version != fzf_latest_version
+    - name: Clone fzf repository at specific version
       git:
         repo: "https://github.com/junegunn/fzf.git"
         dest: "{{ home_dir }}/.fzf"
-        depth: "1"
-        version: "master"
-
+        version: "v{{ fzf_latest_version }}"
+        depth: 1
+      register: git_clone
     - name: check if fzf install script has been executed
       shell: "{{ home_dir }}/.fzf/bin/fzf --version"
       register: fzf_installed
       failed_when: false
       changed_when: false
-
     - name: display fzf version if installed
       debug:
         msg: "fzf version installed: {{ fzf_installed.stdout }}"
       when: fzf_installed.rc == 0
-
     - name: run fzf install
       shell: "{{ home_dir }}/.fzf/install --key-bindings --completion --no-update-rc"
       when: fzf_installed.rc != 0
-
     - name: display fzf uninstallation instructions
       debug:
         msg: |
