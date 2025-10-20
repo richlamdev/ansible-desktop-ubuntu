@@ -17,8 +17,8 @@
     - dev-tools
     # - docker-cli-only
     - docker-desktop-dependency
-    - env        # executes as local user, not root
-    - fzf        # executes as local user, not root
+    - env             # executes as local user, not root
+    - fzf             # executes as local user, not root
     - gh_cli
     - git
     - hashicorp
@@ -31,6 +31,6 @@
     - sublime-text
     - trivy
     - unattended-upgrade-override
-    - vim        # executes as local user, not root
+    - vim             # executes as local user, not root
     - disable-local-dns
-    # - yubico
+    - yubico
