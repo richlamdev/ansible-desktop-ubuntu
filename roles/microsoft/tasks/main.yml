@@ -1,26 +1,39 @@
 ---
 - block:
-    - name: download Microsoft Linux signing key (ASCII format)
-      get_url:
+    - name: Ensure Microsoft GPG keyring directory exists
+      ansible.builtin.file:
+        path: /usr/share/keyrings
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Skip download if GPG key already exists
+      ansible.builtin.stat:
+        path: /usr/share/keyrings/microsoft.gpg
+      register: microsoft_gpg_stat
+
+    - name: Download Microsoft Linux signing key (ASCII format)
+      ansible.builtin.get_url:
         url: "https://packages.microsoft.com/keys/microsoft.asc"
         dest: /tmp/microsoft.asc
         mode: '0644'
-        force: yes
+      when: not microsoft_gpg_stat.stat.exists
+      register: microsoft_key_download
 
-    - name: convert Microsoft key to GPG binary format
-      shell: |
-        gpg --dearmor < /tmp/microsoft.asc > /usr/share/keyrings/microsoft.gpg
-        chmod 644 /usr/share/keyrings/microsoft.gpg
-      args:
+    - name: Convert Microsoft key to GPG binary format
+      ansible.builtin.command:
+        cmd: gpg --dearmor -o /usr/share/keyrings/microsoft.gpg /tmp/microsoft.asc
         creates: /usr/share/keyrings/microsoft.gpg
+      when: not microsoft_gpg_stat.stat.exists
 
-    - name: remove temporary ASCII key file
-      file:
+    - name: Remove temporary ASCII key file
+      ansible.builtin.file:
         path: /tmp/microsoft.asc
         state: absent
 
-    - name: remove old Microsoft key and repo files
-      file:
+    - name: Remove obsolete Microsoft key and repo files (if present)
+      ansible.builtin.file:
         path: "{{ item }}"
         state: absent
       loop:
@@ -28,9 +41,11 @@
         - /etc/apt/sources.list.d/microsoft-edge.list
         - /etc/apt/sources.list.d/vscode.list
 
-    - name: configure Microsoft Edge repository (.sources format)
-      copy:
+    - name: Configure Microsoft Edge repository (.sources format)
+      ansible.builtin.copy:
         dest: /etc/apt/sources.list.d/microsoft-edge.sources
+        owner: root
+        group: root
         mode: '0644'
         content: |
           Types: deb
@@ -39,11 +54,13 @@
           Components: main
           Architectures: amd64
           Signed-By: /usr/share/keyrings/microsoft.gpg
+      register: edge_repo
 
-    # https://code.visualstudio.com/docs/setup/linux
-    - name: configure Microsoft VS Code repository (.sources format)
-      copy:
+    - name: Configure Microsoft VS Code repository (.sources format)
+      ansible.builtin.copy:
         dest: /etc/apt/sources.list.d/vscode.sources
+        owner: root
+        group: root
         mode: '0644'
         content: |
           Types: deb
@@ -52,18 +69,19 @@
           Components: main
           Architectures: amd64
           Signed-By: /usr/share/keyrings/microsoft.gpg
+      register: vscode_repo
 
-    - name: update apt cache
-      apt:
+    - name: Update apt cache if repos changed or key was downloaded
+      ansible.builtin.apt:
         update_cache: yes
+      when: edge_repo.changed or vscode_repo.changed or (microsoft_key_download is defined and microsoft_key_download.changed)
 
-    - name: install Microsoft Edge and VS Code from repository
-      apt:
+    - name: Install Microsoft Edge and VS Code
+      ansible.builtin.apt:
+        name:
+          - microsoft-edge-stable
+          - code
         state: latest
-        pkg: "{{ item }}"
-      loop:
-        - microsoft-edge-stable
-        - code
       loop_control:
         label: "{{ item }}"
   tags: ['microsoft']
