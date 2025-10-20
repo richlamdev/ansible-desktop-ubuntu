@@ -1,17 +1,29 @@
 ---
 # https://support.yubico.com/hc/en-us/articles/360016649039-Installing-Yubico-Software-on-Linux
-# todo: add signing key to ensure it works properly
-- name: Add Yubico repo
-  apt_repository:
-    repo: ppa:yubico/stable
-    filename: yubico
-    state: present
-    update_cache: True
-    validate_certs: True
+# Use the fingerprint and matching key from: https://launchpad.net/~yubico/+archive/ubuntu/stable
+- block:
+    - name: install yubico signing key
+      get_url:
+        url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xfa4ec8f2ee58ce0b"
+        dest: /usr/share/keyrings/yubico.asc
+        mode: 0644
+        force: false
 
-- name: Install Yubico-manager and personalization-gui package
-  apt:
-    state: latest
-    pkg:
-      - yubikey-manager
-      - yubikey-personalization-gui
+    - name: add yubico repo
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/yubico.asc] https://ppa.launchpadcontent.net/yubico/stable/ubuntu {{ ansible_lsb['codename'] }} main"
+        filename: yubico
+        update_cache: true
+        state: present
+
+    - name: install yubico package
+      apt:
+        state: latest
+        pkg: "{{ item  }}"
+      loop:
+        - yubikey-manager
+        - libpam-yubico
+        - libpam-u2f
+        - yubikey-manager-qt
+        - yubioath-desktop
+  tags: ['yubico']
