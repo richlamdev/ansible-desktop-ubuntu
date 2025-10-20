@@ -1,12 +1,12 @@
 ---
 - block:
-    - name: Ensure ubuntu-keyring is installed
+    - name: ensure ubuntu-keyring is installed
       ansible.builtin.apt:
         name: ubuntu-keyring
         state: present
         update_cache: yes
 
-    - name: Ensure codename aware and dual-source ubuntu.sources is in place
+    - name: ensure codename aware and dual-source ubuntu.sources is in place
       ansible.builtin.template:
         src: ubuntu.sources.j2
         dest: /etc/apt/sources.list.d/ubuntu.sources
@@ -16,7 +16,7 @@
         backup: yes
       register: ubuntu_sources
 
-    - name: Update apt cache
+    - name: update apt cache only if sources file change
       ansible.builtin.apt:
         update_cache: yes
       when: ubuntu_sources.changed
