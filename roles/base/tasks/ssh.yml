@@ -1,47 +1,72 @@
 ---
-- name: Find all files in /etc/ssh/sshd_config.d/
-  ansible.builtin.find:
-    paths: /etc/ssh/sshd_config.d/
-    file_type: file
-  register: sshd_config_d_files
+- name: Manage SSH configurations
+  block:
+    - name: Ensure /etc/ssh/sshd_config.d exists
+      ansible.builtin.file:
+        path: /etc/ssh/sshd_config.d
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
 
-- name: Remove all files in /etc/ssh/sshd_config.d/
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: absent
-  loop: "{{ sshd_config_d_files.files }}"
-  loop_control:
-    label: "{{ item.path }}"
-  when: sshd_config_d_files.matched > 0
+    - name: Remove unmanaged files from /etc/ssh/sshd_config.d
+      ansible.builtin.find:
+        paths: /etc/ssh/sshd_config.d/
+        file_type: file
+        patterns: '*'
+      register: sshd_config_d_files
 
-- name: Copy custom sshd_config.conf to /etc/ssh/sshd_config.d/
-  ansible.builtin.copy:
-    src: "sshd_config.conf"
-    dest: /etc/ssh/sshd_config.d/
-    owner: root
-    group: root
-    mode: '0644'
+    - name: Remove unmanaged sshd files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ sshd_config_d_files.files }}"
+      when: item.path | basename != 'sshd_config.conf'
+      loop_control:
+        label: "{{ item.path }}"
+      notify: reload sshd
+
+    - name: Copy managed sshd_config.conf
+      ansible.builtin.copy:
+        src: sshd_config.conf
+        dest: /etc/ssh/sshd_config.d/sshd_config.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: reload sshd
 
 
-- name: Find all files in /etc/ssh/ssh_config.d/
-  ansible.builtin.find:
-    paths: /etc/ssh/ssh_config.d/
-    file_type: file
-  register: ssh_config_d_files
+    - name: Ensure /etc/ssh/ssh_config.d exists
+      ansible.builtin.file:
+        path: /etc/ssh/ssh_config.d
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
 
-- name: Remove all files in /etc/ssh/ssh_config.d/
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: absent
-  loop: "{{ ssh_config_d_files.files }}"
-  loop_control:
-    label: "{{ item.path }}"
-  when: ssh_config_d_files.matched > 0
+    - name: Remove unmanaged files from /etc/ssh/ssh_config.d
+      ansible.builtin.find:
+        paths: /etc/ssh/ssh_config.d/
+        file_type: file
+        patterns: '*'
+      register: ssh_config_d_files
 
-- name: Copy ssh_config to /etc/ssh/ssh_config.d/
-  ansible.builtin.copy:
-    src: "ssh_config.conf"
-    dest: /etc/ssh/ssh_config.d/
-    owner: root
-    group: root
-    mode: '0644'
+    - name: Remove unmanaged ssh files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ ssh_config_d_files.files }}"
+      when: item.path | basename != 'ssh_config.conf'
+      loop_control:
+        label: "{{ item.path }}"
+      notify: reload sshd
+
+    - name: Copy managed ssh_config.conf
+      ansible.builtin.copy:
+        src: ssh_config.conf
+        dest: /etc/ssh/ssh_config.d/ssh_config.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: reload sshd
+  tags: ['ssh-configs']
