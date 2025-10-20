@@ -14,8 +14,10 @@
         group: root
         mode: '0644'
         backup: yes
+      register: ubuntu_sources
 
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
+      when: ubuntu_sources.changed
   tags: ['apt-sources-ubc']
