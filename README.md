@@ -67,7 +67,7 @@ commenting/uncommenting roles in main.yml at the root level of the repo.
   * enter SUDO password. (assumes user is a member of the sudo user group)
 
 To run the playbook via local connection, use the following command:\
-`ansible-playbook main.yml -K -c local`
+`ansible-playbook main.yml -K -c local --skip-tags test-vars`
   * enter SUDO password. (assumes user is a member of the sudo user group)
 
 To run the playbook using SSH password authentication, use the following
@@ -84,6 +84,12 @@ installed on the target host(s) in the context of \<username\> indicated.
 
 The majority of roles are self explantory in terms of what they install.
 
+All roles are tagged with the same name as the role.  If you want to execute
+a specific role, you can use the following command:\
+`ansible-playbook main.yml -bKu <username> --private-key ~/.ssh/<ssh-key> -tags <role-name>`
+or\
+`ansible-playbook main.yml -K -c local --tags <role-name>`
+
 Additional information for the following roles:
 
 * apt-sources-ubc
@@ -92,23 +98,10 @@ Additional information for the following roles:
   * this is a personal preference for me
   * find your fastest/closest mirror [here](https://launchpad.net/ubuntu/+archivemirrors)
 
-* auto-update
-  * force dpkg to accept default settings during updates
-  * add cron to run apt update and dist-upgrade daily
-  * add cron to run snap update daily
-  * technically there are built-in methods to run apt and snap update daily
-    (unattended-upgrades), however, none of those methods seem to work.
-    * see below testing of role unattended-upgrade-override
-    This primitive implementation achieves a similar effect.
-  * This role is for any desktop/laptop that operates 24/7.
-  * There is a basic script (check_reboot.sh) to check if a reboot is required,
-    which is scheduled to run daily at 0400hrs.(checks for presence of
-    /var/run/reboot-required)
-
 * unattended-upgrade-override
   * attempt to make unattended-upgrades work similar to
     `sudo apt update && sudo apt dist-upgrade -y`
-  * not fully tested; once confirmed auto-update will be deleted
+  * set to reboot at 0400hrs every morning, but only if no user is logged in
 
 * aws
   * installs [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
@@ -202,9 +195,8 @@ requirements*
 
 * env
   * setups personal preferences for bash shell
-    * configures .bashrc to read all shell scripts from /home/{USER}/.bashrc.d/
+    * configures .bashrc to read all shell scripts from ~/.bashrc.d/
       to set environment
-  * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
   * .bashrc -bash function `se` is for fast directory navigation at the CLI
     refer to [fzf explorer](https://thevaluable.dev/practical-guide-fzf-example/)
     (this is slightly different from the built in alt-c command provided with fzf)
@@ -214,6 +206,12 @@ requirements*
       * adds .gitconfig-private-example to $HOME
         * change contents to include your user name and email and rename this
           file to .gitconfig-private
+
+* fzf
+  * installs [fzf](https://github.com/junegunn/fzf), the command line fuzzy finder
+  * adds fzf bash configuration to ~/.bashrc.d/fzf.sh, which is loaded by
+    .bashrc as documented in the env role
+  * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
 
 * vim
   * installs customization only, does not install vim

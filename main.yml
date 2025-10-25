@@ -32,5 +32,6 @@
     - trivy
     - unattended-upgrade-override
     - vim             # executes as local user, not root
-    - disable-local-dns
     - yubico
+    - test-vars
+    - disable-local-dns
