@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-# --- Optional colours ---
 if [ -f ./colours.sh ]; then
   source ./colours.sh
 else
@@ -13,7 +12,7 @@ else
   NC="\033[0m"
 fi
 
-# --- Step 1: Get current Neovim version ---
+# --- Get current Neovim version ---
 echo -e "${CYAN}Current Neovim version:${NC}"
 CURRENT_VERSION=""
 if command -v nvim >/dev/null 2>&1; then
@@ -26,7 +25,7 @@ else
 fi
 echo
 
-# --- Step 2: Fetch latest stable release via GitHub API ---
+# --- Fetch latest stable release via GitHub API ---
 echo -e "${GREEN}Fetching latest stable Neovim release...${NC}"
 
 API_URL="https://api.github.com/repos/neovim/neovim/releases/latest"
@@ -51,7 +50,7 @@ fi
 echo -e "${CYAN}Latest stable version:${NC} ${LATEST_VERSION}"
 echo
 
-# --- Step 3: Compare versions ---
+# --- Compare versions ---
 if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
   echo -e "${GREEN}You already have the latest version (${LATEST_VERSION}) installed!${NC}"
   echo -e "${YELLOW}No update needed.${NC}"
@@ -66,21 +65,21 @@ else
 fi
 echo
 
-# --- Step 4: Download AppImage ---
+# --- Download AppImage ---
 TMP_FILE=$(mktemp)
 echo -e "${GREEN}Downloading Neovim AppImage...${NC}"
 curl -L "$LATEST_URL" -o "$TMP_FILE"
 
-# --- Step 5: Prepare install path ---
+# --- Prepare install path ---
 INSTALL_DIR="$HOME/.local/bin"
 mkdir -p "$INSTALL_DIR"
 
-# --- Step 6: Move and set permissions ---
+# --- Move and set permissions ---
 echo -e "${GREEN}Installing to ${INSTALL_DIR}/nvim...${NC}"
 mv "$TMP_FILE" "$INSTALL_DIR/nvim"
 chmod +x "$INSTALL_DIR/nvim"
 
-# --- Step 7: Verify ---
+# --- Verify ---
 echo
 echo -e "${MAGENTA}Neovim upgraded successfully!${NC}"
 echo

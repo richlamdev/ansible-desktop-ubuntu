@@ -1,0 +1,83 @@
+---
+- block:
+    - name: Check if Neovim is currently installed at {{ home_dir }}/.local/bin
+      ansible.builtin.command: "{{ home_dir }}/.local/bin/nvim --version"
+      register: nvim_current_version
+      failed_when: false
+      changed_when: false
+
+    - name: Display current Neovim version
+      ansible.builtin.debug:
+        msg: "Current Neovim version: {{ nvim_current_version.stdout_lines[0] }}"
+      when: nvim_current_version.rc == 0
+
+    - name: Display Neovim not installed message
+      ansible.builtin.debug:
+        msg: "Neovim not currently installed."
+      when: nvim_current_version.rc != 0
+
+    - name: Extract current version number
+      ansible.builtin.set_fact:
+        current_version: "{{ nvim_current_version.stdout | regex_search('v[0-9]+\\.[0-9]+\\.[0-9]+') }}"
+      when: nvim_current_version.rc == 0
+
+    - name: Display extracted current version
+      ansible.builtin.debug:
+        msg: "Extraced current version: {{ current_version | default('not installed') }}"
+      when: nvim_current_version.rc == 0
+
+    - name: Fetch latest Neovim release information from GitHub API
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/neovim/neovim/releases/latest
+        return_content: yes
+      register: neovim_release
+
+    - name: Extract latest version and download URL
+      ansible.builtin.set_fact:
+        latest_version: "{{ neovim_release.json.tag_name }}"
+        appimage_url: "{{ neovim_release.json.assets | selectattr('name', 'equalto', 'nvim-linux-x86_64.appimage') | map(attribute='browser_download_url') | first }}"
+
+    - name: Display latest stable version
+      ansible.builtin.debug:
+        msg: "Latest stable version: {{ latest_version }}"
+
+    - name: Check if update is needed
+      ansible.builtin.set_fact:
+        needs_update: "{{ current_version is not defined or current_version != latest_version }}"
+
+    - name: Display already up-to-date message
+      ansible.builtin.debug:
+        msg: "You already have the latest version ({{ latest_version }}) installed! No update needed."
+      when: not needs_update
+
+    - name: Display version mismatch
+      ansible.builtin.debug:
+        msg: "Version mismatch detected: {{ current_version | default('not installed') }} -> {{ latest_version }}"
+      when: needs_update
+
+    - name: Create installation directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.local/bin"
+        state: directory
+        mode: '0755'
+      when: needs_update
+
+    - name: Download Neovim AppImage
+      ansible.builtin.get_url:
+        url: "{{ appimage_url }}"
+        dest: "{{ ansible_env.HOME }}/.local/bin/nvim"
+        mode: '0755'
+        force: yes
+      when: needs_update
+
+    - name: Verify new Neovim installation
+      ansible.builtin.command: "{{ ansible_env.HOME }}/.local/bin/nvim --version"
+      register: nvim_new_version
+      changed_when: false
+      when: needs_update
+
+    - name: Display new Neovim version
+      ansible.builtin.debug:
+        msg: "Neovim upgraded successfully! New version: {{ nvim_new_version.stdout_lines[0] }}"
+      when: needs_update
+  tags: ['neovim']
