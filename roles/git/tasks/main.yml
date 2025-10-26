@@ -9,7 +9,7 @@
     - name: install git signing key
       get_url:
         url: "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xe363c90f8f1b6217"
-        dest: /usr/share/keyrings/git-archive-keyring.asc"
+        dest: /usr/share/keyrings/git-archive-keyring.asc
         mode: 0644
       register: git_key_download
       when: not git_key_stat.stat.exists
