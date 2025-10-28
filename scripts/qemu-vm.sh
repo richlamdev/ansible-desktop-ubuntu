@@ -53,8 +53,11 @@ QEMU VM Management Script
 
 Usage: $0 <iso-or-disk.qcow2> <install|start> [options]
 
-Warning: By default this exposes the VM to the local network the host is
-attached to.
+
+Warning: By default this exposes the VM ssh port to the local network the host is
+attached to via HOST IP and port 2222. Use the --localhost-only option to ensure
+the VM is only accessible from localhost.
+
 
 Modes:
   install    Install OS from ISO to new disk image
@@ -66,6 +69,7 @@ Options:
   --disk-size G  Disk size for install mode (default: $DEFAULT_DISK_SIZE)
   --ssh-port P   SSH port forwarding (default: $DEFAULT_SSH_PORT)
   --ssh-host IP  Host IP for SSH binding (default: auto-detect or 0.0.0.0)
+  --localhost-only  Bind SSH to localhost only (not accessible from LAN)
   --vnc          Use VNC display instead of SDL
   --headless     Run without display (VNC on :1)
   --help         Show this help
