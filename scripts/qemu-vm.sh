@@ -22,12 +22,39 @@ command -v qemu-img >/dev/null || {
     exit 1
 }
 
+# Get host IP address
+get_host_ip() {
+    local os_type
+    os_type="$(uname)"
+
+    case "$os_type" in
+        Linux)
+            # Try to get the primary non-loopback IP
+            ip route get 1.1.1.1 2>/dev/null | awk '{print $7; exit}' || \
+            hostname -I 2>/dev/null | awk '{print $1}' || \
+            echo "0.0.0.0"
+            ;;
+        Darwin)
+            # macOS
+            ipconfig getifaddr en0 2>/dev/null || \
+            ipconfig getifaddr en1 2>/dev/null || \
+            echo "0.0.0.0"
+            ;;
+        *)
+            echo "0.0.0.0"
+            ;;
+    esac
+}
+
 # Help function
 show_help() {
     cat << EOF
 QEMU VM Management Script
 
 Usage: $0 <iso-or-disk.qcow2> <install|start> [options]
+
+Warning: By default this exposes the VM to the local network the host is
+attached to.
 
 Modes:
   install    Install OS from ISO to new disk image
@@ -38,6 +65,7 @@ Options:
   --cpus N       Number of CPUs (default: $DEFAULT_CPUS)
   --disk-size G  Disk size for install mode (default: $DEFAULT_DISK_SIZE)
   --ssh-port P   SSH port forwarding (default: $DEFAULT_SSH_PORT)
+  --ssh-host IP  Host IP for SSH binding (default: auto-detect or 0.0.0.0)
   --vnc          Use VNC display instead of SDL
   --headless     Run without display (VNC on :1)
   --help         Show this help
@@ -53,6 +81,7 @@ Examples:
   $0 ubuntu-22.04.iso install --ram 8192 --cpus 4
   $0 my-vm-abc123.qcow2 start
   $0 my-vm-abc123.qcow2 start --vnc
+  $0 my-vm-abc123.qcow2 start --ssh-host 192.168.1.100
 EOF
 }
 
@@ -71,6 +100,7 @@ RAM="$DEFAULT_RAM"
 CPUS="$DEFAULT_CPUS"
 DISK_SIZE="$DEFAULT_DISK_SIZE"
 SSH_PORT="$DEFAULT_SSH_PORT"
+SSH_HOST=""  # Will be auto-detected if not specified
 DISPLAY_TYPE="sdl"
 HEADLESS=false
 
@@ -93,6 +123,10 @@ while [[ $# -gt 0 ]]; do
             SSH_PORT="$2"
             shift 2
             ;;
+        --ssh-host)
+            SSH_HOST="$2"
+            shift 2
+            ;;
         --vnc)
             DISPLAY_TYPE="vnc"
             shift
@@ -112,6 +146,12 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+# Auto-detect host IP if not specified
+if [[ -z "$SSH_HOST" ]]; then
+    SSH_HOST=$(get_host_ip)
+    echo "Auto-detected host IP: $SSH_HOST"
+fi
 
 # Validate numeric parameters
 if ! [[ "$RAM" =~ ^[0-9]+$ ]] || [[ "$RAM" -lt 512 ]]; then
@@ -182,6 +222,52 @@ setup_display() {
     fi
 }
 
+# Check firewall and provide guidance
+check_firewall() {
+    local port=$1
+    local has_firewall=false
+
+    echo ""
+    echo "=== Network Configuration ==="
+
+    # Check for common firewall tools
+    if command -v ufw >/dev/null 2>&1 && sudo ufw status 2>/dev/null | grep -q "Status: active"; then
+        has_firewall=true
+        echo "UFW firewall detected (active)"
+        if ! sudo ufw status | grep -q "$port/tcp"; then
+            echo "⚠️  Port $port not found in UFW rules"
+            echo "   To allow access from LAN, run:"
+            echo "   sudo ufw allow $port/tcp comment 'QEMU VM SSH'"
+        else
+            echo "✓  Port $port appears to be allowed in UFW"
+        fi
+    elif command -v firewall-cmd >/dev/null 2>&1 && sudo firewall-cmd --state 2>/dev/null | grep -q "running"; then
+        has_firewall=true
+        echo "firewalld detected (running)"
+        if ! sudo firewall-cmd --list-ports 2>/dev/null | grep -q "$port/tcp"; then
+            echo "⚠️  Port $port not found in firewalld rules"
+            echo "   To allow access from LAN, run:"
+            echo "   sudo firewall-cmd --permanent --add-port=$port/tcp"
+            echo "   sudo firewall-cmd --reload"
+        else
+            echo "✓  Port $port appears to be allowed in firewalld"
+        fi
+    elif command -v iptables >/dev/null 2>&1; then
+        has_firewall=true
+        echo "iptables detected"
+        echo "   Check if port $port is allowed with:"
+        echo "   sudo iptables -L INPUT -n | grep $port"
+    fi
+
+    if ! $has_firewall; then
+        echo "No common firewall tools detected"
+        echo "If you have a firewall, ensure port $port/tcp is allowed"
+    fi
+
+    echo "============================="
+    echo ""
+}
+
 # VM launch function
 run_vm() {
     local kvm_opts
@@ -193,7 +279,7 @@ run_vm() {
 
     echo "Launching VM: $VM_NAME"
     echo "  RAM: ${RAM}MB, CPUs: $CPUS"
-    echo "  SSH: localhost:$SSH_PORT -> guest:22"
+    echo "  SSH: ${SSH_HOST}:${SSH_PORT} -> guest:22"
 
     if [[ "$HEADLESS" == "true" ]]; then
         echo "  Display: Headless (VNC on :5901)"
@@ -204,23 +290,29 @@ run_vm() {
     # Check if SSH port is already in use
     if command -v ss >/dev/null 2>&1; then
         if ss -tln | grep -q ":$SSH_PORT "; then
-            echo "Warning: Port $SSH_PORT appears to be in use"
+            echo "⚠️  Warning: Port $SSH_PORT appears to be in use"
         fi
     elif command -v netstat >/dev/null 2>&1; then
         if netstat -tln 2>/dev/null | grep -q ":$SSH_PORT "; then
-            echo "Warning: Port $SSH_PORT appears to be in use"
+            echo "⚠️  Warning: Port $SSH_PORT appears to be in use"
         fi
     fi
 
-    echo "Starting VM..."
+    # Check firewall configuration
+    check_firewall "$SSH_PORT"
 
-    # Build and execute QEMU command
+    echo "Starting VM..."
+    echo "To connect from another machine on your LAN:"
+    echo "  ssh -p $SSH_PORT user@${SSH_HOST}"
+    echo ""
+
+    # Build and execute QEMU command with network-accessible SSH
     exec qemu-system-x86_64 \
         $kvm_opts \
         -m "$RAM" \
         -smp "$CPUS" \
         -drive file="$DISK_IMAGE",format=qcow2 \
-        -netdev user,id=net0,hostfwd=tcp::"$SSH_PORT"-:22 \
+        -netdev user,id=net0,hostfwd=tcp:${SSH_HOST}:${SSH_PORT}-:22 \
         -device e1000,netdev=net0 \
         -device usb-ehci -device usb-tablet \
         -vga virtio \
