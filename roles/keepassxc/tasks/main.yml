@@ -1,14 +1,30 @@
 ---
 # Use the fingerprint and matching key from: https://launchpad.net/~phoerious/+archive/ubuntu/keepassxc
 - block:
-    - name: add KeePassXC PPA
-      ansible.builtin.apt_repository:
-        repo: ppa:phoerious/keepassxc
-        state: present
-        update_cache: yes
+    - name: install keepassxc signing key
+      get_url:
+        url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x61922ab60068fcd6"
+        dest: /usr/share/keyrings/keepassxc_master_signing_key.asc
+        mode: 0644
+        force: false
 
-    - name: install KeePassXC
-      ansible.builtin.apt:
+    - name: add keepassxc repo
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/keepassxc_master_signing_key.asc] https://ppa.launchpadcontent.net/phoerious/keepassxc/ubuntu jammy main"
+        filename: keepassxc
+        update_cache: true
+        state: present
+
+    - name: Install KeePassXC package
+      apt:
         name: keepassxc
         state: latest
+
+    - name: Update KeePassXC preferences
+      copy:
+        src: "keepassxc.ini"
+        dest: "{{ home_dir }}/.config/keepassxc/"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0664"
   tags: ['keepassxc']
