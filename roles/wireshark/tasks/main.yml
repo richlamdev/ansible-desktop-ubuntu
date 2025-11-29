@@ -1,0 +1,29 @@
+---
+# https://launchpad.net/~wireshark-dev/+archive/ubuntu/stable
+- block:
+    - name: check if wireshark keyring exists
+      stat:
+        path: /usr/share/keyrings/wireshark-archive-keyring.asc
+      register: wireshark_key_stat
+
+    - name: install wireshark signing key
+      get_url:
+        url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa2e402b85a4b70cd78d8a3d9d875551314eca0f0"
+        dest: /usr/share/keyrings/wireshark-archive-keyring.asc
+        mode: 0644
+      register: wireshark_key_download
+      when: not wireshark_key_stat.stat.exists
+
+    - name: add wireshark repo
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/wireshark-archive-keyring.asc] https://ppa.launchpadcontent.net/wireshark-dev/stable/ubuntu {{ ansible_lsb['codename'] }} main"
+        filename: wireshark
+        state: present
+        update_cache: yes
+      when: wireshark_key_stat.stat.exists or (wireshark_key_download is defined and wireshark_key_download.changed)
+
+    - name: install wireshark package
+      apt:
+        name: wireshark
+        state: latest
+  tags: ['wireshark']
