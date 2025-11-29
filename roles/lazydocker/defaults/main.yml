@@ -1,0 +1,4 @@
+---
+lazydocker_version: "latest"
+lazydocker_install_path: /usr/local/bin/lazydocker
+lazydocker_repo: jesseduffield/lazydocker
