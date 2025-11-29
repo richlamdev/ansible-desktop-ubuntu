@@ -15,8 +15,8 @@
     - brave
     - chrome
     - dev-tools
-    # - docker-cli-only
-    - docker-desktop-dependency
+    - docker-cli-only
+    # - docker-desktop-dependency
     - env             # executes as local user, not root
     - fzf             # executes as local user, not root
     - gh_cli
@@ -24,6 +24,7 @@
     - hashicorp
     - keepassxc
     - kubectl
+    - lazydocker
     - microsoft
     - mullvad
     - neovim
