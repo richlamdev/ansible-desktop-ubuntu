@@ -80,4 +80,4 @@
       ansible.builtin.debug:
         msg: "Neovim upgraded successfully! New version: {{ nvim_new_version.stdout_lines[0] }}"
       when: needs_update
-  tags: ['neovim']
+  tags: ['neovim', 'upgrade']
