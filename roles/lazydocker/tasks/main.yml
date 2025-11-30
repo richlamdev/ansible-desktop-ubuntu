@@ -1,9 +1,7 @@
 ---
 - name: "Install/Update LazyDocker"
   block:
-    # ───────────────────────────────────────────────────────────────
     # Check current installation
-    # ───────────────────────────────────────────────────────────────
     - name: "Check if LazyDocker is installed"
       command: "{{ lazydocker_install_path }} --version"
       register: lazydocker_current
@@ -15,9 +13,7 @@
         lazydocker_current_version: "{{ lazydocker_current.stdout | regex_search('([0-9.]+)') }}"
       when: lazydocker_current.rc == 0
 
-    # ───────────────────────────────────────────────────────────────
     # Determine target version
-    # ───────────────────────────────────────────────────────────────
     - name: "Get latest release from GitHub"
       uri:
         url: "https://api.github.com/repos/{{ lazydocker_repo }}/releases/latest"
@@ -44,9 +40,7 @@
         msg: "Could not determine LazyDocker version to install"
       when: lazydocker_target_version is not defined
 
-    # ───────────────────────────────────────────────────────────────
     # Determine if installation/update is needed
-    # ───────────────────────────────────────────────────────────────
     - name: "Check if update is needed"
       set_fact:
         lazydocker_needs_install: "{{ lazydocker_current_version is not defined or lazydocker_current_version != lazydocker_target_version }}"
@@ -55,9 +49,7 @@
       debug:
         msg: "LazyDocker {{ 'will be installed' if lazydocker_current_version is not defined else ('will be updated from ' + lazydocker_current_version + ' to ' + lazydocker_target_version) if lazydocker_needs_install else 'is already up to date (' + lazydocker_current_version + ')' }}"
 
-    # ───────────────────────────────────────────────────────────────
     # Download and install
-    # ───────────────────────────────────────────────────────────────
     - name: "Download LazyDocker"
       get_url:
         url: "https://github.com/{{ lazydocker_repo }}/releases/download/v{{ lazydocker_target_version }}/lazydocker_{{ lazydocker_target_version }}_Linux_x86_64.tar.gz"
@@ -93,9 +85,7 @@
       when: lazydocker_needs_install | bool
 
   always:
-    # ───────────────────────────────────────────────────────────────
     # Cleanup temporary files
-    # ───────────────────────────────────────────────────────────────
     - name: "Clean up temporary files"
       file:
         path: "{{ item }}"
