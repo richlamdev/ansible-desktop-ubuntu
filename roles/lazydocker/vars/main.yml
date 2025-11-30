@@ -1,3 +1,0 @@
----
-# Path where lazydocker binary will be installed
-lazydocker_install_path: /usr/local/bin/lazydocker

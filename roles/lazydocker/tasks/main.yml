@@ -1,5 +1,7 @@
 ---
-- block:
+- name: "Install/Update LazyDocker"
+  block:
+    # Check current installation
     - name: "Check if LazyDocker is installed"
       command: "{{ lazydocker_install_path }} --version"
       register: lazydocker_current
@@ -11,59 +13,86 @@
         lazydocker_current_version: "{{ lazydocker_current.stdout | regex_search('([0-9.]+)') }}"
       when: lazydocker_current.rc == 0
 
-    # ───────────────────────────────────────────────────────────────
-    # Get latest version from GitHub (or use pinned version)
-    # ───────────────────────────────────────────────────────────────
-
-    - name: "Get latest release tag from GitHub"
+    # Determine target version
+    - name: "Get latest release from GitHub"
       uri:
         url: "https://api.github.com/repos/{{ lazydocker_repo }}/releases/latest"
         return_content: yes
+        headers:
+          Accept: "application/vnd.github.v3+json"
       register: lazydocker_release
       when: lazydocker_version == "latest"
 
-    - name: "Set LazyDocker latest version fact"
+    - name: "Set target version (latest from GitHub)"
       set_fact:
-        lazydocker_latest_version: "{{ lazydocker_release.json.tag_name | regex_replace('^v', '') }}"
-      when: lazydocker_version == "latest"
+        lazydocker_target_version: "{{ lazydocker_release.json.tag_name | regex_replace('^v', '') }}"
+      when:
+        - lazydocker_version == "latest"
+        - lazydocker_release.json.tag_name is defined
 
-    - name: "Use pinned LazyDocker version"
+    - name: "Set target version (pinned)"
       set_fact:
-        lazydocker_latest_version: "{{ lazydocker_version }}"
+        lazydocker_target_version: "{{ lazydocker_version }}"
       when: lazydocker_version != "latest"
 
-    # ───────────────────────────────────────────────────────────────
-    # Download & Install if missing or outdated
-    # ───────────────────────────────────────────────────────────────
+    - name: "Fail if version could not be determined"
+      fail:
+        msg: "Could not determine LazyDocker version to install"
+      when: lazydocker_target_version is not defined
 
-    - name: "Download LazyDocker tarball if version differs"
+    # Determine if installation/update is needed
+    - name: "Check if update is needed"
+      set_fact:
+        lazydocker_needs_install: "{{ lazydocker_current_version is not defined or lazydocker_current_version != lazydocker_target_version }}"
+
+    - name: "Display installation status"
+      debug:
+        msg: "LazyDocker {{ 'will be installed' if lazydocker_current_version is not defined else ('will be updated from ' + lazydocker_current_version + ' to ' + lazydocker_target_version) if lazydocker_needs_install else 'is already up to date (' + lazydocker_current_version + ')' }}"
+
+    # Download and install
+    - name: "Download LazyDocker"
       get_url:
-        url: "https://github.com/{{ lazydocker_repo }}/releases/download/v{{ lazydocker_latest_version }}/lazydocker_{{ lazydocker_latest_version }}_Linux_x86_64.tar.gz"
+        url: "https://github.com/{{ lazydocker_repo }}/releases/download/v{{ lazydocker_target_version }}/lazydocker_{{ lazydocker_target_version }}_Linux_x86_64.tar.gz"
         dest: "/tmp/lazydocker.tar.gz"
         mode: "0644"
-      when: lazydocker_current_version is not defined or
-            lazydocker_current_version != lazydocker_latest_version
+      when: lazydocker_needs_install | bool
 
     - name: "Extract LazyDocker"
       unarchive:
         src: "/tmp/lazydocker.tar.gz"
         dest: "/tmp"
         remote_src: yes
-      when: lazydocker_current_version is not defined or
-            lazydocker_current_version != lazydocker_latest_version
+      when: lazydocker_needs_install | bool
 
-    - name: "Install LazyDocker"
+    - name: "Install LazyDocker binary"
       copy:
         src: "/tmp/lazydocker"
         dest: "{{ lazydocker_install_path }}"
         mode: "0755"
-      when: lazydocker_current_version is not defined or
-            lazydocker_current_version != lazydocker_latest_version
+        remote_src: yes
+      become: yes
+      when: lazydocker_needs_install | bool
 
-    - name: "Clean extracted files"
+    - name: "Verify installation"
+      command: "{{ lazydocker_install_path }} --version"
+      register: lazydocker_verify
+      changed_when: false
+      when: lazydocker_needs_install | bool
+
+    - name: "Display installed version"
+      debug:
+        msg: "LazyDocker {{ lazydocker_target_version }} installed successfully"
+      when: lazydocker_needs_install | bool
+
+  always:
+    # Cleanup temporary files
+    - name: "Clean up temporary files"
       file:
-        path: "/tmp/lazydocker"
+        path: "{{ item }}"
         state: absent
-      when: lazydocker_current_version is not defined or
-            lazydocker_current_version != lazydocker_latest_version
-  tags: ['lazydocker']
+      loop:
+        - "/tmp/lazydocker"
+        - "/tmp/lazydocker.tar.gz"
+      when: lazydocker_needs_install is defined and lazydocker_needs_install | bool
+
+  tags: ['lazydocker', 'upgrade']
