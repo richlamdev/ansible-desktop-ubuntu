@@ -5,12 +5,6 @@
     state: present
   become: yes
 
-- name: Remove Firefox Snap
-  snap:
-    name: firefox
-    state: absent
-  become: yes
-
 - name: Install Snap packages
   snap:
     name: "{{ item }}"
