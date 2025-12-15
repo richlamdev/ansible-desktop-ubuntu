@@ -1,0 +1,53 @@
+---
+# tasks/main.yml - Install Firefox from Mozilla APT repository
+
+- name: Setup Mozilla Firefox repository
+  block:
+    - name: Ensure APT keyrings directory exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    - name: Download Mozilla APT repository signing key
+      ansible.builtin.get_url:
+        url: https://packages.mozilla.org/apt/repo-signing-key.gpg
+        dest: /etc/apt/keyrings/packages.mozilla.org.asc
+        mode: '0644'
+        owner: root
+        group: root
+
+    - name: Copy Mozilla APT repository sources file
+      ansible.builtin.copy:
+        src: mozilla.sources
+        dest: /etc/apt/sources.list.d/mozilla.sources
+        mode: '0644'
+        owner: root
+        group: root
+
+    - name: Copy Mozilla APT preferences file
+      ansible.builtin.copy:
+        src: mozilla
+        dest: /etc/apt/preferences.d/mozilla
+        mode: '0644'
+        owner: root
+        group: root
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Remove Firefox snap stub package
+      ansible.builtin.apt:
+        name: firefox
+        state: absent
+        purge: true
+
+    - name: Install Firefox
+      ansible.builtin.apt:
+        name: firefox
+        state: present
+  tags: ['firefox']
