@@ -1,6 +1,12 @@
 ---
 # https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions-recommended
 - block:
+    - name: Remove Firefox Snap
+      snap:
+        name: firefox
+        state: absent
+      become: yes
+
     - name: Ensure APT keyrings directory exists
       ansible.builtin.file:
         path: /etc/apt/keyrings
