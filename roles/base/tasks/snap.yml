@@ -5,8 +5,14 @@
     state: present
   become: yes
 
+- name: Remove Firefox Snap
+  snap:
+    name: firefox
+    state: absent
+  become: yes
+
 - name: Install Snap packages
-  community.general.snap:
+  snap:
     name: "{{ item }}"
     state: present
   loop:
