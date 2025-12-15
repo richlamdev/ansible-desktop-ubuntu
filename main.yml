@@ -18,6 +18,7 @@
     - docker-cli-only
     # - docker-desktop-dependency
     - env             # executes as local user, not root
+    - firefox
     - fzf             # executes as local user, not root
     - gh_cli
     - git
