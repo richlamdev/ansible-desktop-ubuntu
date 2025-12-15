@@ -1,8 +1,6 @@
 ---
-# tasks/main.yml - Install Firefox from Mozilla APT repository
-
-- name: Setup Mozilla Firefox repository
-  block:
+# https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions-recommended
+- block:
     - name: Ensure APT keyrings directory exists
       ansible.builtin.file:
         path: /etc/apt/keyrings
@@ -40,14 +38,26 @@
         update_cache: true
         cache_valid_time: 3600
 
+    - name: Check if Firefox is installed and from Mozilla repository
+      ansible.builtin.shell: |
+        if dpkg -l firefox 2>/dev/null | grep -q '^ii'; then
+          apt-cache policy firefox | grep -q 'packages.mozilla.org' && echo "mozilla" || echo "other"
+        else
+          echo "not_installed"
+        fi
+      register: firefox_source
+      changed_when: false
+
     - name: Remove Firefox snap stub package
       ansible.builtin.apt:
         name: firefox
         state: absent
         purge: true
+      when: firefox_source.stdout in ['other', 'not_installed']
 
-    - name: Install Firefox
+    - name: Install Firefox from Mozilla repository
       ansible.builtin.apt:
         name: firefox
         state: present
+      when: firefox_source.stdout != 'mozilla'
   tags: ['firefox']
