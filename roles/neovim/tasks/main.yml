@@ -24,8 +24,12 @@
     - name: Extract current Neovim version
       ansible.builtin.set_fact:
         current_version: >-
-          {{ nvim_current_version.stdout
-             | regex_search('v([0-9]+\\.[0-9]+\\.[0-9]+)', '\\1') }}
+          {{
+            (nvim_current_version.stdout
+             | regex_search('v[0-9]+\\.[0-9]+\\.[0-9]+'))
+            | default('')
+            | regex_replace('^v', '')
+          }}
       when: nvim_stat.stat.exists
 
     - name: Display current Neovim version
