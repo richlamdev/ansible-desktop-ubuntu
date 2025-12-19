@@ -9,11 +9,6 @@
         path: "{{ nvim_bin }}"
       register: nvim_stat
 
-    - name: Display Neovim not installed message
-      ansible.builtin.debug:
-        msg: "Neovim not currently installed."
-      when: not nvim_stat.stat.exists
-
     - name: Check current Neovim version
       ansible.builtin.command: "{{ nvim_bin }} --version"
       register: nvim_current_version
@@ -24,20 +19,8 @@
     - name: Extract current Neovim version
       ansible.builtin.set_fact:
         current_version: >-
-          {{
-            (nvim_current_version.stdout
-             | regex_search('v[0-9]+\\.[0-9]+\\.[0-9]+'))
-            | default('')
-            | regex_replace('^v', '')
-          }}
+          {{ nvim_current_version.stdout | regex_search('v[0-9]+\.[0-9]+\.[0-9]+') | default('v0.0.0') | regex_replace('^v', '') }}
       when: nvim_stat.stat.exists
-
-    - name: Display current Neovim version
-      ansible.builtin.debug:
-        msg: "Current Neovim version: {{ current_version }}"
-      when:
-        - nvim_stat.stat.exists
-        - current_version is defined
 
     - name: Fetch latest Neovim release information from GitHub
       ansible.builtin.uri:
@@ -63,14 +46,18 @@
         needs_update: >-
           {{ not nvim_stat.stat.exists
              or current_version is not defined
-             or current_version != latest_version }}
+             or current_version is version(latest_version, '<') }}
 
-    - name: Display version mismatch
+    - name: Display current status
       ansible.builtin.debug:
         msg: >-
-          Installing/Upgrading Neovim:
-          {{ current_version | default('not installed') }} → {{ latest_version }}
-      when: needs_update
+          {% if not nvim_stat.stat.exists %}
+          Neovim not installed. Installing version {{ latest_version }}
+          {% elif current_version is version(latest_version, '<') %}
+          Upgrading Neovim: {{ current_version }} → {{ latest_version }}
+          {% else %}
+          Neovim already up to date: {{ current_version }}
+          {% endif %}
 
     - name: Ensure installation directory exists
       ansible.builtin.file:
@@ -84,7 +71,6 @@
         url: "{{ appimage_url }}"
         dest: "{{ nvim_bin }}"
         mode: '0755'
-        force: yes
       when: needs_update
 
     - name: Verify Neovim installation
@@ -93,10 +79,11 @@
       changed_when: false
       when: needs_update
 
-    - name: Display installed Neovim version
+    - name: Display installation result
       ansible.builtin.debug:
         msg: "Neovim successfully installed/upgraded: {{ nvim_new_version.stdout_lines[0] }}"
       when: needs_update
+
   tags:
     - neovim
     - upgrade
