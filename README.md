@@ -113,6 +113,8 @@ Additional information for the following roles:
   * autostart.yml - enables autostart of applications
   * ssh.yml - configures ssh server & client; disables password authentication
   * ufw - disables incoming ports, except port 22 (limit) from 192.168.0.0/16
+  * screenshot-mover - automatically moves screen shots from ~/Pictures/Screenshots to ~/Desktop
+                       (imo, this is a silly way to do this, but in the absence of being able to configure the default save directory, this is a workaround)
 
 * dev-tools
   * list of development packages to install via apt and pipx
@@ -207,11 +209,17 @@ requirements*
         * change contents to include your user name and email and rename this
           file to .gitconfig-private
 
+* firefox
+  * removes the snap version and installs the binary from Mozilla
+
 * fzf
   * installs [fzf](https://github.com/junegunn/fzf), the command line fuzzy finder
   * adds fzf bash configuration to ~/.bashrc.d/fzf.sh, which is loaded by
     .bashrc as documented in the env role
   * fzf is required for [fzf.vim](https://github.com/junegunn/fzf.vim)
+
+* git
+  * installs a more up-to-date version of git in lieu of the default distribution version
 
 * vim
   * installs customization only, does not install vim

@@ -21,6 +21,9 @@
     - name: keychron tasks
       import_tasks: keychron.yml
 
+    - name: screenshot mover tasks
+      import_tasks: screenshot-mover.yml
+
     - name: autostart tasks
       import_tasks: autostart.yml
 

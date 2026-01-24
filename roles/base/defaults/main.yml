@@ -1,0 +1,9 @@
+---
+# Use home_dir which properly detects the actual user even with sudo
+screenshot_monitor_install_dir: "{{ home_dir }}/.local/bin"
+screenshot_monitor_service_dir: "{{ home_dir }}/.config/systemd/user"
+screenshot_monitor_source_dir: "{{ home_dir }}/Pictures/Screenshots"
+screenshot_monitor_dest_dir: "{{ home_dir }}/Desktop"
+screenshot_monitor_user_uid: "{{ lookup('pipe', 'id -u ' + local_user) }}"
+screenshot_monitor_enable_lingering: true
+screenshot_monitor_ensure_uv: true

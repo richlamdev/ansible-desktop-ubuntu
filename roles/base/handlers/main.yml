@@ -3,3 +3,20 @@
   service:
     name: ssh
     state: reloaded
+
+- name: reload systemd user daemon
+  systemd:
+    daemon_reload: true
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ screenshot_monitor_user_uid }}"
+  become: false
+
+- name: restart screenshot-monitor
+  systemd:
+    name: screenshot-monitor
+    state: restarted
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ screenshot_monitor_user_uid }}"
+  become: false

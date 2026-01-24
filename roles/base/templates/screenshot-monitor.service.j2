@@ -1,0 +1,13 @@
+[Unit]
+Description=Screenshot Transfer Monitor
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart={{ screenshot_monitor_install_dir }}/uv run {{ screenshot_monitor_install_dir }}/screenshot_monitor.py
+Restart=on-failure
+RestartSec=5
+Environment="PATH={{ ansible_env.HOME }}/.local/bin:/usr/local/bin:/usr/bin:/bin"
+
+[Install]
+WantedBy=default.target
