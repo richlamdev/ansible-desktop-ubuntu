@@ -17,6 +17,7 @@ from inotify_simple import INotify, flags
 
 def setup_directories():
     """Setup and validate source and destination directories."""
+    # Path.home() resolves dynamically to the current user's home directory
     home = Path.home()
     source_dir = home / "Pictures" / "Screenshots"
     dest_dir = home / "Desktop"
@@ -39,7 +40,7 @@ def transfer_file(source_path, dest_dir):
     try:
         dest_path = dest_dir / source_path.name
 
-        # Handle duplicate filenames
+        # Handle duplicate filenames by appending a counter
         if dest_path.exists():
             base = dest_path.stem
             ext = dest_path.suffix
@@ -50,11 +51,10 @@ def transfer_file(source_path, dest_dir):
 
         shutil.move(str(source_path), str(dest_path))
 
-        # Set proper permissions so file appears on desktop
-        # 0o644 = rw-r--r-- (owner can read/write, others can read)
+        # Set permissions: rw-r--r-- (User: Read/Write, Group/Others: Read)
         os.chmod(dest_path, 0o644)
 
-        # Ensure current user owns the file
+        # Ensure current user owns the file (important if run via sudo/root context)
         uid = os.getuid()
         gid = os.getgid()
         os.chown(dest_path, uid, gid)
@@ -74,31 +74,32 @@ def main():
     print(f"Destination: {dest_dir}")
     print("Press Ctrl+C to stop\n")
 
-    # Initialize inotify - only watch CLOSE_WRITE and MOVED_TO (file complete events)
+    # Initialize inotify
     inotify = INotify()
     watch_flags = flags.CLOSE_WRITE | flags.MOVED_TO
-    wd = inotify.add_watch(str(source_dir), watch_flags)
 
-    # Track files already processed to avoid double-processing
-    processed = set()
+    # We call add_watch to register it with the kernel,
+    # but we don't need to store the return value (wd) since we only watch one path.
+    inotify.add_watch(str(source_dir), watch_flags)
 
     try:
         while True:
-            # Wait for events (blocking)
+            # Blocking wait for events (uses 0% CPU while waiting)
             events = inotify.read()
 
             for event in events:
-                # Skip directories
+                # Skip directory events
                 if event.mask & flags.ISDIR:
                     continue
 
                 filename = event.name
-                if not filename or filename in processed:
+                if not filename:
                     continue
 
                 source_path = source_dir / filename
-                if source_path.exists():
-                    processed.add(filename)
+
+                # Check if file exists and ignore hidden files (like .temp)
+                if source_path.exists() and not filename.startswith('.'):
                     transfer_file(source_path, dest_dir)
 
     except KeyboardInterrupt:
