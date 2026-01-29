@@ -213,56 +213,86 @@ nnoremap <Leader>i :IndentLinesToggle<cr>
 " }}}
 
 " statusline {{{
+" Git branch (cached)
 function! GitBranch()
-  let branch = substitute(system('git rev-parse --abbrev-ref HEAD 2>/dev/null'), '\n', '', '')
-  return strlen(branch) ? ' '.branch.' ' : ''
+  if !exists('b:git_branch')
+    let b:git_branch = substitute(system(
+          \ 'git rev-parse --abbrev-ref HEAD 2>/dev/null'
+          \ ), '\n', '', '')
+  endif
+  return strlen(b:git_branch) ? ' '.b:git_branch.' ' : ''
+endfunction
+
+autocmd BufEnter * unlet! b:git_branch
+
+function! StatusHex()
+  let l:col = col('.')
+  let l:line = getline('.')
+  if l:col <= len(l:line)
+    return printf('0x%02X', char2nr(l:line[l:col - 1]))
+  endif
+  return ''
 endfunction
 
 function! SetStatusLine()
-  " based on gnome-terminal, use XTerm colour palette
-  "set fillchars+=vert:\ " change appearance of window split border
-  hi VertSplit ctermfg=white guifg=white " change color of window split border
+  hi VertSplit ctermfg=white guifg=white
 
-  hi User1 ctermbg=red ctermfg=white guibg=red guifg=white
-  hi User2 ctermbg=214 ctermfg=black guibg=#ffaf00 guifg=black "DarkOrange
-  hi User3 ctermbg=yellow ctermfg=black guibg=yellow guifg=black
-  hi User4 ctermbg=darkmagenta ctermfg=white guibg=darkmagenta guifg=white
-  hi User5 ctermbg=brown ctermfg=white guibg=brown guifg=white
-  hi User6 ctermbg=lightblue ctermfg=black guibg=lightblue guifg=black
-  hi User7 ctermbg=grey ctermfg=black guibg=grey guifg=black
-  hi User8 ctermbg=black ctermfg=214 guibg=black guifg=#ffaf00
-  hi User9 ctermbg=blue ctermfg=yellow guibg=blue guifg=yellow
-  hi StatusLineNC cterm=italic       " non active windows are italic
+  hi User1 ctermbg=red          ctermfg=white guibg=red          guifg=white
+  hi User2 ctermbg=214          ctermfg=black guibg=#ffaf00      guifg=black
+  hi User3 ctermbg=yellow       ctermfg=black guibg=yellow       guifg=black
+  hi User4 ctermbg=darkmagenta  ctermfg=white guibg=darkmagenta  guifg=white
+  hi User5 ctermbg=brown        ctermfg=white guibg=brown        guifg=white
+  hi User6 ctermbg=lightblue    ctermfg=black guibg=lightblue    guifg=black
+  hi User7 ctermbg=grey         ctermfg=black guibg=grey         guifg=black
+  hi User8 ctermbg=black        ctermfg=214   guibg=black        guifg=#ffaf00
+  hi User9 ctermbg=blue         ctermfg=yellow guibg=blue        guifg=yellow
 
-  set laststatus=2                   " always display status line
+  hi StatusLineNC cterm=italic
+
+  set laststatus=2
   set statusline=
 
-  set statusline+=%2*                " set to User1 color
-  set statusline+=\b:%n              " buffer number
-  "set statusline+=%2*                " set to User2 color
-  "set statusline+=%{getcwd()}/       " current working directory (same as :pwd)
-  set statusline+=%4*                " set to User4 color
-  set statusline+=%f                 " current directory + file with respect to pwd
-  set statusline+=\                  " add space separator
-  set statusline+=%3*                " set to User3 color
-  set statusline+=\ft:\%y            " file type in [brackets]
-  set statusline+=%1*                " set to User1 color
-  set statusline+=\ {Codeium:\ %3{codeium#GetStatusString()}} " codeium status
-  set statusline+=%8*                " set to User8 color
-  set statusline+=%{GitBranch()}     " display git branch name
-  set statusline+=%9*                " reset color to default blue
-  set statusline+=\%=                " separator point left/right of statusline
-  set statusline+=%1*                " set to User1 color
-  set statusline+=\search:\ %{searchcount().current}/%{searchcount().total}
-  set statusline+=%7*                " set to User7 color
-  set statusline+=\ row:%l/%L         " line number / line total
-  set statusline+=%4*                " set to User4 color
-  set statusline+=\ col:%c           " column number
-  set statusline+=%6*                " set to User6 color
-  set statusline+=\ %p%%             " percentage through file
-  set statusline+=%5*                " set to User5 color
-  set statusline+=\ hex:%B           " value of char under cursor in hex
+  " -------- Left side --------
+  set statusline+=%1*
+  set statusline+=\ buf:%n
+
+  set statusline+=%4*
+  set statusline+=\ %f
+
+  set statusline+=%3*
+  set statusline+=\ ft:%y
+
+  if exists('*codeium#GetStatusString')
+    set statusline+=%1*
+    set statusline+=\ Codeium:\ %{codeium#GetStatusString()}
+  endif
+
+  set statusline+=%8*
+  set statusline+=\ %{GitBranch()}
+
+  " -------- Right side --------
+  set statusline+=%=
+
+  set statusline+=%1*
+  set statusline+=\ search:\ %{searchcount().current}/%{searchcount().total}
+
+  set statusline+=%7*
+  set statusline+=\ row:%l/%L
+
+  set statusline+=%4*
+  set statusline+=\ col:%c
+
+  set statusline+=%6*
+  set statusline+=\ %p%%
+
+  set statusline+=%5*
+  set statusline+=\ hex:%{StatusHex()}
 endfunction
+
+augroup StatusLineInit
+  autocmd!
+  autocmd VimEnter,ColorScheme * call SetStatusLine()
+augroup END
 " }}}
 
 " vimwiki {{{
@@ -287,6 +317,11 @@ vnoremap <c-y> "+y
 
 " fzf {{{
 set runtimepath+=~/.fzf,~/.vim/bundle/fzf.vim
+
+" Use ripgrep for Vim project searches (respects .gitignore)
+"let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --smart-case'
+let $FZF_DEFAULT_COMMAND = "rg --files --hidden --follow --smart-case --glob '!.git/'"
+
 
 " CTRL-A and CTRL-D to populate quickfix list when using :Ag :Rg :Lines
 let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:deselect-all --layout=reverse --height 90% --border'
