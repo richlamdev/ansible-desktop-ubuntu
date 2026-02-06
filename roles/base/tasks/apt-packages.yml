@@ -35,7 +35,6 @@
     - ufw
     - unzip
     - vim-gtk3  # install by github and compile
-    - virtualbox
     - vlc
     - xclip
   loop_control:

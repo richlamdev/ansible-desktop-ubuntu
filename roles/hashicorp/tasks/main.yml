@@ -21,7 +21,6 @@
         pkg: "{{ item }}"
       loop:
         - terraform
-        - vagrant
         - vault
       loop_control:
         label: "{{ item }}"
