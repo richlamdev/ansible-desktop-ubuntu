@@ -1,0 +1,29 @@
+---
+- block:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: install alacritty
+      apt:
+        name: alacritty
+        state: present
+
+    - name: ensure {{ home_dir }}/.config/alacritty directory exists
+      file:
+        state: directory
+        path: "{{ home_dir }}/.config/alacritty"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0770"
+
+    - name: install alacritty config
+      copy:
+        src: "alacritty.toml"
+        dest: "{{ home_dir }}/.config/alacritty/alacritty.toml"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0640"
+        force: true
+  tags: ['alacritty']
