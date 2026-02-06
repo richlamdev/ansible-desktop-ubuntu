@@ -23,9 +23,17 @@
     owner: "{{ local_user }}"
     group: "{{ local_user_primary_group }}"
 
-- name: enable gnome-terminal autostart
+# - name: enable gnome-terminal autostart
+#   copy:
+#     src: autostart/gnome-terminal.desktop
+#     dest: "/home/{{ local_user }}/.config/autostart/"
+#     mode: 0644
+#     owner: "{{ local_user }}"
+#     group: "{{ local_user_primary_group }}"
+
+- name: enable alacritty autostart
   copy:
-    src: autostart/gnome-terminal.desktop
+    src: autostart/alacritty.desktop
     dest: "/home/{{ local_user }}/.config/autostart/"
     mode: 0644
     owner: "{{ local_user }}"

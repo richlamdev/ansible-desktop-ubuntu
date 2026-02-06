@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=alacritty --dimensions 90 45
+Terminal=false
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+StartupNotify=false
+Name=Alacritty
+Comment=start Alacritty
