@@ -1,0 +1,104 @@
+# ~/.config/alacritty/alacritty.toml
+
+[window]
+padding = { x = 8, y = 8 }
+dimensions = { columns = 90, lines = 45 }
+decorations = "full"
+dynamic_title = true
+startup_mode = "Windowed"
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+# ----------------------------------------
+# Font – GNOME Terminal–like (Ubuntu Mono)
+# ----------------------------------------
+
+[font]
+size = 18.0
+builtin_box_drawing = true
+offset = { x = 0, y = 1 }
+glyph_offset = { x = 0, y = 0 }
+
+[font.normal]
+family = "Ubuntu Mono"
+style = "Regular"
+
+[font.bold]
+family = "Ubuntu Mono"
+style = "Bold"
+
+[font.italic]
+family = "Ubuntu Mono"
+style = "Italic"
+
+# ----------------------------------------
+# Colors – GNOME Terminal–like palette
+# ----------------------------------------
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.primary]
+background = "0x171421"
+foreground = "0xd0cfcc"
+
+[colors.cursor]
+text = "0x171421"
+cursor = "0xd0cfcc"
+
+[colors.normal]
+black   = "0x171421"
+red     = "0xc01c28"
+green   = "0x26a269"
+yellow  = "0xa2734c"
+blue    = "0x12488b"
+magenta = "0xa347ba"
+cyan    = "0x2aa1b3"
+white   = "0xd0cfcc"
+
+[colors.bright]
+black   = "0x5e5c64"
+red     = "0xf66151"
+green   = "0x33d17a"
+yellow  = "0xe9ad0c"
+blue    = "0x2a7bde"
+magenta = "0xc061cb"
+cyan    = "0x33c7de"
+white   = "0xffffff"
+
+[keyboard]
+bindings = [
+  { key = "N", mods = "Control|Shift", action = "SpawnNewInstance" },
+  { key = "F11", action = "ToggleFullscreen" },
+
+  { key = "Plus",  mods = "Control", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+  { key = "Key0",  mods = "Control", action = "ResetFontSize" },
+
+  { key = "PageUp",   mods = "Shift", action = "ScrollPageUp" },
+  { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
+  { key = "Home",     mods = "Shift", action = "ScrollToTop" },
+  { key = "End",      mods = "Shift", action = "ScrollToBottom" },
+
+  { key = "F", mods = "Control|Shift", action = "SearchForward" },
+  { key = "B", mods = "Control|Shift", action = "SearchBackward" },
+
+  { key = "K", mods = "Control|Shift", action = "ClearHistory" }
+]
+
+
+# ----------------------------------------
+# Cursor & interaction
+# ----------------------------------------
+
+[cursor]
+style = "Block"
+unfocused_hollow = true
+
+[mouse]
+hide_when_typing = true
+
+[selection]
+save_to_clipboard = true

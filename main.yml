@@ -10,6 +10,7 @@
 
   roles:
     - apt-sources-ubc
+    - alacritty
     - base
     - aws
     - brave
