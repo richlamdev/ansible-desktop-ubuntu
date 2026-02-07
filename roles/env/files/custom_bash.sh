@@ -33,10 +33,12 @@ google() {
 
 acg() {
   . ~/.local/bin/$USER/sandbox-creds.sh
+  sts
 }
 
 acg-clear() {
   . ~/.local/bin/$USER/sandbox-creds-delete.sh
+  sts
 }
 
 # Function to pretty-print CSV files
