@@ -2,7 +2,7 @@
 
 # Prompt the user for their AWS credentials
 read -p "Enter AWS Access Key ID: " ACCESS_KEY_ID
-read -s -p "Enter AWS Secret Access Key: " SECRET_ACCESS_KEY
+read -p "Enter AWS Secret Access Key: " SECRET_ACCESS_KEY
 echo
 # read -p "Enter AWS Session Token (if any, leave blank if none): " SESSION_TOKEN
 # read -p "Enter AWS Region (default: us-east-1): " REGION
@@ -17,6 +17,3 @@ export AWS_SECRET_ACCESS_KEY="$SECRET_ACCESS_KEY"
 export AWS_DEFAULT_REGION="us-east-1"
 
 echo "✅ AWS credentials have been set in your environment."
-
-echo
-aws sts get-caller-identity
