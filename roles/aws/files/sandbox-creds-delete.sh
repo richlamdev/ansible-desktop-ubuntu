@@ -7,6 +7,3 @@ unset AWS_SESSION_TOKEN
 unset AWS_DEFAULT_REGION
 
 echo "AWS CLI environment credentials have been unset."
-
-echo
-aws sts get-caller-identity
