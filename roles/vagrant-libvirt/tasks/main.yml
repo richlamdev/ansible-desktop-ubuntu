@@ -4,16 +4,16 @@
     apt:
       update_cache: true
       name:
-        - qemu-system-x86
+        - bridge-utils
+        - gcc
         - libvirt-daemon-system
         - libvirt-clients
-        - bridge-utils
-        - ruby
-        - ruby-dev
-        - gcc
+        - libvirt-dev
         - make
         - pkg-config
-        - git
+        - qemu-system-x86
+        - ruby
+        - ruby-dev
       state: present
 
   - name: Ensure libvirtd is running
