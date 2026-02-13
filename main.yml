@@ -5,8 +5,10 @@
   become_user: root
   become_method: sudo
   gather_facts: true
-  vars_files:
-    - vars.yml
+  pre_tasks:
+    - name: resolve remote user facts
+      ansible.builtin.include_tasks: resolve_user.yml
+      tags: always
 
   roles:
     - apt-sources-ubc
@@ -35,6 +37,7 @@
     - sublime-text
     - trivy
     - unattended-upgrade-override
+    - vagrant-libvirt
     - vim             # executes as local user, not root
     - wireshark
     - yubico

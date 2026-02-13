@@ -1,9 +1,0 @@
----
-project_dir: "{{ home_dir }}/vagrant-libvirt-test"
-
-vm_name: ubuntu-test
-vm_box: generic/ubuntu2204
-vm_ip: 192.168.121.50
-
-vm_memory: 4096
-vm_cpus: 2
