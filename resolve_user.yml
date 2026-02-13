@@ -1,0 +1,25 @@
+---
+- name: resolve remote user facts
+  block:
+  - name: Determine effective remote user
+    ansible.builtin.set_fact:
+      local_user: >-
+        {{ ansible_env.SUDO_USER
+           | default(ansible_user_id)
+           | default(ansible_ssh_user) }}
+
+  - name: Get home directory on remote host
+    ansible.builtin.shell: "echo ~{{ local_user }}"
+    changed_when: false
+    register: _home_dir_result
+
+  - name: Get primary group on remote host
+    ansible.builtin.command: "id -gn {{ local_user }}"
+    changed_when: false
+    register: _primary_group_result
+
+  - name: Set derived facts
+    ansible.builtin.set_fact:
+      home_dir: "{{ _home_dir_result.stdout }}"
+      local_user_primary_group: "{{ _primary_group_result.stdout }}"
+  tags: always

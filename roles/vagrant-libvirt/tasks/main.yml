@@ -1,0 +1,56 @@
+---
+- block:
+  - name: Install required packages
+    apt:
+      update_cache: true
+      name:
+        - qemu-system-x86
+        - libvirt-daemon-system
+        - libvirt-clients
+        - bridge-utils
+        - ruby
+        - ruby-dev
+        - gcc
+        - make
+        - pkg-config
+        - git
+      state: present
+
+  - name: Ensure libvirtd is running
+    systemd:
+      name: libvirtd
+      enabled: true
+      state: started
+
+  - name: Add user to libvirt and kvm groups
+    user:
+      name: "{{ local_user }}"
+      groups: libvirt,kvm
+      append: true
+
+  - name: Install vagrant-libvirt plugin
+    command: vagrant plugin install vagrant-libvirt
+    args:
+      creates: "{{ home_dir }}/.vagrant.d/plugins.json"
+
+  - name: Reminder about logout
+    debug:
+      msg: |
+        ⚠️ You MUST log out and log back in for libvirt group changes to apply.
+        After logging back in:
+          vagrant up --provider=libvirt
+
+  - name: Check if vagrant-libvirt plugin is installed
+    command: vagrant plugin list
+    register: _vagrant_plugins
+    changed_when: false
+    become: false
+    become_user: "{{ local_user }}"
+
+  - name: Install vagrant-libvirt plugin
+    command: vagrant plugin install vagrant-libvirt
+    become: false
+    become_user: "{{ local_user }}"
+    when: "'vagrant-libvirt' not in _vagrant_plugins.stdout"
+  tags:
+    - vagrant-libvirt
