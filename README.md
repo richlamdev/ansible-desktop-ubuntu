@@ -8,6 +8,9 @@ desktop/laptop deployment.
 This Playbook is designed and tested for Ubunutu 24.04 LTS.  This playbook may
 not work on older versions of Ubuntu without modification.
 
+See the [Testing](#testing) section for instructions on how to test this
+playbook and/or specific roles
+
 
 ## Requirements
 
@@ -221,12 +224,16 @@ requirements*
 * git
   * installs a more up-to-date version of git in lieu of the default distribution version
 
+* vagrant-libvirt
+  * installs the vagrant-libvirt plugin and configures the user for Vagrant
+  * Vagrant is installed by the hashicorp role
+
 * vim
   * installs customization only, does not install vim
     * optional: compile and install vim with this [script](https://github.com/richlamdev/vim-compile)
 
-  * if codeium is not needed, disable codeium in the status line within .vimrc
-    that is deployed with this role:
+  * if codeium, now known as windsurf, is not needed, disable codeium in the
+    status line within .vimrc that is deployed with this role:
     * comment out this line
 
     ```set statusline+=\{…\}%3{codeium#GetStatusString()}  " codeium status```
@@ -239,7 +246,7 @@ requirements*
 
   * installs following plugins:
     * [ALE](https://github.com/dense-analysis/ale)
-    * [codeium](https://github.com/Exafunction/codeium.vim)
+    * [codeium](https://github.com/Exafunction/windsurf.vim)
     * [fzf.vim](https://github.com/junegunn/fzf.vim)
     * ~~[Github copilot](https://github.com/github/copilot.vim)~~ (use codeium)
     * [hashivim](https://github.com/hashivim/vim-terraform)
@@ -282,7 +289,42 @@ Upgrade specific packages, not upraded via apt or snap:
 ## Idempotency
 
 The majority of this playbook is idempotent.  Minimal use of Ansible shell or
-command is used.
+command is used; and when they are used, all attempts have been made to ensure
+idempotency.
+
+## Testing
+
+Ensure the roles from this repo have been successully installed:
+`dev-tools`
+`hashicorp` - vagrant package particularly
+`vagrant-libvirt`
+
+Ensure the [vagrant-ubuntu](https://github.com/richlamdev/vagrant-ubuntu) repo
+is installed (cloned) at the same level as the ansible-desktop-ubuntu repo.
+
+The structure should be:
+
+git-repos
+├── ansible-desktop-ubuntu
+└── vagrant-ubuntu
+
+This will ensure the Makefile correctly points to the correct location to
+ensure testing will work.
+
+Use the command `make help` for a basic list of commands.
+
+### Quick test
+
+Use `make bootstrap` - which will spin up a Ubuntu VM, which you can use
+to test any role (or all) in the playbook. `make apply ARGS="--tags <role-name>"`
+
+IE: To test alacritty role:
+
+`make apply ARGS="--tags alacritty"`
+
+Use `make ssh` to login to the VM and check if the package was installed.
+
+After testing is complete, use `make destroy` to remove the VM
 
 
 ## Scripts
