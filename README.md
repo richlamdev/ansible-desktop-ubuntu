@@ -304,9 +304,9 @@ is installed (cloned) at the same level as the ansible-desktop-ubuntu repo.
 
 The structure should be:
 
-git-repos
-├── ansible-desktop-ubuntu
-└── vagrant-ubuntu
+git-repos\
+├── ansible-desktop-ubuntu\
+└── vagrant-ubuntu\
 
 This will ensure the Makefile correctly points to the correct location to
 ensure testing will work.
@@ -323,8 +323,8 @@ IE: To test alacritty role:
 `make apply ARGS="--tags alacritty"`
 
 Use `make ssh` to login to the VM and check if the package was installed.
-
-After testing is complete, use `make destroy` to remove the VM
+Type `exit` to exit the VM and after testing is complete,
+use `make destroy` to remove the VM
 
 
 ## Scripts
