@@ -306,7 +306,7 @@ The structure should be:
 
 git-repos\
 ├── ansible-desktop-ubuntu\
-└── vagrant-ubuntu\
+└── vagrant-ubuntu
 
 This will ensure the Makefile correctly points to the correct location to
 ensure testing will work.
