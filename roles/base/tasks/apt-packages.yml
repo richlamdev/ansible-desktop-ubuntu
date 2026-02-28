@@ -5,41 +5,51 @@
     upgrade: dist
 
 # keep alphabetically ordered
+- name: packages | define base packages
+  set_fact:
+    base_packages:
+      - bat
+      - clamav
+      - clamav-daemon
+      - curl
+      - fd-find
+      - gimp
+      - graphviz
+      - htop
+      - iperf3
+      - meld
+      - net-tools
+      - nmap
+      - p7zip
+      - qemu-system-x86
+      - ranger
+      - ripgrep
+      - rtorrent
+      - silversearcher-ag
+      - sshfs
+      - tcpdump
+      - tmux
+      - tree
+      - ufw
+      - unzip
+      - vim-gtk3  # install by github and compile
+      - vlc
+      - xclip
+
 - name: packages | install standard additions to the base install
   apt:
     state: latest
-    pkg: "{{ item }}"
-  loop:
-    - bat
-    - clamav
-    - clamav-daemon
-    - curl
-    - fd-find
-    - gimp
-    - graphviz
-    - htop
-    - iperf3
-    - meld
-    - net-tools
-    - nmap
-    - p7zip
-    - qemu-system-x86
-    - ranger
-    - ripgrep
-    - rtorrent
-    - silversearcher-ag
-    - sshfs
-    - tcpdump
-    - tmux
-    - tree
-    - ufw
-    - unzip
-    - vim-gtk3  # install by github and compile
-    - vlc
-    - xclip
-  loop_control:
-    label: "{{ item }}"
-  become: yes
+    name: "{{ base_packages }}"
+  register: _apt_result
+
+- name: packages | managed package list
+  debug:
+    msg: "{{ base_packages }}"
+
+- name: packages | show what changed
+  debug:
+    msg: "{{ _apt_result.stdout_lines }}"
+  when: _apt_result.changed
 
 - name: packages | apt autoremove & autoclean
   apt:
