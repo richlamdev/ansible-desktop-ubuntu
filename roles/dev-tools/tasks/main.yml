@@ -1,25 +1,36 @@
 ---
 - block:
     - name: Ensure development packages and libraries are installed
+      set_fact:
+        dev_packages:
+          - build-essential
+          - gcc
+          - git
+          - gitk
+          - golang
+          - httpie
+          - jq
+          - make
+          - pipx
+          - python3-venv
+          - shellcheck
+          - shfmt
+          - universal-ctags
+
+    - name: packages | install standard additions to the dev packages
       apt:
         state: latest
-        pkg: "{{ item }}"
-      loop:
-        - build-essential
-        - gcc
-        - git
-        - gitk
-        - golang
-        - httpie
-        - jq
-        - make
-        - pipx
-        - python3-venv
-        - shellcheck
-        - shfmt
-        - universal-ctags
-      loop_control:
-        label: "{{ item }}"
+        name: "{{ dev_packages }}"
+      register: _apt_dev_result
+
+    - name: packages | managed package list
+      debug:
+        msg: "{{ dev_packages }}"
+
+    - name: packages | show what changed
+      debug:
+        msg: "{{ _apt_dev_result.stdout_lines }}"
+      when: _apt_dev_result.changed
 
     - name: install development tools
       community.general.pipx:
