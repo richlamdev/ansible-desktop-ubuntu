@@ -1,6 +1,6 @@
 ---
 - block:
-    - name: Ensure development packages and libraries are installed
+    - name: set_fact dev tools packages list
       set_fact:
         dev_packages:
           - build-essential
@@ -17,17 +17,17 @@
           - shfmt
           - universal-ctags
 
-    - name: packages | install standard additions to the dev packages
+    - name: register dev tools packages
       apt:
         state: latest
         name: "{{ dev_packages }}"
       register: _apt_dev_result
 
-    - name: packages | managed package list
+    - name: display dev tools
       debug:
         msg: "{{ dev_packages }}"
 
-    - name: packages | show what changed
+    - name: dev tools | show what changed
       debug:
         msg: "{{ _apt_dev_result.stdout_lines }}"
       when: _apt_dev_result.changed

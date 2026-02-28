@@ -15,14 +15,26 @@
         state: present
         update_cache: true
 
-    - name: install terraform, vagrant, and vault
+    - name: set_fact hashicorp packages list
+      set_fact:
+        hashicorp_packages:
+          - terraform
+          - vagrant
+          - vault
+
+    - name: register hashicorp packages
       apt:
-        state: present
-        pkg: "{{ item }}"
-      loop:
-        - terraform
-        - vagrant
-        - vault
-      loop_control:
-        label: "{{ item }}"
+        state: latest
+        name: "{{ hashicorp_packages }}"
+      register: _apt_hashicorp_result
+
+    - name: display hashicorp packages
+      debug:
+        msg: "{{ hashicorp_packages }}"
+
+    - name: hashicorp packages | show what changed
+      debug:
+        msg: "{{ _apt_hashicorp_result.stdout_lines }}"
+      when: _apt_hashicorp_result.changed
+
   tags: ['hashicorp']
