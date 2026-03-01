@@ -9,9 +9,11 @@
   set_fact:
     base_packages:
       - bat
+      - btop
       - clamav
       - clamav-daemon
       - curl
+      - eza
       - fd-find
       - gimp
       - graphviz
@@ -23,6 +25,7 @@
       - p7zip
       - qemu-system-x86
       - ranger
+      - rclone
       - ripgrep
       - rtorrent
       - silversearcher-ag
@@ -35,6 +38,7 @@
       - vim-gtk3  # install by github and compile
       - vlc
       - xclip
+      - zoxide
 
 - name: packages | install standard additions to the base install
   apt:

@@ -8,9 +8,11 @@
           - git
           - gitk
           - golang
+          - gron
           - httpie
           - jq
           - make
+          - miller
           - pipx
           - python3-venv
           - shellcheck
@@ -42,7 +44,6 @@
         - black
         - coverage
         - flake8
-        - glances
         - mypy
         - pre-commit
         - pytest
