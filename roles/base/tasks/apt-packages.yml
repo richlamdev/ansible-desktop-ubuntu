@@ -22,6 +22,7 @@
       - meld
       - net-tools
       - nmap
+      - okular
       - p7zip
       - qemu-system-x86
       - ranger
