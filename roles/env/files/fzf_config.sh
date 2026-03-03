@@ -40,41 +40,36 @@ se() {
   local search_folder="${1:-$HOME}"
 
   # Common folders to exclude from traversal
-  local exclude_paths=(
-    "$HOME/.cache"
-    "$HOME/.config"
-    "$HOME/.local"
-    "$HOME/.codeium"
-    "$HOME/.git"
-    "$HOME/.vscode"
-    "$HOME/.npm"
-    "$HOME/.cargo"
-    "$HOME/.rustup"
-    "$HOME/.mozilla"
-    "$HOME/.snap"
+  local exclude_args=(
+    --exclude .cache
+    --exclude .config
+    --exclude .local
+    --exclude .codeium
+    --exclude .git
+    --exclude .vscode
+    --exclude .npm
+    --exclude .cargo
+    --exclude .rustup
+    --exclude .mozilla
+    --exclude .snap
   )
 
-  # Build prune expression for find
-  local prune_expr=""
-  for path in "${exclude_paths[@]}"; do
-    prune_expr+=" -path \"$path\" -o"
-  done
-  # Remove trailing -o
-  prune_expr="${prune_expr::-3}"
+  # Base fdfind command (Ubuntu packages fd as fdfind)
+  local fd_base="fdfind --hidden --no-ignore ${exclude_args[*]} . '$search_folder'"
 
   selection=$(
-    eval "find \"$search_folder\" \( $prune_expr \) -prune -o -type d -print" | fzf \
+    eval "$fd_base --type d" | fzf \
       --preview='command -v tree >/dev/null && tree -C {} || ls -la {}' \
       --preview-window='50%' \
       --prompt='Dirs > ' \
       --bind='del:execute(rm -ri {+})' \
       --bind='ctrl-p:toggle-preview' \
       --bind='ctrl-d:change-prompt(Dirs > )' \
-      --bind="ctrl-d:+reload(eval \"find '$search_folder' \\( ${prune_expr//\"/\\\"} \\) -prune -o -type d -print\")" \
+      --bind="ctrl-d:+reload($fd_base --type d)" \
       --bind='ctrl-d:+change-preview(command -v tree >/dev/null && tree -C {} || ls -la {})' \
       --bind='ctrl-d:+refresh-preview' \
       --bind='ctrl-f:change-prompt(Files > )' \
-      --bind="ctrl-f:+reload(eval \"find '$search_folder' \\( ${prune_expr//\"/\\\"} \\) -prune -o -type f -print\")" \
+      --bind="ctrl-f:+reload($fd_base --type f)" \
       --bind='ctrl-f:+change-preview(command -v batcat >/dev/null && batcat --color=always {} || cat {})' \
       --bind='ctrl-f:+refresh-preview' \
       --bind='ctrl-a:select-all' \
