@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=alacritty --dimensions 90 45
+Exec=alacritty
 Terminal=false
 Hidden=false
 NoDisplay=false
