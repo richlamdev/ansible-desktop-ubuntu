@@ -1,8 +1,9 @@
 ---
 - name: check if uv is installed
-  stat:
-    path: "{{ home_dir }}/.local/bin/uv"
+  command: "{{ home_dir }}/.local/bin/uv --version"
   register: _uv_installed
+  failed_when: false
+  changed_when: false
   become: false
 
 - name: download uv installer
@@ -10,19 +11,19 @@
     url: https://astral.sh/uv/install.sh
     dest: /tmp/uv-install.sh
     mode: '0755'
-  when: not _uv_installed.stat.exists
+  when: _uv_installed.rc != 0
   become: false
 
 - name: install uv
   command: /tmp/uv-install.sh
-  when: not _uv_installed.stat.exists
+  when: _uv_installed.rc != 0
   become: false
 
 - name: update uv to latest
   command: uv self update
   register: _uv_update
   changed_when: "'Updated' in _uv_update.stdout"
-  when: _uv_installed.stat.exists
+  when: _uv_installed.rc == 0
   become: false
 
 - name: define uv tool packages

@@ -3,39 +3,39 @@
 - name: Screenshot monitor tasks
   become: false
   block:
-    - name: Ensure pipx is installed
-      when: screenshot_monitor_ensure_uv | bool
-      block:
-        - name: Check if pipx is installed
-          command: which pipx
-          register: pipx_check
-          changed_when: false
-          failed_when: false
-
-        - name: Install pipx via apt
-          apt:
-            name: pipx
-            state: present
-          become: true
-          when: pipx_check.rc != 0
-
-        - name: Ensure pipx path is in environment
-          command: pipx ensurepath
-          when: pipx_check.rc != 0
-          changed_when: false
-
-    - name: Ensure uv is installed via pipx
+    - name: Ensure uv is installed
       when: screenshot_monitor_ensure_uv | bool
       block:
         - name: Check if uv is installed
-          command: which uv
-          register: uv_check
-          changed_when: false
+          command: "{{ home_dir }}/.local/bin/uv --version"
+          register: _uv_installed
           failed_when: false
+          changed_when: false
 
-        - name: Install uv via pipx if not present
-          command: pipx install uv
-          when: uv_check.rc != 0
+        - name: Remove uv if installed via pipx
+          community.general.pipx:
+            name: uv
+            state: absent
+          when:
+            - _uv_installed.rc == 0
+            - "'pipx' in lookup('pipe', 'readlink -f ' + home_dir + '/.local/bin/uv')"
+
+        - name: Download uv installer
+          get_url:
+            url: https://astral.sh/uv/install.sh
+            dest: /tmp/uv-install.sh
+            mode: '0755'
+          when: _uv_installed.rc != 0
+
+        - name: Install uv
+          command: /tmp/uv-install.sh
+          when: _uv_installed.rc != 0
+
+        - name: Update uv to latest
+          command: "{{ home_dir }}/.local/bin/uv self update"
+          register: _uv_update
+          changed_when: "'Updated' in _uv_update.stdout"
+          when: _uv_installed.rc == 0
 
     - name: Ensure directories exist
       file:
