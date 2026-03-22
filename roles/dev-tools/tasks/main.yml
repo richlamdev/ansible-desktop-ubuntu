@@ -3,6 +3,12 @@
     - name: python dev tools
       import_tasks: python.yml
 
+    - name: pipx
+      import_tasks: pipx.yml
+
+    - name: pyenv
+      import_tasks: pyenv.yml
+
     - name: install/update uv
       import_tasks: uv.yml
 
