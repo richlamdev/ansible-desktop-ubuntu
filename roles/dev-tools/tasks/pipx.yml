@@ -1,0 +1,12 @@
+---
+- name: Check if pipx path is present
+  shell: test -d ~/.local/bin && echo "Pipx ensurepath executed" || echo "Pipx ensurepath not executed"
+  register: pipx_ensurepath_output
+  changed_when: false
+  ignore_errors: true
+  become: false
+
+- name: Execute pipx ensurepath, if required
+  command: pipx ensurepath
+  when: pipx_ensurepath_output.rc != 0
+  become: false
