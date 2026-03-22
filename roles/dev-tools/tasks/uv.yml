@@ -60,5 +60,5 @@
 - name: upgrade all uv tools
   command: "{{ home_dir }}/.local/bin/uv tool upgrade --all"
   register: _uv_upgrade_all
-  changed_when: "'Nothing to upgrade' not in _uv_upgrade_all.stdout"
+  changed_when: "'Nothing to upgrade' not in _uv_upgrade_all.stderr"
   become: false
