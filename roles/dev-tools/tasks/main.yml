@@ -1,7 +1,7 @@
 ---
 - block:
-    - name: python dev tools
-      import_tasks: python.yml
+    - name: dev tools
+      import_tasks: dev-tools.yml
 
     - name: pipx
       import_tasks: pipx.yml

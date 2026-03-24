@@ -1,12 +1,21 @@
 ---
-- name: Check if pipx path is present
-  shell: test -d ~/.local/bin && echo "Pipx ensurepath executed" || echo "Pipx ensurepath not executed"
-  register: pipx_ensurepath_output
-  changed_when: false
-  ignore_errors: true
-  become: false
+- block:
+    - name: Check if pipx path is present
+      shell: test -d ~/.local/bin && echo "Pipx ensurepath executed" || echo "Pipx ensurepath not executed"
+      register: pipx_ensurepath_output
+      changed_when: false
+      ignore_errors: true
+      become: false
 
-- name: Execute pipx ensurepath, if required
-  command: pipx ensurepath
-  when: pipx_ensurepath_output.rc != 0
-  become: false
+    - name: ensure pipx path is configured
+      command: pipx ensurepath
+      register: _pipx_ensurepath
+      changed_when: "'has been been added to PATH' in _pipx_ensurepath.stdout"
+      become: false
+
+    - name: upgrade all pipx packages
+      command: pipx upgrade-all
+      register: _pipx_upgrade_all
+      changed_when: "'upgraded package' in _pipx_upgrade_all.stdout"
+      become: false
+  tags: ['pipx']
