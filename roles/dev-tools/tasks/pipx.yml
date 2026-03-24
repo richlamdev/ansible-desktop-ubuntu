@@ -18,4 +18,4 @@
       register: _pipx_upgrade_all
       changed_when: "'upgraded package' in _pipx_upgrade_all.stdout"
       become: false
-  tags: ['pipx']
+  tags: ['pipx', 'upgrade']

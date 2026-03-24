@@ -63,4 +63,4 @@
       register: _uv_upgrade_all
       changed_when: "'Nothing to upgrade' not in _uv_upgrade_all.stderr"
       become: false
-  tags: ['uv']
+  tags: ['uv', 'upgrade']
