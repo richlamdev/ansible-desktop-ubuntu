@@ -3,6 +3,7 @@
   apt:
     update_cache: true
     upgrade: dist
+  tags: ["upgrade"]
 
 # keep alphabetically ordered
 - name: packages | define base packages
