@@ -9,6 +9,7 @@
 - name: packages | define base packages
   set_fact:
     base_packages:
+      - aria2
       - bat
       - btop
       - clamav
