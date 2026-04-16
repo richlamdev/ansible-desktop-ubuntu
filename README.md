@@ -96,7 +96,7 @@ or\
 Additional information for the following roles:
 
 * apt-sources-ubc
-  * adds University of BC (UBC) as primary apt source
+  * adds arcustech as primary apt source
   * default apt source is fallback apt source
   * this is a personal preference for me
   * find your fastest/closest mirror [here](https://launchpad.net/ubuntu/+archivemirrors)
