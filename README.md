@@ -17,6 +17,8 @@ playbook and/or specific roles
 1) Basic knowledge of Ansible
 
 2) Ubuntu 24.04 (may work on other apt based distros with modification)
+   * As of Ubuntu 26.04, may require minor modification to use older sudo
+     command.  sudo-rs may not be supported. TBD.
 
 3) Software: ansible, git, openssh-server, vim-gtk3 (vim or vim-gtk3 is not
 strictly required, but is required if the vim role is executed)
@@ -95,7 +97,7 @@ or\
 
 Additional information for the following roles:
 
-* apt-sources-ubc
+* apt-sources-arcustech
   * adds arcustech as primary apt source
   * default apt source is fallback apt source
   * this is a personal preference for me
@@ -120,10 +122,11 @@ Additional information for the following roles:
                        (imo, this is a silly way to do this, but in the absence of being able to configure the default save directory, this is a workaround)
 
 * dev-tools
-  * list of development packages to install via apt and pipx
-    * some of the development packages are installed using pipx where possible
+  * list of development packages to install via apt and uv.
+    * pipx is installed here, but largely unused
+    * some of the development packages are installed using uv where possible
       due to [PEP 668](https://peps.python.org/pep-0668/)
-    * primarily installs pipx binary packages for coding/development
+    * primarily installs uv binary packages for coding/development
        * [bandit](https://github.com/PyCQA/bandit)
        * [black](https://github.com/psf/black) (needed for VIM ALE plugin)
        * [flake8](https://github.com/PyCQA/flake8) (needed for VIM ALE plugin)
@@ -262,28 +265,29 @@ requirements*
 
 ## System Updates
 
-The commands used to keep your system up to date are:
+The command to keep your system up to date, execute from the root of this repo:
+
+```bash
+ansible-playbook main.yml --ask-become-pass -c local --tags upgrade
+```
+This essentially executes the following:
 
 1. `sudo apt update && sudo apt upgrade -y`
 2. `sudo apt autoremove -y` (not really an update, but removes old packages)
 3. `sudo snap refresh`*
 4. `pipx upgrade-all`
+5. `uv self update`
+6. `uv tool upgrade --all`
 
 *while snap package mangement is controversial - tradeoff of manual updates
 and convenience...
 
 Upgrade specific packages, not upraded via apt or snap:
 
-1. `execute scripts/aws_upgrade.sh` or `ansible-playbook main.yml --ask-become-pass -c local --tags aws`
-2. `execute scripts/fzf_upgrade.sh` or `ansible-playbook main.yml --ask-become-pass -c local --tags fzf`
-  - aws and fzf roles have been tagged with upgrade, to simplify playbook, upgrade both with:
-    `ansible-playbook main.yml --ask-become-pass -c local --tags upgrade`
-    This will allow future roles that are not update with apt/snap/pipx to be updated via upgrade tag
-
-3. If Docker Desktop, is installed.  Start Docker Desktop, click "Settings",
-   then "Software updates", then "Check for updates", then Download and install
-   updated Docker Desktop.
-   `sudo apt update && sudo apt install ./docker-desktop-<version>-<arch>.deb`
+* If Docker Desktop, is installed.  Start Docker Desktop, click "Settings",
+  then "Software updates", then "Check for updates", then Download and install
+  updated Docker Desktop.
+  `sudo apt update && sudo apt install ./docker-desktop-<version>-<arch>.deb`
 
 
 ## Idempotency
@@ -329,8 +333,9 @@ use `make destroy` to remove the VM
 
 ## Scripts
 
-1. gen_ssh_keys.sh - generates a new SSH key pair for localhost and copies
-the public key to ~/.ssh/authorized_keys.
+1. gen_ssh_keys.sh - generates a new SSH key pair for <target> and copies
+the public key to ~/.ssh/authorized_keys.  In the case the target is not
+localhost, then keys are placed in ~/.ssh/keys/<target>
 
 2. desktop-setup.sh - restore dconf settings.
   - this script essentially saves/loads desktop settings using dconf, things

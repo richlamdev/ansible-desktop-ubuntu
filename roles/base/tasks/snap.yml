@@ -14,3 +14,11 @@
   loop_control:
     label: "{{ item }}"
   become: yes
+
+- block:
+    - name: Refresh all snap packages
+      command: snap refresh
+      register: _snap_refresh
+      changed_when: "'All snaps up to date.' not in _snap_refresh.stderr"
+      become: yes
+  tags: ['upgrade']
