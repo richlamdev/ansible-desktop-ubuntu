@@ -62,6 +62,7 @@
   apt:
     autoremove: true
     autoclean: true
+  tags: ["upgrade"]
 
 - name: packages | enable clamav service
   systemd:
