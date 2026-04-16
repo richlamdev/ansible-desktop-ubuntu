@@ -1,5 +1,16 @@
 ---
 - block:
+    - name: Install unattended-upgrades
+      ansible.builtin.apt:
+        name: unattended-upgrades
+        state: present
+        update_cache: yes
+
+    - name: Unmask apt-daily-upgrade.service
+      ansible.builtin.systemd:
+        name: apt-daily-upgrade.service
+        masked: no
+
     - name: Copy apt configs
       ansible.builtin.copy:
         src: "{{ item }}"
@@ -29,5 +40,6 @@
         mode: '0644'
       notify:
         - Reload systemd
-        - Restart apt-daily-upgrade.timer
+        - Reset failed state (if any)
+        - Ensure timer is active
   tags: ['unattended-upgrade-override']
