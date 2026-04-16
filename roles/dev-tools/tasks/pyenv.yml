@@ -57,10 +57,12 @@
             eval "$(pyenv init - bash)"
           Then restart your shell or run: exec "$SHELL"
       when: not pyenv_binary.stat.exists or pyenv_install_result is defined
+  tags: ['pyenv']
 
+- block:
     - name: update pyenv
       ansible.builtin.command: "{{ home_dir }}/.pyenv/bin/pyenv update"
       register: _pyenv_update
       changed_when: "'Already up to date' not in _pyenv_update.stdout"
       become: false
-  tags: ['pyenv', 'upgrade']
+  tags: ['upgrade']
