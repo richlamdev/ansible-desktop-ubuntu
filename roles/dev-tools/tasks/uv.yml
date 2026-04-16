@@ -20,13 +20,6 @@
       when: _uv_installed.rc != 0
       become: false
 
-    - name: update uv to latest
-      command: "{{ home_dir }}/.local/bin/uv self update"
-      register: _uv_update
-      changed_when: "'Updated' in _uv_update.stdout"
-      when: _uv_installed.rc == 0
-      become: false
-
     - name: define uv tool packages
       set_fact:
         uv_packages:
@@ -57,10 +50,18 @@
       loop: "{{ uv_packages }}"
       when: (item + ' ') not in _uv_tools.stdout
       become: false
+  tags: ['uv']
+
+- block:
+    - name: update uv to latest
+      command: "{{ home_dir }}/.local/bin/uv self update"
+      register: _uv_update
+      changed_when: "'already on version' not in _uv_update.stderr"
+      become: false
 
     - name: upgrade all uv tools
       command: "{{ home_dir }}/.local/bin/uv tool upgrade --all"
       register: _uv_upgrade_all
       changed_when: "'Nothing to upgrade' not in _uv_upgrade_all.stderr"
       become: false
-  tags: ['uv', 'upgrade']
+  tags: ['upgrade']
