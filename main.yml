@@ -11,7 +11,7 @@
       tags: always
 
   roles:
-    - apt-sources-ubc
+    - apt-sources-arcustech
     - alacritty
     - base
     - aws

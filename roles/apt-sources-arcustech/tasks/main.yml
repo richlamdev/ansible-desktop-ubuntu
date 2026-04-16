@@ -20,4 +20,4 @@
       ansible.builtin.apt:
         update_cache: yes
       when: ubuntu_sources.changed
-  tags: ['apt-sources-ubc']
+  tags: ['apt-sources-arcustech']
