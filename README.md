@@ -17,13 +17,15 @@ playbook and/or specific roles
 1) Basic knowledge of Ansible
 
 2) Ubuntu 24.04 (may work on other apt based distros with modification)
-   * As of Ubuntu 26.04, may require minor modification to use older sudo
-     command.  sudo-rs may not be supported. TBD.
 
 3) Software: ansible, git, openssh-server, vim-gtk3 (vim or vim-gtk3 is not
 strictly required, but is required if the vim role is executed)
 
-4) Ensure ansible community modules are installed. See below for instructions.
+4) Ensure classic sudo is used in lieu of the new rust version of sudo.
+`sudo update-alternatives --config sudo`
+** This is TBD if this works. **
+
+5) Ensure ansible community modules are installed. See below for instructions.
 
 
 ## Instructions
