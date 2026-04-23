@@ -4,9 +4,8 @@ HISTFILE=/home/$USER/.bash_history
 HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:pwd:cd *:export AWS_*"
 
-# cbc/cbp=cliboard; similar to pbcopy/pbpaste on MacOS
-alias cbc='xclip -sel clip'
-alias cbp='xclip -sel clip -o'
+alias pbcopy='_clipboard_copy'
+alias pbpaste='_clipboard_paste'
 alias dateu='echo -e "\n\e[32m$(date)\e[0m\n\e[33m$(date -u)\e[0m\n"'
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -20,11 +19,34 @@ alias check-snap='sudo snap refresh --list'
 alias g='git'
 alias bedit='cd ~/.bashrc.d && vim custom_bash.sh'
 alias bload='source ~/.bashrc'
+alias open='xdg-open'
 
 shopt -s autocd
 shopt -s cdspell
 shopt -s direxpand
 shopt -s dirspell
+
+_clipboard_copy() {
+  if [ -n "$WAYLAND_DISPLAY" ]; then
+    wl-copy
+  elif [ -n "$DISPLAY" ]; then
+    xclip -sel clip
+  else
+    echo "cbc: no display server detected" >&2
+    return 1
+  fi
+}
+
+_clipboard_paste() {
+  if [ -n "$WAYLAND_DISPLAY" ]; then
+    wl-paste --no-newline
+  elif [ -n "$DISPLAY" ]; then
+    xclip -sel clip -o
+  else
+    echo "cbp: no display server detected" >&2
+    return 1
+  fi
+}
 
 # google search from the command line
 google() {
@@ -70,6 +92,9 @@ fi
 
 # pipx autocomplete
 eval "$(register-python-argcomplete pipx)"
+
+# zoxid autocomplete
+eval "$(zoxide init bash)"
 
 sts() {
   local sensitive_vars="AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN"

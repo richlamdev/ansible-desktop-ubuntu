@@ -40,7 +40,6 @@
       - unzip
       - vim-gtk3  # install by github and compile
       - vlc
-      - xclip
       - zoxide
 
 - name: packages | install standard additions to the base install
