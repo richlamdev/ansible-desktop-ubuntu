@@ -1,5 +1,26 @@
 ---
 - block:
+    - name: env packages | define env packages
+      set_fact:
+        env_packages:
+          - wl-clipboard
+          - xclip
+
+    - name: env packages | install env packages
+      apt:
+        state: latest
+        name: "{{ env_packages }}"
+      register: _apt_env_result
+
+    - name: env packages | manage env package list
+      debug:
+        msg: "{{ env_packages }}"
+
+    - name: env packages | show what changed for env packages
+      debug:
+        msg: "{{ _apt_env_result.stdout_lines }}"
+      when: _apt_env_result.changed
+
     - name: ensure .bashrc.d directory exists in user's home
       file:
         path: "{{ home_dir }}/.bashrc.d"
