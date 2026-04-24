@@ -21,9 +21,10 @@ playbook and/or specific roles
 3) Software: ansible, git, openssh-server, vim-gtk3 (vim or vim-gtk3 is not
 strictly required, but is required if the vim role is executed)
 
-4) Ensure classic sudo is used in lieu of the new rust version of sudo.
+4) If deploying this on Ubuntu 26.04.  Ensure classic sudo is used in lieu
+   of the new rust version of sudo.
 `sudo update-alternatives --config sudo`
-** This is TBD if this works. **
+   Choose sudo classic to ensure proper execution.
 
 5) Ensure ansible community modules are installed. See below for instructions.
 
@@ -204,6 +205,8 @@ requirements*
     * [restricted unprivileged user namespace](https://ubuntu.com/blog/ubuntu-23-10-restricted-unprivileged-user-namespaces)
 
 * env
+  * installs xclip and wl-clipboard for copy and paste and maintain
+    compatibility between X11 and Wayland environments
   * setups personal preferences for bash shell
     * configures .bashrc to read all shell scripts from ~/.bashrc.d/
       to set environment

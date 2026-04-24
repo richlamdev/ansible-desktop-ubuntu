@@ -11,6 +11,7 @@
         state: latest
         name: "{{ env_packages }}"
       register: _apt_env_result
+      become: true
 
     - name: env packages | manage env package list
       debug:

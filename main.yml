@@ -20,9 +20,9 @@
     - dev-tools
     - docker-cli-only
     # - docker-desktop-dependency
-    - env             # executes as local user, not root
+    - env         # installs as local user, apt installation as root
     - firefox
-    - fzf             # executes as local user, not root
+    - fzf         # executes as local user, not root
     - gh_cli
     - git
     - hashicorp
@@ -38,7 +38,7 @@
     - trivy
     - unattended-upgrade-override
     - vagrant-libvirt
-    - vim             # executes as local user, not root
+    - vim         # executes as local user, not root
     - wireshark
     - yubico
     - test-vars
