@@ -29,6 +29,7 @@
     - keepassxc
     - kubectl
     - lazydocker
+    - lazygit
     - microsoft
     - mullvad
     - neovim
