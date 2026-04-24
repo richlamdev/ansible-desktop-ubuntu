@@ -1,0 +1,98 @@
+---
+- name: "Install/Update Lazygit"
+  block:
+    # Check current installation
+    - name: "Check if Lazygit is installed"
+      command: "{{ lazygit_install_path }} --version"
+      register: lazygit_current
+      failed_when: false
+      changed_when: false
+
+    - name: "Extract installed version"
+      set_fact:
+        lazygit_current_version: "{{ lazygit_current.stdout | regex_search('([0-9.]+)') }}"
+      when: lazygit_current.rc == 0
+
+    # Determine target version
+    - name: "Get latest release from GitHub"
+      uri:
+        url: "https://api.github.com/repos/{{ lazygit_repo }}/releases/latest"
+        return_content: yes
+        headers:
+          Accept: "application/vnd.github.v3+json"
+      register: lazygit_release
+      when: lazygit_version == "latest"
+
+    - name: "Set target version (latest from GitHub)"
+      set_fact:
+        lazygit_target_version: "{{ lazygit_release.json.tag_name | regex_replace('^v', '') }}"
+      when:
+        - lazygit_version == "latest"
+        - lazygit_release.json.tag_name is defined
+
+    - name: "Set target version (pinned)"
+      set_fact:
+        lazygit_target_version: "{{ lazygit_version }}"
+      when: lazygit_version != "latest"
+
+    - name: "Fail if version could not be determined"
+      fail:
+        msg: "Could not determine Lazygit version to install"
+      when: lazygit_target_version is not defined
+
+    # Determine if installation/update is needed
+    - name: "Check if update is needed"
+      set_fact:
+        lazygit_needs_install: "{{ lazygit_current_version is not defined or lazygit_current_version != lazygit_target_version }}"
+
+    - name: "Display installation status"
+      debug:
+        msg: "Lazygit {{ 'will be installed' if lazygit_current_version is not defined else ('will be updated from ' + lazygit_current_version + ' to ' + lazygit_target_version) if lazygit_needs_install else 'is already up to date (' + lazygit_current_version + ')' }}"
+
+    # Download and install
+    - name: "Download Lazygit"
+      get_url:
+        url: "https://github.com/{{ lazygit_repo }}/releases/download/v{{ lazygit_target_version }}/lazygit_{{ lazygit_target_version }}_Linux_x86_64.tar.gz"
+        dest: "/tmp/lazygit.tar.gz"
+        mode: "0644"
+      when: lazygit_needs_install | bool
+
+    - name: "Extract Lazygit"
+      unarchive:
+        src: "/tmp/lazygit.tar.gz"
+        dest: "/tmp"
+        remote_src: yes
+      when: lazygit_needs_install | bool
+
+    - name: "Install Lazygit binary"
+      copy:
+        src: "/tmp/lazygit"
+        dest: "{{ lazygit_install_path }}"
+        mode: "0755"
+        remote_src: yes
+      become: yes
+      when: lazygit_needs_install | bool
+
+    - name: "Verify installation"
+      command: "{{ lazygit_install_path }} --version"
+      register: lazygit_verify
+      changed_when: false
+      when: lazygit_needs_install | bool
+
+    - name: "Display installed version"
+      debug:
+        msg: "Lazygit {{ lazygit_target_version }} installed successfully"
+      when: lazygit_needs_install | bool
+
+  always:
+    # Cleanup temporary files
+    - name: "Clean up temporary files"
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/lazygit"
+        - "/tmp/lazygit.tar.gz"
+      when: lazygit_needs_install is defined and lazygit_needs_install | bool
+
+  tags: ['lazygit', 'upgrade']
