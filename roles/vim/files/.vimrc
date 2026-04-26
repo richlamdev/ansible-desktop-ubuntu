@@ -336,11 +336,23 @@ nnoremap <Leader>s :BLines<cr>
 nnoremap <Leader>w :Windows<cr>
 nnoremap <Leader>j :Jumps<cr>
 nnoremap <Leader>r :Rg<cr>
-nnoremap <Leader>a :Ag<cr>
 nnoremap <Leader>mk :Marks<cr>
 nnoremap <Leader>ma :Maps<cr>
 nnoremap <Leader>ch :Changes<cr>
 nnoremap <Leader>li :Lines<cr>
+
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+endfunction
+
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit',
+  \ 'ctrl-q': function('s:build_quickfix_list') }
+
+nnoremap <expr> <leader>q empty(filter(getwininfo(), 'v:val.quickfix')) ? ':copen<CR>' : ':cclose<CR>'
 " }}}
 
 " vimgrep & grep {{{
