@@ -31,7 +31,6 @@
       - rclone
       - ripgrep
       - rtorrent
-      - silversearcher-ag
       - sshfs
       - tcpdump
       - tmux
