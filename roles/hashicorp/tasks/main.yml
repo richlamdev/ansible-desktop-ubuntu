@@ -8,9 +8,18 @@
         mode: 0644
         force: true
 
+    - name: determine Hashicorp repo codename
+      ansible.builtin.set_fact:
+        hashicorp_codename: >-
+          {{
+            'noble'
+            if ansible_facts.distribution_release == 'resolute'
+            else ansible_facts.distribution_release
+          }}
+
     - name: add hashicorp repo
       apt_repository:
-        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_lsb['codename'] }} main"
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ hashicorp_codename }} main"
         filename: hashicorp
         state: present
         update_cache: true
