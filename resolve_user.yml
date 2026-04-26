@@ -2,26 +2,24 @@
 - name: resolve remote user facts
   block:
   - name: Determine local_user
+    ansible.builtin.command: whoami
+    become: false
+    changed_when: false
+    register: whoami_result
+
+  - name: Set local_user fact
     ansible.builtin.set_fact:
-      local_user: >-
-        {{ ansible_env.SUDO_USER
-           | default(ansible_user_id)
-           | default(ansible_ssh_user) }}
+      local_user: "{{ whoami_result.stdout }}"
 
-  - name: Determine home_dir
-    ansible.builtin.shell: "echo ~{{ local_user }}"
-    changed_when: false
-    register: _home_dir_result
-
-  - name: Determine local_user_primary_group
-    ansible.builtin.command: "id -gn {{ local_user }}"
-    changed_when: false
-    register: _primary_group_result
+  - name: Get passwd entry for local_user
+    ansible.builtin.getent:
+      database: passwd
+      key: "{{ local_user }}"
 
   - name: Set derived facts
     ansible.builtin.set_fact:
-      home_dir: "{{ _home_dir_result.stdout }}"
-      local_user_primary_group: "{{ _primary_group_result.stdout }}"
+      home_dir: "{{ ansible_facts.getent_passwd[local_user][4] }}"
+      local_user_primary_group: "{{ ansible_facts.getent_passwd[local_user][3] }}"
 
   - name: Display resolved values
     ansible.builtin.debug:
