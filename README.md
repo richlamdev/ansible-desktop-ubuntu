@@ -8,6 +8,14 @@ desktop/laptop deployment.
 This Playbook is designed and tested for Ubunutu 24.04 LTS.  This playbook may
 not work on older versions of Ubuntu without modification.
 
+Update, 25 April 2026, this playbook is now partially updated and tested on
+Ubuntu 26.04, however, the following roles are not working on Ubuntu 26.04,
+to be fixed in the near future:
+
+* `keepassxc`
+* `mullvad`
+* `yubikey`
+
 See the [Testing](#testing) section for instructions on how to test this
 playbook and/or specific roles
 
