@@ -48,7 +48,8 @@ autocmd BufWrite * %s/\s\+$//e        " Remove trailing whitespace on save
 " file find {{{
 set path=.,**                         " relative to current file and everything under :pwd
 set wildmenu                          " display matches in command-line mode
-set wildmode=list:longest,full        " first tab complete as much as possible
+" set wildmode=list:longest,full        " first tab complete as much as possible
+set wildoptions=pum                   " show a list of matches on command line
 set wildignore+=.pyc,.swp             " ignore these files when opening based on glob pattern
 set wildignorecase                    " ignore case when completing file names
 set hidden                            " hide buffers when they are abandoned
@@ -151,6 +152,11 @@ autocmd FileType markdown,json
   \ setlocal smartindent |
   \ setlocal smarttab |
   \ setlocal foldmethod=manual |
+" }}}
+
+" terraform {{{
+autocmd FileType terraform
+    \ setlocal foldlevelstart=99 |
 " }}}
 
 " ALE {{{
@@ -456,9 +462,10 @@ command! -nargs=0 Reg call Reg()
 " }}}
 
 " load built-in plugins {{{
+packadd editorconfig
+packadd hlyank
 packadd matchit
 packadd cfilter
-
 packadd comment
 " enable line range commenting (similar to vim-commentary)
 command! -range Comment <line1>,<line2>norm gcc
