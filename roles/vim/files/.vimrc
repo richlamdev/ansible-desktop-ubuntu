@@ -355,12 +355,12 @@ let g:fzf_action = {
 
 " toggle quickfix window
 nnoremap <expr> <leader>q empty(filter(getwininfo(), 'v:val.quickfix')) ? ':copen<CR>' : ':cclose<CR>'
-" clear quickfix
+" clear quickfix list
 nnoremap <leader>cq :call setqflist([], 'r')<CR>
 
 " prepopulate :RG with word under cursor
 nnoremap <leader>g :RG <c-r>=expand("<cWORD>")<cr><cr>
-" shortcut to :Cfilter quicker
+" shortcut to :Cfilter
 nnoremap <leader>cf :Cfilter /
 " }}}
 
