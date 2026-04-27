@@ -377,8 +377,6 @@ nnoremap <leader>cq :call setqflist([], 'r')<CR>
 nnoremap <leader>g :RG <c-r>=expand("<cWORD>")<cr><cr>
 " shortcut to :Cfilter
 nnoremap <leader>cf :Cfilter /
-
-nnoremap <leader>cb :execute 'Cfilter /' . escape(expand('%:t'), '/') . '/'<CR>
 " }}}
 
 " codeium {{{
