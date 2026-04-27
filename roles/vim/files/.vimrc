@@ -8,7 +8,7 @@
 set nocompatible
 set title                             " set title of window
 set titlestring=\ [CWD:\ %{getcwd()}]\ \ \ \ [%t]%a%r%m%h%w%q titlelen=80
-set ttyfast                           " Make the keyboard fast
+" set ttyfast                           " Make the keyboard fast
 "set timeout timeoutlen=1000 ttimeoutlen=50
 set showmode                          " always show what mode we're currently editing in
 set showcmd                           " Show (partial) command in status line.
@@ -342,7 +342,17 @@ nnoremap <Leader>ch :Changes<cr>
 nnoremap <Leader>li :Lines<cr>
 
 function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  let l:qf = []
+  for l:line in a:lines
+    let l:parts = split(l:line, ':', 4)
+    call add(l:qf, {
+      \ 'filename': l:parts[0],
+      \ 'lnum': str2nr(l:parts[1]),
+      \ 'col': str2nr(l:parts[2]),
+      \ 'text': l:parts[3],
+      \ })
+  endfor
+  call setqflist(l:qf, 'r')
   copen
 endfunction
 
@@ -352,19 +362,15 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit',
   \ 'ctrl-q': function('s:build_quickfix_list') }
 
+" toggle quickfix window
 nnoremap <expr> <leader>q empty(filter(getwininfo(), 'v:val.quickfix')) ? ':copen<CR>' : ':cclose<CR>'
-" }}}
+" clear quickfix list
+nnoremap <leader>cq :call setqflist([], 'r')<CR>
 
-" vimgrep & grep {{{
-" need to load args list first
-" use :Vim <search_term>
-command! -nargs=+ Vim execute "silent vimgrep! /<args>/gj ##" | copen | execute 'silent /<args>' | redraw!
-nnoremap <silent> <leader>v :Vim <c-r>=expand("<cWORD>")<cr><cr>
-
-" modified from: https://chase-seibert.github.io/blog/2013/09/21/vim-grep-under-cursor.html
-" use :Grep <search_term>
-command! -nargs=+ Grep execute 'silent grep! -I -i -r -n --exclude=\*.pyc --exclude-dir=.git ## -e <args>' | copen | execute 'silent /<args>' | redraw!
-nnoremap <silent> <leader>g :Grep <c-r>=expand("<cWORD>")<cr><cr>
+" prepopulate :RG with word under cursor
+nnoremap <leader>g :RG <c-r>=expand("<cWORD>")<cr><cr>
+" shortcut to :Cfilter
+nnoremap <leader>cf :Cfilter /
 " }}}
 
 " codeium {{{
@@ -447,6 +453,15 @@ function! Reg()
 endfunction
 
 command! -nargs=0 Reg call Reg()
+" }}}
+
+" load built-in plugins {{{
+packadd matchit
+packadd cfilter
+
+packadd comment
+" enable line range commenting (similar to vim-commentary)
+command! -range Comment <line1>,<line2>norm gcc
 " }}}
 
 " startup {{{
