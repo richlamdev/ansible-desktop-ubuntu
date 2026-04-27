@@ -342,8 +342,17 @@ nnoremap <Leader>ch :Changes<cr>
 nnoremap <Leader>li :Lines<cr>
 
 function! s:build_quickfix_list(lines)
-  :cexpr []
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  let l:qf = []
+  for l:line in a:lines
+    let l:parts = split(l:line, ':', 4)
+    call add(l:qf, {
+      \ 'filename': l:parts[0],
+      \ 'lnum': str2nr(l:parts[1]),
+      \ 'col': str2nr(l:parts[2]),
+      \ 'text': l:parts[3],
+      \ })
+  endfor
+  call setqflist(l:qf, 'r')
   copen
 endfunction
 
