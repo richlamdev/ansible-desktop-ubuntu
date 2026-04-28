@@ -12,13 +12,12 @@ Update, 25 April 2026, this playbook is now partially updated and tested on
 Ubuntu 26.04, however, the following roles are not working on Ubuntu 26.04,
 to be fixed in the near future:
 
-* `keepassxc`
 * `mullvad`
 * `yubikey`
 
 use the following command to skip the roles on Ubuntu 26.04, for now:
 
-`ansible-playbook main.yml -K -c local --skip-tags keepassxc,mullvad,yubikey`
+`ansible-playbook main.yml -K -c local --skip-tags mullvad,yubikey`
 
 See the [Testing](#testing) section for instructions on how to test this
 playbook and/or specific roles
