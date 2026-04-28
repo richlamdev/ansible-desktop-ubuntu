@@ -8,9 +8,18 @@
         mode: 0644
         force: false
 
+    - name: Set Mullvad repo codename
+      set_fact:
+        mullvad_codename: >-
+          {{
+            ansible_facts['distribution_release']
+            if ansible_facts['distribution_release'] in ['jammy', 'noble']
+            else 'noble'
+          }}
+
     - name: add keepassxc repo
       apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/keepassxc_master_signing_key.asc] https://ppa.launchpadcontent.net/phoerious/keepassxc/ubuntu {{ ansible_facts['distribution_release'] }} main"
+        repo: "deb [signed-by=/usr/share/keyrings/keepassxc_master_signing_key.asc] https://ppa.launchpadcontent.net/phoerious/keepassxc/ubuntu {{ mullvad_codename }} main"
         filename: keepassxc
         update_cache: true
         state: present
