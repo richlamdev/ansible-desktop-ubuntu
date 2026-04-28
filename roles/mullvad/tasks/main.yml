@@ -8,9 +8,18 @@
         mode: "0644"
         force: false
 
+    - name: Set Mullvad repo codename
+      set_fact:
+        mullvad_codename: >-
+          {{
+            ansible_facts['distribution_release']
+            if ansible_facts['distribution_release'] in ['jammy', 'noble']
+            else 'noble'
+          }}
+
     - name: Add Mullvad repo
       apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=amd64] https://repository.mullvad.net/deb/stable {{ ansible_lsb['codename'] }} main"
+        repo: "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=amd64] https://repository.mullvad.net/deb/stable {{ mullvad_codename }} main"
         filename: mullvad-browser
         state: present
         update_cache: true
