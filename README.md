@@ -9,15 +9,14 @@ This Playbook is designed and tested for Ubunutu 24.04 LTS.  This playbook may
 not work on older versions of Ubuntu without modification.
 
 Update, 25 April 2026, this playbook is now partially updated and tested on
-Ubuntu 26.04, however, the following roles are not working on Ubuntu 26.04,
+Ubuntu 26.04, however, the following role is not working on Ubuntu 26.04,
 to be fixed in the near future:
 
-* `mullvad`
 * `yubikey`
 
-use the following command to skip the roles on Ubuntu 26.04, for now:
+use the following command to skip the role on Ubuntu 26.04, for now:
 
-`ansible-playbook main.yml -K -c local --skip-tags mullvad,yubikey`
+`ansible-playbook main.yml -K -c local --skip-tags yubikey`
 
 See the [Testing](#testing) section for instructions on how to test this
 playbook and/or specific roles
