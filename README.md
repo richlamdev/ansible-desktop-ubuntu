@@ -5,18 +5,8 @@
 This is a collection of roles and configuarions I use for my Ubuntu
 desktop/laptop deployment.
 
-This Playbook is designed and tested for Ubunutu 24.04 LTS.  This playbook may
+This Playbook is designed and tested for Ubuntu 26.04 LTS.  This playbook may
 not work on older versions of Ubuntu without modification.
-
-Update, 25 April 2026, this playbook is now partially updated and tested on
-Ubuntu 26.04, however, the following role is not working on Ubuntu 26.04,
-to be fixed in the near future:
-
-* `yubikey`
-
-use the following command to skip the role on Ubuntu 26.04, for now:
-
-`ansible-playbook main.yml -K -c local --skip-tags yubikey`
 
 See the [Testing](#testing) section for instructions on how to test this
 playbook and/or specific roles
@@ -26,13 +16,12 @@ playbook and/or specific roles
 
 1) Basic knowledge of Ansible
 
-2) Ubuntu 24.04 (may work on other apt based distros with modification)
+2) Ubuntu 26.04 (may work on other apt based distros with modification)
 
 3) Software: ansible, git, openssh-server, vim-gtk3 (vim or vim-gtk3 is not
 strictly required, but is required if the vim role is executed)
 
-4) If deploying this on Ubuntu 26.04.  Ensure classic sudo is used in lieu
-   of the new rust version of sudo.
+4) Ensure classic sudo is used in lieu of the new rust version of sudo.
 `sudo update-alternatives --config sudo`
    Choose sudo classic to ensure proper execution.
 
