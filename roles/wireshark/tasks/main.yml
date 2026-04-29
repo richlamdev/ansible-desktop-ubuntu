@@ -16,7 +16,7 @@
 
     - name: add wireshark repo
       apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/wireshark-archive-keyring.asc] https://ppa.launchpadcontent.net/wireshark-dev/stable/ubuntu {{ ansible_lsb['codename'] }} main"
+        repo: "deb [signed-by=/usr/share/keyrings/wireshark-archive-keyring.asc] https://ppa.launchpadcontent.net/wireshark-dev/stable/ubuntu {{ ansible_facts['distribution_release'] }} main"
         filename: wireshark
         state: present
         update_cache: yes
