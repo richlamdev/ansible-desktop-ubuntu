@@ -13,15 +13,20 @@
       local_user: "{{ whoami_result.stdout }}"
     when: local_user is not defined
 
-  - name: Get passwd entry for local_user
+  - name: Get home_dir via passwd entry for local_user
     ansible.builtin.getent:
       database: passwd
       key: "{{ local_user }}"
 
+  - name: Get local_user_primary_group via group entry for local_user
+    ansible.builtin.getent:
+      database: group
+      key: "{{ ansible_facts.getent_passwd[local_user][2] }}"
+
   - name: Set derived facts
     ansible.builtin.set_fact:
       home_dir: "{{ ansible_facts.getent_passwd[local_user][4] }}"
-      local_user_primary_group: "{{ ansible_facts.getent_passwd[local_user][3] }}"
+      local_user_primary_group: "{{ ansible_facts.getent_group | first }}"
 
   - name: Display resolved values
     ansible.builtin.debug:
