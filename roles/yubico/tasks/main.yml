@@ -9,9 +9,18 @@
         mode: 0644
         force: false
 
+    - name: set yubico repo codename
+      set_fact:
+        yubico_codename: >-
+          {{
+            ansible_facts['distribution_release']
+            if ansible_facts['distribution_release'] in ['jammy', 'noble']
+            else 'noble'
+          }}
+
     - name: add yubico repo
       apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/yubico.asc] https://ppa.launchpadcontent.net/yubico/stable/ubuntu {{ ansible_lsb['codename'] }} main"
+        repo: "deb [signed-by=/usr/share/keyrings/yubico.asc] https://ppa.launchpadcontent.net/yubico/stable/ubuntu {{ yubico_codename }} main"
         filename: yubico
         update_cache: true
         state: present
