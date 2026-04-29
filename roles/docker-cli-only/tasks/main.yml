@@ -18,7 +18,7 @@
 
     - name: add docker repo
       apt_repository:
-        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_lsb['codename'] }} stable"
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_facts['distribution_release'] }} stable"
         filename: docker
         state: present
         update_cache: true
