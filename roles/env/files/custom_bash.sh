@@ -68,6 +68,10 @@ pretty_csv() {
   perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' "$@" | column -t -s, | batcat -S
 }
 
+mkcd() {
+  mkdir -p -- "$1" && cd -P -- "$1" && pwd
+}
+
 # minikube autocomplete
 #source <(minikube completion bash)
 
