@@ -17,6 +17,7 @@ alias check-apt-update='sudo apt update && apt list --upgradeable'
 alias check-unattended='sudo apt update && sudo unattended-upgrade --dry-run'
 alias check-snap='sudo snap refresh --list'
 alias g='git'
+alias tf='terraform'
 alias bedit='cd ~/.bashrc.d && vim custom_bash.sh'
 alias bload='source ~/.bashrc'
 alias open='xdg-open'
@@ -66,6 +67,10 @@ acg-clear() {
 # Function to pretty-print CSV files
 pretty_csv() {
   perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' "$@" | column -t -s, | batcat -S
+}
+
+mkcd() {
+  mkdir -p -- "$1" && cd -P -- "$1" && pwd
 }
 
 # minikube autocomplete
