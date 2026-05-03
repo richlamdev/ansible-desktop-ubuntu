@@ -18,7 +18,7 @@ alias check-unattended='sudo apt update && sudo unattended-upgrade --dry-run'
 alias check-snap='sudo snap refresh --list'
 alias g='git'
 alias tf='terraform'
-alias bedit='cd ~/.bashrc.d && vim custom_bash.sh'
+alias bedit='cd ~/.bashrc.d && vim custom_bash.sh && cd -'
 alias bload='source ~/.bashrc'
 alias open='xdg-open'
 
