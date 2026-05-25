@@ -21,6 +21,7 @@ alias tf='terraform'
 alias bedit='cd ~/.bashrc.d && vim custom_bash.sh && cd -'
 alias bload='source ~/.bashrc'
 alias open='xdg-open'
+alias lsblk='lsblk -e 7 -o NAME,SIZE,MOUNTPOINT,TYPE,FSTYPE'
 
 shopt -s autocd
 shopt -s cdspell
