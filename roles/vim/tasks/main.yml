@@ -81,6 +81,25 @@
         force: true
 
 
+
+    - name: create {{ home_dir }}/.vim/ftdetect directory
+      file:
+        state: directory
+        path: "{{ home_dir }}/.vim/ftdetect"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0770"
+
+    - name: install kubernetes yaml filetype detection
+      copy:
+        src: "kubernetes.vim"
+        dest: "{{ home_dir }}/.vim/ftdetect/kubernetes.vim"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0640"
+        force: true
+
+
     - name: install monokai colorscheme
       git:
         repo: "https://github.com/sickill/vim-monokai.git"
