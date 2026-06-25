@@ -81,7 +81,6 @@
         force: true
 
 
-
     - name: create {{ home_dir }}/.vim/ftdetect directory
       file:
         state: directory
@@ -94,6 +93,24 @@
       copy:
         src: "kubernetes.vim"
         dest: "{{ home_dir }}/.vim/ftdetect/kubernetes.vim"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0640"
+        force: true
+
+
+    - name: create {{ home_dir }}/.config/yamllint directory
+      file:
+        state: directory
+        path: "{{ home_dir }}/.config/yamllint"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0770"
+
+    - name: install yamllint config file
+      copy:
+        src: "config.yaml"
+        dest: "{{ home_dir }}/.config/yamllint/config.yaml"
         owner: "{{ local_user }}"
         group: "{{ local_user_primary_group }}"
         mode: "0640"
