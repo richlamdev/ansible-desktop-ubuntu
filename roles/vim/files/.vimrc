@@ -32,6 +32,11 @@ set smoothscroll                      " smooth scrolling
 set updatetime=300                    " set updatetime to 300ms
 set background=dark                   " enable dark background within editing
 set termguicolors                     " enable true colors
+set shiftround
+highlight ColorColumn ctermbg=red |   " highlight a marker at column 80
+call matchadd('ColorColumn', '\%80v', 100)
+
+filetype plugin indent on
 syntax on                             " enable syntax highlighting.
 
 if has("autocmd")                     " Jump to last position when reopening a file
@@ -53,29 +58,6 @@ set wildoptions=pum                   " show a list of matches on command line
 set wildignore+=.pyc,.swp             " ignore these files when opening based on glob pattern
 set wildignorecase                    " ignore case when completing file names
 set hidden                            " hide buffers when they are abandoned
-" }}}
-
-" Python PEP8 {{{
-autocmd Filetype python
-  \ setlocal tabstop=4 |
-  \ setlocal softtabstop=4 |
-  \ setlocal shiftwidth=4 |
-  \ setlocal expandtab |
-  \ setlocal autoindent |
-  \ setlocal fileformat=unix |
-  \ setlocal textwidth=0 |
-  \ setlocal smarttab |
-  \ setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with,async,await,match,case |
-
-" highlight a marker at column 80
-highlight ColorColumn ctermbg=red |
-call matchadd('ColorColumn', '\%80v', 100)
-
-" Ensure all types of requirements.txt files get Python syntax highlighting
-autocmd BufNewFile,BufRead requirements*.txt set ft=python
-
-" map f9 to excute python script
-" nnoremap <buffer> <F9> :w<CR> :exec '!python3' shellescape(@%, 1)<CR>
 " }}}
 
 " window management {{{
@@ -117,83 +99,164 @@ nnoremap * *zzzv
 nnoremap # #zzzv
 " }}}
 
-" vimspector settings {{{
-" let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
-"nnoremap <Leader>dd :call vimspector#Launch()<CR>
-"nnoremap <Leader>de :call vimspector#Reset()<CR>
-"nnoremap <Leader>dc :call vimspector#Continue()<CR>
-"nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
-"nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
-"nmap <Leader>dk <Plug>VimspectorRestart
-"nmap <Leader>dh <Plug>VimspectorStepOut
-"nmap <Leader>dl <Plug>VimspectorStepInto
-"nmap <Leader>dj <Plug>VimspectorStepOver
+" filetype indent {{{
+augroup filetype_indent
+  autocmd!
+
+  " yaml + kubernetes: smartindent off — # triggers dedent and breaks comments
+  autocmd FileType yaml,yaml.kubernetes
+      \ setlocal tabstop=2 softtabstop=2 shiftwidth=2 |
+      \ setlocal expandtab autoindent nosmartindent |
+
+  " sh: let the filetype indent plugin handle block structure
+  autocmd FileType sh
+      \ setlocal tabstop=2 softtabstop=2 shiftwidth=2 |
+      \ setlocal expandtab autoindent nosmartindent |
+
+  " vim: smartindent off — vimscript continuation lines misbehave with it
+  autocmd FileType vim
+      \ setlocal tabstop=2 softtabstop=2 shiftwidth=2 |
+      \ setlocal expandtab autoindent nosmartindent |
+
+  " python: pep8 — indent plugin handles blocks, we just set spacing
+  autocmd FileType python
+      \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 |
+      \ setlocal expandtab autoindent nosmartindent |
+      \ setlocal textwidth=88 |
+
+  " markdown: prose — autoindent on for lists/quotes, no cursorcolumn, spell on
+  autocmd FileType markdown
+      \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 |
+      \ setlocal expandtab autoindent nosmartindent |
+      \ setlocal foldmethod=manual nocursorcolumn |
+      \ setlocal spell spelllang=en_us |
+
+  " json: 2-space, syntax fold, folds start open
+  autocmd FileType json
+      \ setlocal tabstop=2 softtabstop=2 shiftwidth=2 |
+      \ setlocal expandtab autoindent nosmartindent |
+      \ setlocal foldmethod=syntax foldlevelstart=99 |
+
+  " terraform: hashicorp 2-space, folds start open
+  autocmd FileType terraform
+      \ setlocal tabstop=2 softtabstop=2 shiftwidth=2 |
+      \ setlocal expandtab autoindent nosmartindent |
+      \ setlocal foldmethod=syntax foldlevelstart=99 |
+
+  " dockerfile: 4-space, nosmartindent — no block structure to help with
+  autocmd FileType dockerfile
+      \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 |
+      \ setlocal expandtab autoindent nosmartindent |
+
+  " toml: 2-space — pyproject.toml, uv.lock, Cargo.toml, aws tooling configs
+  autocmd FileType toml
+      \ setlocal tabstop=2 softtabstop=2 shiftwidth=2 |
+      \ setlocal expandtab autoindent nosmartindent |
+
+  " conf: generic config files — sshd_config, nginx, requirements.txt etc.
+  autocmd FileType conf
+      \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 |
+      \ setlocal expandtab autoindent nosmartindent |
+
+  " lua: nmap scripts — 2-space is nmap/lua community standard
+  " indentexpr handled by vim's runtime lua indent plugin
+  autocmd FileType lua
+      \ setlocal tabstop=2 softtabstop=2 shiftwidth=2 |
+      \ setlocal expandtab autoindent nosmartindent |
+      \ setlocal foldmethod=syntax foldlevelstart=99 |
+
+  " gitcommit: spell on, textwidth for commit message body
+  autocmd FileType gitcommit
+      \ setlocal spell spelllang=en_us |
+      \ setlocal textwidth=72 |
+
+  " prose: disable shiftround — not shifting indentation in prose
+  autocmd FileType markdown,text
+      \ setlocal noshiftround |
+
+augroup END
 " }}}
 
-" shell yaml vim {{{
-autocmd FileType sh,yaml,vim
-  \ setlocal tabstop=2 |
-  \ setlocal softtabstop=2 |
-  \ setlocal shiftwidth=2 |
-  \ setlocal expandtab |
-  \ setlocal autoindent |
-  \ setlocal smartindent |
-  \ setlocal smarttab |
-  "\ setlocal colorscheme molokai |
-" }}}
+" filetype detection {{{
+augroup filetype_detect
+  autocmd!
 
-" markdown json {{{
-autocmd FileType markdown,json
-  \ setlocal tabstop=4 |
-  \ setlocal softtabstop=4 |
-  \ setlocal shiftwidth=4 |
-  \ setlocal expandtab |
-  \ setlocal autoindent |
-  \ setlocal smartindent |
-  \ setlocal smarttab |
-  \ setlocal foldmethod=manual |
-" }}}
+  " uv lock file is toml format
+  autocmd BufNewFile,BufRead uv.lock
+      \ setlocal filetype=toml |
 
-" terraform {{{
-autocmd FileType terraform
-    \ setlocal foldlevelstart=99 |
+  " requirements files — pip format, not python, conf is more honest
+  autocmd BufNewFile,BufRead requirements*.txt
+      \ setlocal filetype=conf |
+
+  " jinja2: ansible and other jinja2 templates
+  " falls back to yaml highlighting without vim-jinja2-syntax or ansible-vim
+  " install one of those plugins for proper jinja2 {{ }} block highlighting
+  autocmd BufNewFile,BufRead *.j2,*.jinja,*.jinja2
+      \ setlocal filetype=yaml |
+
+augroup END
 " }}}
 
 " ALE {{{
 " https://github.com/dense-analysis/ale
-let g:ale_linters = {'json': ['jq'], 'python': ['ruff', 'bandit', 'mypy'], 'sh': ['shellcheck'], 'yaml': ['yamllint'], 'terraform': ['terraform']}
-let g:ale_fixers = {'json': ['jq'], 'python': ['ruff', 'black'], 'sh': ['shfmt'], 'yaml': ['yamlfmt'], 'terraform': ['terraform']}
-
-let g:ale_python_flake8_options = '--max-line-length 79'
-let g:ale_python_black_options = '--line-length 79'
-
-let g:ale_sh_shfmt_options = '-i 2 -ci'
-let g:ale_sh_shellcheck_options = '--exclude=SC2034' " ignore unused shell variables
-
-" ignore long line length for yaml
-let g:ale_yaml_yamllint_options = '-d "{extends: relaxed, rules: {line-length: {max: disable}}"'
-
-let g:ale_terraform_trivy_options = 'config --exit-code 0'
-let g:ale_terraform_trivy_use_global = 1
-let g:ale_terraform_trivy_linter = {
-    \ 'name': 'trivy',
-    \ 'executable': 'trivy',
-    \ 'command': 'trivy config --exit-code 0 -f json -o /dev/stdout %t',
-    \ 'callback': 'ale#handlers#json#Handle',
-    \ 'output_stream': 'both',
-    \ 'language': 'terraform',
+let g:ale_linters = {
+    \ 'json':            ['jq'],
+    \ 'python':          ['ruff', 'bandit'],
+    \ 'sh':              ['shellcheck'],
+    \ 'terraform':       ['trivy'],
+    \ 'yaml':            ['yamllint'],
+    \ 'yaml.kubernetes': ['kubeconform', 'kubescape'],
     \ }
 
-let g:ale_fix_on_save = 1
+let g:ale_fixers = {
+    \ 'json':      ['jq'],
+    \ 'lua':       ['stylua'],
+    \ 'python':    ['black'],
+    \ 'sh':        ['shfmt'],
+    \ 'terraform': ['terraform'],
+    \ 'yaml':      ['yamlfmt'],
+    \ }
+
+" python
+let g:ale_python_black_options = '--line-length 88'
+let g:ale_python_ruff_options  = '--line-length 88'
+
+" sh
+let g:ale_sh_shfmt_options       = '-i 2 -ci'
+let g:ale_sh_shellcheck_options  = '--exclude=SC2034'
+
+" yaml
+let g:ale_yaml_yamllint_options = '-c ~/.config/yamllint/config'
+let g:ale_yaml_yamlfmt_options   = '-formatter retain_line_breaks=true'
+
+" yaml.kubernetes — verify variable name with :ALEInfo in a kubernetes buffer
+let g:ale_yaml_kubernetes_kubeconform_options = '-strict -ignore-missing-schemas'
+
+" lua
+let g:ale_lua_stylua_options = '--indent-type Spaces --indent-width 2'
+
+" terraform — trivy via ale#linter#Define since ALE has no native trivy linter
+call ale#linter#Define('terraform', {
+    \ 'name':          'trivy',
+    \ 'executable':    'trivy',
+    \ 'command':       'trivy config --exit-code 0 -f json -o /dev/stdout %t',
+    \ 'callback':      'ale#handlers#json#Handle',
+    \ 'output_stream': 'both',
+    \ })
+
+" behaviour
+let g:ale_fix_on_save          = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_enter = 0 " if you don't want linters to run on opening a file
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
-highlight ALEErrorSign ctermfg=Red guifg=Red
-highlight ALEWarningSign ctermfg=Yellow guifg=Yellow
+let g:ale_lint_on_enter        = 0
 
+" display
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_error      = '✘'
+let g:ale_sign_warning    = '⚠'
+
+" navigation
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
@@ -202,9 +265,7 @@ function! ClearALEHighlights()
     call ale#highlight#RemoveHighlights()
     echo "ALE and search highlights cleared"
 endfunction
-
-" clear ALE highlights and search results
-nnoremap <silent> <leader>ca :call ClearALEHighlights()<CR>:noh<CR>:redraw!<CR>
+nnoremap <silent> <leader>ca :noh<CR> :call ClearALEHighlights()<CR> :redraw!<CR>
 " }}}
 
 " indentLine {{{
@@ -303,7 +364,6 @@ augroup END
 
 " vimwiki {{{
 " https://github.com/vimwiki/vimwiki
-filetype plugin indent on
 autocmd BufNewFile,BufReadPost,BufAdd *.wiki set filetype=vimwiki
 let g:vimwiki_list = [{'path': '~/backup/git/wiki/',
                       \ 'syntax': 'default', 'ext': '.wiki',
