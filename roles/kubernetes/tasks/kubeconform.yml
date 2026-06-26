@@ -1,0 +1,100 @@
+---
+- name: "Install/Update kubeconform"
+  block:
+    # Check current installation
+    - name: "Check if kubeconform is installed"
+      command: "{{ kubeconform_install_path }} -v"
+      register: kubeconform_current
+      failed_when: false
+      changed_when: false
+
+    - name: "Extract installed version"
+      set_fact:
+        kubeconform_current_version: "{{ kubeconform_current.stdout | regex_search('([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+      when: kubeconform_current.rc == 0
+
+    # Determine target version
+    - name: "Get latest release from GitHub"
+      uri:
+        url: "https://api.github.com/repos/{{ kubeconform_repo }}/releases/latest"
+        return_content: yes
+        headers:
+          Accept: "application/vnd.github.v3+json"
+      register: kubeconform_release
+      when: kubeconform_version == "latest"
+
+    - name: "Set target version (latest from GitHub)"
+      set_fact:
+        kubeconform_target_version: "{{ kubeconform_release.json.tag_name | regex_replace('^v', '') }}"
+      when:
+        - kubeconform_version == "latest"
+        - kubeconform_release.json.tag_name is defined
+
+    - name: "Set target version (pinned)"
+      set_fact:
+        kubeconform_target_version: "{{ kubeconform_version }}"
+      when: kubeconform_version != "latest"
+
+    - name: "Fail if version could not be determined"
+      fail:
+        msg: "Could not determine kubeconform version to install"
+      when: kubeconform_target_version is not defined
+
+    # Determine if installation/update is needed
+    - name: "Check if install or update is needed"
+      set_fact:
+        kubeconform_needs_install: "{{ kubeconform_current_version is not defined or kubeconform_current_version != kubeconform_target_version }}"
+
+    - name: "Display installation status"
+      debug:
+        msg: >-
+          kubeconform
+          {{ 'will be installed' if kubeconform_current_version is not defined
+             else ('will be updated from ' + kubeconform_current_version + ' to ' + kubeconform_target_version) if kubeconform_needs_install
+             else 'is already up to date (' + kubeconform_current_version + ')' }}
+
+    # Download and install
+    - name: "Download kubeconform"
+      get_url:
+        url: "https://github.com/{{ kubeconform_repo }}/releases/download/v{{ kubeconform_target_version }}/kubeconform-linux-amd64.tar.gz"
+        dest: "/tmp/kubeconform.tar.gz"
+        mode: "0644"
+      when: kubeconform_needs_install | bool
+
+    - name: "Extract kubeconform"
+      unarchive:
+        src: "/tmp/kubeconform.tar.gz"
+        dest: "/tmp"
+        remote_src: yes
+      when: kubeconform_needs_install | bool
+
+    - name: "Install kubeconform binary"
+      copy:
+        src: "/tmp/kubeconform"
+        dest: "{{ kubeconform_install_path }}"
+        mode: "0755"
+        remote_src: yes
+      become: yes
+      when: kubeconform_needs_install | bool
+
+    - name: "Verify installation"
+      command: "{{ kubeconform_install_path }} -v"
+      register: kubeconform_verify
+      changed_when: false
+      when: kubeconform_needs_install | bool
+
+    - name: "Display installed version"
+      debug:
+        msg: "kubeconform {{ kubeconform_target_version }} installed successfully"
+      when: kubeconform_needs_install | bool
+
+  always:
+    # Cleanup temporary files
+    - name: "Clean up temporary files"
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/kubeconform"
+        - "/tmp/kubeconform.tar.gz"
+      when: kubeconform_needs_install is defined and kubeconform_needs_install | bool

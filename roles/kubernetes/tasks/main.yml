@@ -1,0 +1,12 @@
+---
+- name: kubectl
+  import_tasks: kubectl.yml
+  tags: ['kubernetes', 'kubectl']
+
+- name: kubeconform
+  import_tasks: kubeconform.yml
+  tags: ['kubernetes', 'kubeconform', 'upgrade']
+
+- name: kubescape
+  import_tasks: kubescape.yml
+  tags: ['kubernetes', 'kubescape', 'upgrade']

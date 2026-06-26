@@ -27,7 +27,7 @@
     - git
     - hashicorp
     - keepassxc
-    - kubectl
+    - kubernetes
     - lazydocker
     - lazygit
     - microsoft

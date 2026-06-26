@@ -1,0 +1,8 @@
+---
+kubeconform_repo: "yannh/kubeconform"
+kubeconform_version: "latest"          # or pin e.g. "0.7.0"
+kubeconform_install_path: "/usr/local/bin/kubeconform"
+
+kubescape_repo: "kubescape/kubescape"
+kubescape_version: "latest"           # or pin e.g. "4.0.9"
+kubescape_install_path: "/usr/local/bin/kubescape"
