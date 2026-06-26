@@ -98,5 +98,3 @@
         - "/tmp/kubeconform"
         - "/tmp/kubeconform.tar.gz"
       when: kubeconform_needs_install is defined and kubeconform_needs_install | bool
-
-  tags: ['kubeconform', 'upgrade']

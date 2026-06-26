@@ -1,15 +1,12 @@
 ---
-- block:
-    - name: kubectl
-      import_tasks: kubectl.yml
+- name: kubectl
+  import_tasks: kubectl.yml
+  tags: ['kubernetes', 'kubectl']
 
-    - name: kubeconform
-      import_tasks: kubeconform.yml
+- name: kubeconform
+  import_tasks: kubeconform.yml
+  tags: ['kubernetes', 'kubeconform', 'upgrade']
 
-    # - name: pyenv
-    #   import_tasks: pyenv.yml
-
-    # - name: install/update uv
-    #   import_tasks: uv.yml
-
-  tags: ['kubernetes']
+- name: kubescape
+  import_tasks: kubescape.yml
+  tags: ['kubernetes', 'kubescape', 'upgrade']
