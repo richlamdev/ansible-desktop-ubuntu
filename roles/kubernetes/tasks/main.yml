@@ -1,0 +1,15 @@
+---
+- block:
+    - name: kubectl
+      import_tasks: kubectl.yml
+
+    - name: kubeconform
+      import_tasks: kubeconform.yml
+
+    # - name: pyenv
+    #   import_tasks: pyenv.yml
+
+    # - name: install/update uv
+    #   import_tasks: uv.yml
+
+  tags: ['kubernetes']

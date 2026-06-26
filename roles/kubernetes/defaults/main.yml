@@ -1,0 +1,4 @@
+---
+kubeconform_repo: "yannh/kubeconform"
+kubeconform_version: "latest"          # or pin e.g. "0.7.0"
+kubeconform_install_path: "/usr/local/bin/kubeconform"
