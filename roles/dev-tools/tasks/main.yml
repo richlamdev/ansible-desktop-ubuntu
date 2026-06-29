@@ -1,15 +1,21 @@
 ---
-- block:
-    - name: dev tools
-      import_tasks: dev-tools.yml
-
-    - name: pipx
-      import_tasks: pipx.yml
-
-    - name: pyenv
-      import_tasks: pyenv.yml
-
-    - name: install/update uv
-      import_tasks: uv.yml
-
+- import_tasks: dev-tools.yml
   tags: ['dev-tools']
+
+- import_tasks: pipx.yml
+  tags: ['dev-tools', 'pipx']
+
+- import_tasks: pipx-upgrade.yml
+  tags: ['dev-tools', 'pipx', 'upgrade']
+
+- import_tasks: pyenv.yml
+  tags: ['dev-tools', 'pyenv']
+
+- import_tasks: pyenv-upgrade.yml
+  tags: ['dev-tools', 'pyenv', 'upgrade']
+
+- import_tasks: uv.yml
+  tags: ['dev-tools', 'uv']
+
+- import_tasks: uv-upgrade.yml
+  tags: ['dev-tools', 'uv', 'upgrade']

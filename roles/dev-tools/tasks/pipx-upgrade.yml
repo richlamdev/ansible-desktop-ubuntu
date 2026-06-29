@@ -1,0 +1,6 @@
+---
+- name: upgrade all pipx packages
+  command: pipx upgrade-all
+  register: _pipx_upgrade_all
+  changed_when: "'upgraded package' in _pipx_upgrade_all.stdout"
+  become: false

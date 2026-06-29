@@ -1,0 +1,6 @@
+---
+- name: update pyenv
+  ansible.builtin.command: "{{ home_dir }}/.pyenv/bin/pyenv update"
+  register: _pyenv_update
+  changed_when: "'Already up to date' not in _pyenv_update.stdout"
+  become: false
