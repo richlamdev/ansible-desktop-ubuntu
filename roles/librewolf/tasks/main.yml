@@ -1,0 +1,39 @@
+---
+- block:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install extrepo package manager
+      ansible.builtin.apt:
+        name: extrepo
+        state: present
+      register: extrepo_install
+
+    - name: Enable LibreWolf repository via extrepo
+      ansible.builtin.command:
+        cmd: extrepo enable librewolf
+      when: extrepo_install.changed
+      register: extrepo_enable
+      changed_when: extrepo_enable.rc == 0
+
+    - name: Update extrepo repositories
+      ansible.builtin.command:
+        cmd: extrepo update librewolf
+      when: extrepo_enable.changed
+      register: extrepo_update
+      changed_when: extrepo_update.rc == 0
+
+    - name: Update apt cache after enabling repository
+      ansible.builtin.apt:
+        update_cache: yes
+      when: extrepo_update.changed
+
+    - name: Install LibreWolf browser
+      ansible.builtin.apt:
+        name: librewolf
+        state: "{{ librewolf_state }}"
+      notify: librewolf installed
+  tags:
+    - librewolf

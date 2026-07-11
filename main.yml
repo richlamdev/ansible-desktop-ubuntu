@@ -30,6 +30,7 @@
     - kubernetes
     - lazydocker
     - lazygit
+    - librewolf
     - microsoft
     - mullvad
     - neovim
