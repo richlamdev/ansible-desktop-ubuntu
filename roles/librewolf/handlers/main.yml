@@ -1,0 +1,5 @@
+---
+- name: librewolf installed
+  ansible.builtin.debug:
+    msg: "LibreWolf has been successfully installed"
+  listen: librewolf installed

@@ -1,0 +1,4 @@
+---
+# LibreWolf installation state
+# Possible values: present, latest, absent
+librewolf_state: present
