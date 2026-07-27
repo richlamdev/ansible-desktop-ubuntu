@@ -29,4 +29,9 @@
 
     - name: configure ufw
       import_tasks: ufw.yml
+
+    - name: sudo cache tasks
+      import_tasks: sudo-cache.yml
+      tags: ['sudo-cache']
+
   tags: ['base']
