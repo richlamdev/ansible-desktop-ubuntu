@@ -4,7 +4,7 @@
     dest: /etc/sudoers.d/ansible-cache
     content: |
       Defaults:{{ local_user }} !tty_tickets
-      Defaults:{{ local_user }} timestamp_timeout=5
+      Defaults:{{ local_user }} timestamp_timeout=15
     owner: root
     group: root
     mode: '0440'
