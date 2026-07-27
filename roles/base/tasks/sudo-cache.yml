@@ -1,0 +1,11 @@
+---
+- name: Allow sudo credential cache to persist across setsid sessions (ansible-core 2.19+)
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/ansible-cache
+    content: |
+      Defaults:{{ local_user }} !tty_tickets
+      Defaults:{{ local_user }} timestamp_timeout=15
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -cf %s'
