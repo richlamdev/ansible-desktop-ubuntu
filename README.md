@@ -157,6 +157,39 @@ Additional information for the following roles:
          `scripts/install_optimized_pyenv_latest.sh` - be aware that this
          script will take a long time to complete.
 
+  * fnm
+    * installs [fnm](https://github.com/Schniz/fnm) (Fast Node Manager) to
+      `/usr/local/bin/fnm`
+    * adds the shell hook to `~/.bashrc.d/custom_bash.sh` via the env role:
+      ```bash
+      eval "$(fnm env --use-on-cd --shell bash)"
+      eval "$(fnm completions --shell bash)"
+      ```
+    * this role follows the same approach as pyenv: it installs the *version
+      manager*, not a node runtime.  Which node version to use is a per-project
+      decision, handled by a `.node-version` or `.nvmrc` file plus the
+      `--use-on-cd` hook above
+    * to install a node version yourself after the playbook has run:
+      ```bash
+      fnm install 22          # or: fnm install --lts
+      fnm default 22
+      ```
+    * optionally the playbook can install node for you.  Both variables are
+      empty by default - set them in `roles/fnm/defaults/main.yml`, in your
+      inventory, or as extra vars:
+      ```yaml
+      fnm_node_versions: ['22', '20']   # installed for the local user
+      fnm_node_default: '22'            # aliased as default for new shells
+      ```
+      * node is installed under `$FNM_DIR` (`~/.local/share/fnm`) as the
+        local user, not system wide
+      * pin explicit versions.  Moving targets such as `lts-latest` or `latest`
+        resolve to a newer release over time, so every playbook run would
+        install yet another version instead of converging.  A pinned version is
+        a no-op on re-run
+      * `fnm_node_default` must be one of `fnm_node_versions`; the role fails
+        early if it is not
+
 * disable-local-dns
   * disables local dns on the target host
     (again this is a personal preference, as my network DNS server handles
@@ -282,6 +315,7 @@ This essentially executes the following:
 4. `pipx upgrade-all`
 5. `uv self update`
 6. `uv tool upgrade --all`
+7. upgrades aws-cli, aws-sam-cli, fnm, fzf, lazydocker, lazygit, neovim
 
 *while snap package mangement is controversial - tradeoff of manual updates
 and convenience...

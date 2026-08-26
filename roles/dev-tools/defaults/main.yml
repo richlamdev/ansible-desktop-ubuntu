@@ -1,0 +1,24 @@
+---
+fnm_version: "latest"
+fnm_install_path: /usr/local/bin/fnm
+fnm_repo: Schniz/fnm
+
+# Where fnm keeps its node versions and aliases. This is fnm's own default on
+# Linux; if you change it you must also export FNM_DIR in the shell, otherwise
+# the `fnm env` hook in custom_bash.sh will not find these installs.
+fnm_dir: "{{ home_dir }}/.local/share/fnm"
+
+# Node versions to install for the local user. Empty by default: this role
+# installs the version manager, not a runtime - same approach as the pyenv
+# role in dev-tools. Per-project versions are handled by .node-version /
+# .nvmrc and the `fnm env --use-on-cd` hook in custom_bash.sh.
+#
+# Pin versions explicitly, e.g. ['22'] or ['22.11.0', '20.18.0']. Moving
+# aliases such as 'lts-latest' or 'latest' are not idempotent here: they
+# resolve to a new release over time, so every playbook run would install
+# yet another version.
+fnm_node_versions: []
+
+# Which of fnm_node_versions to alias as the default for new shells.
+# Empty means the default alias is left alone.
+fnm_node_default: ""
