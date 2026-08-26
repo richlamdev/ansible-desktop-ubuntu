@@ -2,6 +2,9 @@
 - import_tasks: dev-tools.yml
   tags: ['dev-tools']
 
+- import_tasks: fnm.yml
+  tags: ['dev-tools', 'fnm']
+
 - import_tasks: pipx.yml
   tags: ['dev-tools', 'pipx']
 

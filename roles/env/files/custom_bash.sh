@@ -102,6 +102,12 @@ eval "$(register-python-argcomplete pipx)"
 # zoxid autocomplete
 eval "$(zoxide init bash)"
 
+# fnm (fast node manager) - node version switching + autocomplete
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd --shell bash)"
+  eval "$(fnm completions --shell bash)"
+fi
+
 sts() {
   local sensitive_vars="AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN"
   local has_env_creds=false

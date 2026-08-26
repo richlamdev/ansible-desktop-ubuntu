@@ -1,0 +1,160 @@
+---
+- name: "Install/Update fnm"
+  block:
+    # Check current installation
+    - name: "Check if fnm is installed"
+      command: "{{ fnm_install_path }} --version"
+      register: fnm_current
+      failed_when: false
+      changed_when: false
+
+    - name: "Extract installed version"
+      set_fact:
+        fnm_current_version: "{{ fnm_current.stdout | regex_search('([0-9.]+)') }}"
+      when: fnm_current.rc == 0
+
+    # Determine target version
+    - name: "Get latest release from GitHub"
+      uri:
+        url: "https://api.github.com/repos/{{ fnm_repo }}/releases/latest"
+        return_content: yes
+        headers:
+          Accept: "application/vnd.github.v3+json"
+      register: fnm_release
+      when: fnm_version == "latest"
+
+    - name: "Set target version (latest from GitHub)"
+      set_fact:
+        fnm_target_version: "{{ fnm_release.json.tag_name | regex_replace('^v', '') }}"
+      when:
+        - fnm_version == "latest"
+        - fnm_release.json.tag_name is defined
+
+    - name: "Set target version (pinned)"
+      set_fact:
+        fnm_target_version: "{{ fnm_version }}"
+      when: fnm_version != "latest"
+
+    - name: "Fail if version could not be determined"
+      fail:
+        msg: "Could not determine fnm version to install"
+      when: fnm_target_version is not defined
+
+    # Determine if installation/update is needed
+    - name: "Check if update is needed"
+      set_fact:
+        fnm_needs_install: "{{ fnm_current_version is not defined or fnm_current_version != fnm_target_version }}"
+
+    - name: "Display installation status"
+      debug:
+        msg: "fnm {{ 'will be installed' if fnm_current_version is not defined else ('will be updated from ' + fnm_current_version + ' to ' + fnm_target_version) if fnm_needs_install else 'is already up to date (' + fnm_current_version + ')' }}"
+
+    # Download and install
+    - name: "Ensure unzip is installed"
+      package:
+        name: unzip
+        state: present
+      when: fnm_needs_install | bool
+
+    - name: "Download fnm"
+      get_url:
+        url: "https://github.com/{{ fnm_repo }}/releases/download/v{{ fnm_target_version }}/fnm-linux.zip"
+        dest: "/tmp/fnm-linux.zip"
+        mode: "0644"
+      when: fnm_needs_install | bool
+
+    - name: "Extract fnm"
+      unarchive:
+        src: "/tmp/fnm-linux.zip"
+        dest: "/tmp"
+        remote_src: yes
+      when: fnm_needs_install | bool
+
+    - name: "Install fnm binary"
+      copy:
+        src: "/tmp/fnm"
+        dest: "{{ fnm_install_path }}"
+        mode: "0755"
+        remote_src: yes
+      become: yes
+      when: fnm_needs_install | bool
+
+    - name: "Verify installation"
+      command: "{{ fnm_install_path }} --version"
+      register: fnm_verify
+      changed_when: false
+      when: fnm_needs_install | bool
+
+    - name: "Display installed version"
+      debug:
+        msg: "fnm {{ fnm_target_version }} installed successfully"
+      when: fnm_needs_install | bool
+
+    # Optional node runtimes - skipped entirely while fnm_node_versions is
+    # empty.  These run as the local user: the fnm binary above is system
+    # wide, but node installs live under $FNM_DIR in the user's home.
+    - name: "Validate fnm_node_default"
+      fail:
+        msg: >-
+          fnm_node_default ('{{ fnm_node_default }}') must also be listed in
+          fnm_node_versions ({{ fnm_node_versions }})
+      when:
+        - fnm_node_default | length > 0
+        - fnm_node_default not in fnm_node_versions
+
+    - name: "Check which node versions are already installed"
+      find:
+        paths: "{{ fnm_dir }}/node-versions"
+        file_type: directory
+        patterns: "v{{ item }}*"
+      become: false
+      loop: "{{ fnm_node_versions }}"
+      register: fnm_node_installed
+      changed_when: false
+
+    - name: "Install node versions via fnm"
+      command: "{{ fnm_install_path }} install {{ item.item }}"
+      environment:
+        HOME: "{{ home_dir }}"
+      become: false
+      loop: "{{ fnm_node_installed.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+      when: item.matched == 0
+
+    - name: "Check current default node alias"
+      stat:
+        path: "{{ fnm_dir }}/aliases/default"
+      become: false
+      register: fnm_default_alias
+      when: fnm_node_default | length > 0
+
+    - name: "Set default node version"
+      command: "{{ fnm_install_path }} default {{ fnm_node_default }}"
+      environment:
+        HOME: "{{ home_dir }}"
+      become: false
+      when:
+        - fnm_node_default | length > 0
+        - >-
+          (fnm_default_alias.stat.lnk_target | default('') | basename)
+          is not match('v' ~ fnm_node_default)
+
+    - name: "Display node installation status"
+      debug:
+        msg: >-
+          node {{ fnm_node_versions | join(', ') }} installed via fnm; default
+          alias:
+          {{ fnm_node_default if fnm_node_default | length > 0 else 'not set' }}
+      when: fnm_node_versions | length > 0
+
+  always:
+    # Cleanup temporary files
+    - name: "Clean up temporary files"
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/fnm"
+        - "/tmp/fnm-linux.zip"
+      when: fnm_needs_install is defined and fnm_needs_install | bool
