@@ -1,0 +1,137 @@
+---
+# Upstream Go toolchain from https://go.dev/dl/ - the distro `golang` package
+# lags several releases behind, so it is removed in favour of this install.
+- name: "Install/Update Go"
+  block:
+    # Check current installation
+    - name: "Check if Go is installed"
+      command: "{{ go_bin_path }} version"
+      register: go_current
+      failed_when: false
+      changed_when: false
+
+    - name: "Extract installed version"
+      set_fact:
+        go_current_version: "{{ go_current.stdout | regex_search('go([0-9][0-9.]*)') | regex_replace('^go', '') }}"
+      when: go_current.rc == 0
+
+    # Determine target version
+    - name: "Get latest stable release from go.dev"
+      uri:
+        url: "https://go.dev/dl/?mode=json"
+        return_content: yes
+      register: go_release
+      when: go_version == "latest"
+
+    - name: "Set target version (latest from go.dev)"
+      set_fact:
+        go_target_version: "{{ go_release.json[0].version | regex_replace('^go', '') }}"
+      when:
+        - go_version == "latest"
+        - go_release.json | default([]) | length > 0
+
+    - name: "Set target version (pinned)"
+      set_fact:
+        go_target_version: "{{ go_version }}"
+      when: go_version != "latest"
+
+    - name: "Fail if version could not be determined"
+      fail:
+        msg: "Could not determine Go version to install"
+      when: go_target_version is not defined
+
+    - name: "Set Go archive name"
+      set_fact:
+        go_archive: "go{{ go_target_version }}.linux-{{ go_arch }}.tar.gz"
+
+    # Determine if installation/update is needed
+    - name: "Check if update is needed"
+      set_fact:
+        go_needs_install: "{{ go_current_version is not defined or go_current_version != go_target_version }}"
+
+    - name: "Display installation status"
+      debug:
+        msg: "Go {{ 'will be installed' if go_current_version is not defined else ('will be updated from ' + go_current_version + ' to ' + go_target_version) if go_needs_install else 'is already up to date (' + go_current_version + ')' }}"
+
+    # Download and install.  A .sha256 is published alongside every archive;
+    # fetch it so get_url can verify what it downloaded.  go.dev/dl/<file>
+    # redirects here, but only the download host serves the bare checksum -
+    # go.dev/dl/<file>.sha256 answers with an HTML page.
+    - name: "Get checksum for {{ go_archive | default('Go archive') }}"
+      uri:
+        url: "{{ go_dl_url }}/{{ go_archive }}.sha256"
+        return_content: yes
+      register: go_checksum
+      when: go_needs_install | bool
+
+    - name: "Download Go"
+      get_url:
+        url: "{{ go_dl_url }}/{{ go_archive }}"
+        dest: "/tmp/{{ go_archive }}"
+        checksum: "sha256:{{ go_checksum.content | trim }}"
+        mode: "0644"
+      when: go_needs_install | bool
+
+    # The tarball is extracted whole, so an old tree must go first: extracting
+    # over it would leave stale files from the previous release behind.
+    - name: "Remove previous Go installation"
+      file:
+        path: "{{ go_root }}"
+        state: absent
+      become: yes
+      when: go_needs_install | bool
+
+    - name: "Install Go"
+      unarchive:
+        src: "/tmp/{{ go_archive }}"
+        dest: "{{ go_install_root }}"
+        remote_src: yes
+        owner: root
+        group: root
+      become: yes
+      when: go_needs_install | bool
+
+    - name: "Verify installation"
+      command: "{{ go_bin_path }} version"
+      register: go_verify
+      changed_when: false
+      when: go_needs_install | bool
+
+    - name: "Display installed version"
+      debug:
+        msg: "Go {{ go_target_version }} installed successfully"
+      when: go_needs_install | bool
+
+    # The distro package puts a second, older `go` on PATH at /usr/bin/go.
+    # Remove it so there is one toolchain, the one managed here.
+    - name: "Remove distribution Go packages"
+      apt:
+        name:
+          - golang
+          - golang-go
+          - golang-doc
+        state: absent
+        purge: yes
+      become: yes
+      when: go_remove_apt_golang | bool
+
+    # GOPATH itself is created by the go tool on first use; GOBIN is created
+    # here so it can be put on PATH unconditionally by the env role.
+    - name: "Ensure GOPATH bin directory exists"
+      file:
+        path: "{{ go_path }}/bin"
+        state: directory
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0755"
+      become: false
+
+  always:
+    # Cleanup temporary files
+    - name: "Clean up temporary files"
+      file:
+        path: "/tmp/{{ go_archive }}"
+        state: absent
+      when:
+        - go_archive is defined
+        - go_needs_install is defined and go_needs_install | bool

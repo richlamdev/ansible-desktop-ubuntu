@@ -6,7 +6,6 @@
       - gcc
       - git
       - gitk
-      - golang
       - gron
       - httpie
       - jq

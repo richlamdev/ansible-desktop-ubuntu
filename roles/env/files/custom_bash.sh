@@ -108,6 +108,13 @@ if command -v fnm >/dev/null 2>&1; then
   eval "$(fnm completions --shell bash)"
 fi
 
+# go toolchain installed from https://go.dev/dl/ by the dev-tools role
+if [ -x /usr/local/go/bin/go ]; then
+  export PATH="/usr/local/go/bin:$PATH"
+  export GOPATH="${GOPATH:-$HOME/go}"
+  export PATH="$PATH:$GOPATH/bin"
+fi
+
 sts() {
   local sensitive_vars="AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN"
   local has_env_creds=false
