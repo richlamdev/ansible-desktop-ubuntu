@@ -5,6 +5,9 @@
 - import_tasks: fnm.yml
   tags: ['dev-tools', 'fnm']
 
+- import_tasks: go.yml
+  tags: ['dev-tools', 'go', 'upgrade']
+
 - import_tasks: pipx.yml
   tags: ['dev-tools', 'pipx']
 

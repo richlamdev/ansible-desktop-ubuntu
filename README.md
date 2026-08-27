@@ -190,6 +190,33 @@ Additional information for the following roles:
       * `fnm_node_default` must be one of `fnm_node_versions`; the role fails
         early if it is not
 
+  * go
+    * installs the [Go toolchain](https://go.dev/dl/) to `/usr/local/go` from
+      the upstream tarball, per the [official instructions](https://go.dev/doc/install)
+      * the archive's published `.sha256` is fetched and verified before the
+        tarball is unpacked
+      * the previous `/usr/local/go` tree is removed before extracting, so an
+        upgrade never leaves files from the older release behind
+    * `go_version` defaults to `latest`, which tracks the newest stable release
+      published on https://go.dev/dl/.  Pin a release to hold it:
+      ```yaml
+      go_version: '1.25.3'
+      ```
+    * puts `go` on PATH at `/usr/bin/go`.  Set
+      `go_remove_apt_golang: false` to keep it
+    * adds the following to `~/.bashrc.d/custom_bash.sh` via the env role:
+      ```bash
+      export PATH="/usr/local/go/bin:$PATH"
+      export GOPATH="${GOPATH:-$HOME/go}"
+      export PATH="$PATH:$GOPATH/bin"
+      ```
+      so binaries from `go install` (`~/go/bin`) are on PATH
+    * re-running the playbook upgrades Go to the current stable release; it is
+      also covered by the `upgrade` tag:
+      ```bash
+      ansible-playbook main.yml --ask-become-pass -c local --tags go
+      ```
+
 * disable-local-dns
   * disables local dns on the target host
     (again this is a personal preference, as my network DNS server handles
@@ -315,7 +342,8 @@ This essentially executes the following:
 4. `pipx upgrade-all`
 5. `uv self update`
 6. `uv tool upgrade --all`
-7. upgrades aws-cli, aws-sam-cli, fnm, fzf, lazydocker, lazygit, neovim
+7. upgrades aws-cli, aws-sam-cli, fnm, fzf, go, lazydocker, lazygit,
+   neovim
 
 *while snap package mangement is controversial - tradeoff of manual updates
 and convenience...

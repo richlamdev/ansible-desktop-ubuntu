@@ -22,3 +22,35 @@ fnm_node_versions: []
 # Which of fnm_node_versions to alias as the default for new shells.
 # Empty means the default alias is left alone.
 fnm_node_default: ""
+
+# Go toolchain, installed from the upstream tarballs at https://go.dev/dl/.
+# "latest" tracks the newest stable release published there; pin an explicit
+# version instead (e.g. "1.25.3") to hold a release.
+go_version: "latest"
+
+# Archives and their .sha256 files.  https://go.dev/dl/ redirects downloads
+# here; the release index itself is read from go.dev (see go.yml).
+go_dl_url: https://dl.google.com/go
+
+# The tarball unpacks to a single `go` directory - /usr/local is the layout
+# documented at https://go.dev/doc/install.
+go_install_root: /usr/local
+go_root: "{{ go_install_root }}/go"
+go_bin_path: "{{ go_root }}/bin/go"
+
+# Workspace for `go install` binaries and module cache, owned by the local
+# user.  $GOPATH/bin is added to PATH by custom_bash.sh via the env role.
+go_path: "{{ home_dir }}/go"
+
+# Ubuntu's golang package is several releases behind and puts a second `go`
+# on PATH at /usr/bin/go.  Set to false to keep the distro package alongside
+# the upstream install.
+go_remove_apt_golang: true
+
+go_arch_map:
+  x86_64: amd64
+  amd64: amd64
+  aarch64: arm64
+  arm64: arm64
+  armv6l: armv6l
+go_arch: "{{ go_arch_map[ansible_facts['architecture']] | default('amd64') }}"
