@@ -28,8 +28,8 @@
 
     - name: Copy managed sshd_config.conf
       ansible.builtin.copy:
-        src: sshd_config.conf
-        dest: /etc/ssh/sshd_config.d/sshd_config.conf
+        src: 00-hardened_sshd_config.conf
+        dest: /etc/ssh/sshd_config.d/00-hardened_sshd_config.conf
         owner: root
         group: root
         mode: '0644'
@@ -63,8 +63,8 @@
 
     - name: Copy managed ssh_config.conf
       ansible.builtin.copy:
-        src: ssh_config.conf
-        dest: /etc/ssh/ssh_config.d/ssh_config.conf
+        src: 00-hardened_ssh_config.conf
+        dest: /etc/ssh/ssh_config.d/00-hardened_ssh_config.conf
         owner: root
         group: root
         mode: '0644'
