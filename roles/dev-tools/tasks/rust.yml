@@ -1,0 +1,146 @@
+---
+# Rust toolchain, installed via the official rustup installer for the local
+# user - https://www.rust-lang.org/tools/install
+# Equivalent of: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+#
+# Every step below is guarded so re-running this role is a no-op once the
+# requested channel, components and targets are already in place - same
+# approach as the uv/pyenv roles in dev-tools.
+- name: "Install/configure Rust ({{ rust_channel }})"
+  block:
+    - name: "Check if rustup is already installed"
+      command: "{{ rustup_bin }} --version"
+      register: _rustup_installed
+      failed_when: false
+      changed_when: false
+      become: false
+
+    - name: "Download rustup installer"
+      get_url:
+        url: https://sh.rustup.rs
+        dest: /tmp/rustup-init.sh
+        mode: "0755"
+        timeout: 30
+      become: false
+      when: _rustup_installed.rc != 0
+
+    - name: "Run rustup installer (non-interactive)"
+      command: >-
+        bash /tmp/rustup-init.sh -y
+        --default-toolchain {{ rust_channel }}
+        --profile {{ rust_profile }}
+        {{ '--no-modify-path' if not rust_modify_path else '' }}
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      become: false
+      when: _rustup_installed.rc != 0
+
+    - name: "Verify rustup installation"
+      command: "{{ rustup_bin }} --version"
+      register: _rustup_verify
+      changed_when: false
+      failed_when: _rustup_verify.rc != 0
+      become: false
+      when: _rustup_installed.rc != 0
+
+    - name: "Display rustup installation status"
+      debug:
+        msg: >-
+          {{ 'rustup installed: ' + _rustup_verify.stdout
+              if _rustup_installed.rc != 0
+              else 'rustup already installed: ' + _rustup_installed.stdout }}
+
+    - name: "Check installed rustup toolchains"
+      command: "{{ rustup_bin }} toolchain list"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      register: _rust_toolchains
+      changed_when: false
+      become: false
+
+    - name: "Install the {{ rust_channel }} toolchain"
+      command: "{{ rustup_bin }} toolchain install {{ rust_channel }}"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      when: (rust_channel ~ '-') not in _rust_toolchains.stdout
+      become: false
+
+    - name: "Check current default toolchain"
+      command: "{{ rustup_bin }} show active-toolchain"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      register: _rust_active_toolchain
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: "Set {{ rust_channel }} as the default toolchain"
+      command: "{{ rustup_bin }} default {{ rust_channel }}"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      when: (rust_channel ~ '-') not in _rust_active_toolchain.stdout
+      become: false
+
+    - name: "Check installed rustup components"
+      command: "{{ rustup_bin }} component list --installed --toolchain {{ rust_channel }}"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      register: _rust_installed_components
+      changed_when: false
+      become: false
+      when: rust_components | length > 0
+
+    - name: "Add rustup components"
+      command: "{{ rustup_bin }} component add {{ item }} --toolchain {{ rust_channel }}"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      loop: "{{ rust_components }}"
+      when: item not in _rust_installed_components.stdout
+      become: false
+
+    - name: "Check installed compilation targets"
+      command: "{{ rustup_bin }} target list --installed --toolchain {{ rust_channel }}"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      register: _rust_installed_targets
+      changed_when: false
+      become: false
+      when: rust_targets | length > 0
+
+    - name: "Add additional compilation targets"
+      command: "{{ rustup_bin }} target add {{ item }} --toolchain {{ rust_channel }}"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      loop: "{{ rust_targets }}"
+      when: item not in _rust_installed_targets.stdout
+      become: false
+
+    - name: "Display installed Rust version"
+      command: "{{ cargo_bin }} --version"
+      environment:
+        RUSTUP_HOME: "{{ rustup_home }}"
+        CARGO_HOME: "{{ cargo_home }}"
+      register: _rust_version
+      changed_when: false
+      become: false
+
+    - name: "Rust toolchain summary"
+      debug:
+        msg: "{{ _rust_version.stdout }} (channel: {{ rust_channel }})"
+
+  always:
+    - name: "Clean up rustup installer script"
+      file:
+        path: /tmp/rustup-init.sh
+        state: absent
+      become: false
+      when: _rustup_installed.rc != 0
