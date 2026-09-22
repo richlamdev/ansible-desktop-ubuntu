@@ -20,6 +20,12 @@
 - import_tasks: pyenv-upgrade.yml
   tags: ['dev-tools', 'pyenv', 'upgrade']
 
+- import_tasks: rust.yml
+  tags: ['dev-tools', 'rust']
+
+- import_tasks: rust-upgrade.yml
+  tags: ['dev-tools', 'rust', 'upgrade']
+
 - import_tasks: uv.yml
   tags: ['dev-tools', 'uv']
 

@@ -1,0 +1,36 @@
+---
+# Update rustup itself and every installed toolchain to the latest release
+# on their current channel(s). Safe to run repeatedly: rustup reports
+# "unchanged"/"up to date" and this maps to Ansible's changed_when so a
+# second run in a row shows no changes - same convention as
+# uv-upgrade.yml/pyenv-upgrade.yml.
+- name: "Update rustup"
+  command: "{{ rustup_bin }} self update"
+  environment:
+    RUSTUP_HOME: "{{ rustup_home }}"
+    CARGO_HOME: "{{ cargo_home }}"
+  register: _rustup_self_update
+  changed_when: "'up to date' not in (_rustup_self_update.stdout + _rustup_self_update.stderr)"
+  become: false
+
+- name: "Update installed Rust toolchains"
+  command: "{{ rustup_bin }} update"
+  environment:
+    RUSTUP_HOME: "{{ rustup_home }}"
+    CARGO_HOME: "{{ cargo_home }}"
+  register: _rust_update
+  changed_when: "'unchanged' not in (_rust_update.stdout + _rust_update.stderr)"
+  become: false
+
+- name: "Display updated Rust version"
+  command: "{{ cargo_bin }} --version"
+  environment:
+    RUSTUP_HOME: "{{ rustup_home }}"
+    CARGO_HOME: "{{ cargo_home }}"
+  register: _rust_version_after_update
+  changed_when: false
+  become: false
+
+- name: "Rust update summary"
+  debug:
+    msg: "{{ _rust_update.stdout_lines + [_rust_version_after_update.stdout] }}"

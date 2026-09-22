@@ -54,3 +54,34 @@ go_arch_map:
   arm64: arm64
   armv6l: armv6l
 go_arch: "{{ go_arch_map[ansible_facts['architecture']] | default('amd64') }}"
+
+# Rust toolchain, installed via the official rustup installer for the local
+# user - https://www.rust-lang.org/tools/install
+# Channel to install and keep up to date via the "upgrade" tag. One of:
+# stable, beta, nightly, or a pinned version such as "1.81.0".
+rust_channel: stable
+
+# rustup and cargo install entirely under the invoking user's home
+# directory and do not need become.
+rustup_home: "{{ home_dir }}/.rustup"
+cargo_home: "{{ home_dir }}/.cargo"
+rustup_bin: "{{ cargo_home }}/bin/rustup"
+cargo_bin: "{{ cargo_home }}/bin/cargo"
+
+# Additional rustup components to install, e.g. ['clippy', 'rustfmt'].
+# Empty by default - both ship with the "default" rustup profile already.
+rust_components: []
+
+# Additional compilation targets to add via `rustup target add`, e.g.
+# ['x86_64-unknown-linux-musl']. Empty by default.
+rust_targets: []
+
+# rustup profile used for the initial install - see
+# https://rust-lang.github.io/rustup/concepts/profiles.html
+rust_profile: default
+
+# Let rustup-init modify the user's shell startup files (.profile, .bashrc,
+# etc.) to source "{{ cargo_home }}/env" and put cargo_home/bin on PATH.
+# Set to false if PATH management is handled elsewhere (e.g. custom_bash.sh
+# via the env role) and pass --no-modify-path instead.
+rust_modify_path: true
