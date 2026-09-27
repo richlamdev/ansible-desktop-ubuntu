@@ -1,0 +1,227 @@
+---
+# Bitwarden desktop AppImage — fresh install and in-place upgrade.
+#
+# Source: GitHub releases for bitwarden/clients (desktop-v* tags). This is
+# where the bitwarden.com AppImage download is published, and the GitHub API
+# exposes a sha256 digest per asset, which is verified before install.
+#
+# Up-to-date check is by sha256 of the installed AppImage vs the release
+# digest, not by running the binary (running an Electron AppImage launches
+# the GUI). A modified or corrupted local file is therefore also replaced.
+- name: Install/Update Bitwarden desktop AppImage
+  tags:
+    - bitwarden
+    - upgrade
+  block:
+    - name: Install libfuse2 (required to run AppImages)
+      ansible.builtin.apt:
+        name: "{{ 'libfuse2t64' if ansible_facts['distribution_version'] is version('24.04', '>=') else 'libfuse2' }}"
+        state: present
+
+    # ---- Resolve target release -------------------------------------------
+    - name: Fetch recent bitwarden/clients releases
+      ansible.builtin.uri:
+        url: "{{ bitwarden_api_url }}/repos/{{ bitwarden_repo }}/releases?per_page={{ bitwarden_releases_per_page }}"
+        headers:
+          Accept: "application/vnd.github+json"
+        return_content: true
+      register: bitwarden_releases
+      when: bitwarden_version == "latest"
+
+    - name: Fetch pinned Bitwarden desktop release
+      ansible.builtin.uri:
+        url: "{{ bitwarden_api_url }}/repos/{{ bitwarden_repo }}/releases/tags/desktop-v{{ bitwarden_version }}"
+        headers:
+          Accept: "application/vnd.github+json"
+        return_content: true
+      register: bitwarden_pinned_release
+      when: bitwarden_version != "latest"
+
+    - name: Select desktop release
+      ansible.builtin.set_fact:
+        bitwarden_release: >-
+          {{ (bitwarden_releases.json
+              | selectattr('tag_name', 'match', '^desktop-v')
+              | rejectattr('prerelease')
+              | rejectattr('draft')
+              | list | first | default({}))
+             if bitwarden_version == 'latest'
+             else bitwarden_pinned_release.json }}
+
+    - name: Fail if no desktop release was found
+      ansible.builtin.fail:
+        msg: >-
+          No stable desktop-v* release in the last {{ bitwarden_releases_per_page }}
+          releases of {{ bitwarden_repo }}. Raise bitwarden_releases_per_page.
+      when: bitwarden_release.tag_name is not defined
+
+    - name: Extract version, AppImage URL and digest
+      ansible.builtin.set_fact:
+        bitwarden_target_version: "{{ bitwarden_release.tag_name | regex_replace('^desktop-v', '') }}"
+        bitwarden_asset: >-
+          {{ bitwarden_release.assets
+             | selectattr('name', 'match', '^Bitwarden-.*-x86_64\.AppImage$')
+             | list | first | default({}) }}
+
+    # Fail closed: never install an AppImage we cannot verify.
+    - name: Fail if the AppImage asset or its sha256 digest is missing
+      ansible.builtin.fail:
+        msg: "Release {{ bitwarden_release.tag_name }} has no x86_64 AppImage with a sha256 digest."
+      when: >-
+        bitwarden_asset.browser_download_url is not defined
+        or not (bitwarden_asset.digest | default('')) is match('^sha256:[0-9a-f]{64}$')
+
+    - name: Set expected checksum
+      ansible.builtin.set_fact:
+        bitwarden_sha256: "{{ bitwarden_asset.digest | regex_replace('^sha256:', '') }}"
+
+    # ---- Inspect current install -------------------------------------------
+    - name: Check installed Bitwarden AppImage
+      ansible.builtin.stat:
+        path: "{{ bitwarden_bin }}"
+        get_checksum: true
+        checksum_algorithm: sha256
+      register: bitwarden_stat
+
+    - name: Read installed version from desktop entry
+      ansible.builtin.slurp:
+        src: "{{ bitwarden_desktop_file }}"
+      register: bitwarden_desktop_current
+      failed_when: false
+
+    - name: Extract installed version
+      ansible.builtin.set_fact:
+        bitwarden_current_version: >-
+          {{ (bitwarden_desktop_current.content | default('') | b64decode)
+             | regex_search('X-AppImage-Version=(\S+)', '\1')
+             | default(['unknown'], true) | first }}
+
+    - name: Determine if installation or upgrade is needed
+      ansible.builtin.set_fact:
+        bitwarden_needs_update: >-
+          {{ not bitwarden_stat.stat.exists
+             or bitwarden_stat.stat.checksum != bitwarden_sha256 }}
+
+    - name: Display current status
+      ansible.builtin.debug:
+        msg: >-
+          {% if not bitwarden_stat.stat.exists %}
+          Bitwarden not installed. Installing version {{ bitwarden_target_version }}
+          {% elif bitwarden_needs_update and bitwarden_current_version == bitwarden_target_version %}
+          Installed AppImage does not match the {{ bitwarden_target_version }} release digest. Reinstalling
+          {% elif bitwarden_needs_update %}
+          Updating Bitwarden: {{ bitwarden_current_version }} → {{ bitwarden_target_version }}
+          {% else %}
+          Bitwarden already up to date: {{ bitwarden_target_version }}
+          {% endif %}
+
+    # ---- Install / upgrade -------------------------------------------------
+    - name: Ensure user directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0755"
+      loop:
+        - "{{ bitwarden_install_dir }}"
+        - "{{ bitwarden_desktop_file | dirname }}"
+        - "{{ bitwarden_icon_dir }}"
+
+    # get_url verifies the checksum on the temp download before moving it
+    # into place, so a failed/tampered download never replaces a working copy.
+    - name: Download and verify Bitwarden AppImage
+      ansible.builtin.get_url:
+        url: "{{ bitwarden_asset.browser_download_url }}"
+        dest: "{{ bitwarden_bin }}"
+        checksum: "sha256:{{ bitwarden_sha256 }}"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0755"
+        force: true
+      when: bitwarden_needs_update | bool
+
+    - name: Extract icon from AppImage
+      when: bitwarden_needs_update | bool
+      block:
+        - name: Create temp dir for icon extraction
+          ansible.builtin.tempfile:
+            state: directory
+            suffix: bitwarden
+          register: bitwarden_tmp
+
+        - name: Extract 256x256 icon
+          ansible.builtin.command:
+            cmd: "{{ bitwarden_bin }} --appimage-extract usr/share/icons/hicolor/256x256/apps/bitwarden.png"
+            chdir: "{{ bitwarden_tmp.path }}"
+          changed_when: false
+
+        - name: Install icon
+          ansible.builtin.copy:
+            src: "{{ bitwarden_tmp.path }}/squashfs-root/usr/share/icons/hicolor/256x256/apps/bitwarden.png"
+            dest: "{{ bitwarden_icon_dir }}/bitwarden.png"
+            remote_src: true
+            owner: "{{ local_user }}"
+            group: "{{ local_user_primary_group }}"
+            mode: "0644"
+      always:
+        - name: Remove temp dir
+          ansible.builtin.file:
+            path: "{{ bitwarden_tmp.path }}"
+            state: absent
+          when: bitwarden_tmp.path is defined
+
+    - name: Install desktop entry
+      ansible.builtin.template:
+        src: bitwarden.desktop.j2
+        dest: "{{ bitwarden_desktop_file }}"
+        owner: "{{ local_user }}"
+        group: "{{ local_user_primary_group }}"
+        mode: "0644"
+
+    # ---- Optional: keep Chromium sandbox on Ubuntu 24.04+ -----------------
+    - name: Install AppArmor userns profile for Bitwarden AppImage
+      ansible.builtin.template:
+        src: bitwarden-appimage.apparmor.j2
+        dest: /etc/apparmor.d/bitwarden-appimage
+        owner: root
+        group: root
+        mode: "0644"
+      register: bitwarden_apparmor
+      # userns restriction (and abi/4.0) only exist on Ubuntu 24.04+
+      when:
+        - bitwarden_chromium_sandbox | bool
+        - ansible_facts['distribution_version'] is version('24.04', '>=')
+
+    - name: Load AppArmor profile
+      ansible.builtin.command: apparmor_parser -r /etc/apparmor.d/bitwarden-appimage
+      changed_when: true
+      when:
+        - bitwarden_chromium_sandbox | bool
+        - bitwarden_apparmor is changed
+
+    - name: Check for leftover AppArmor profile
+      ansible.builtin.stat:
+        path: /etc/apparmor.d/bitwarden-appimage
+      register: bitwarden_apparmor_file
+      when: not (bitwarden_chromium_sandbox | bool)
+
+    - name: Unload and remove AppArmor profile when sandbox is disabled
+      when:
+        - not (bitwarden_chromium_sandbox | bool)
+        - bitwarden_apparmor_file.stat.exists
+      block:
+        - name: Unload AppArmor profile
+          ansible.builtin.command: apparmor_parser -R /etc/apparmor.d/bitwarden-appimage
+          changed_when: true
+          failed_when: false
+
+        - name: Remove AppArmor profile file
+          ansible.builtin.file:
+            path: /etc/apparmor.d/bitwarden-appimage
+            state: absent
+
+    - name: Display installation result
+      ansible.builtin.debug:
+        msg: "Bitwarden {{ bitwarden_target_version }} installed (sha256 verified: {{ bitwarden_sha256 }})"
+      when: bitwarden_needs_update | bool
