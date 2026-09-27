@@ -1,0 +1,21 @@
+---
+# "latest" tracks the newest stable desktop release; pin e.g. "2026.9.0" to hold.
+bitwarden_version: "latest"
+
+# bitwarden/clients publishes browser-, cli-, web- and desktop- releases from
+# one repo, so /releases/latest is usually NOT the desktop app.  The role pages
+# through recent releases and picks the newest desktop-v* tag instead.
+bitwarden_api_url: https://api.github.com
+bitwarden_repo: bitwarden/clients
+bitwarden_releases_per_page: 50
+
+bitwarden_install_dir: "{{ home_dir }}/.local/bin"
+bitwarden_bin: "{{ bitwarden_install_dir }}/bitwarden"
+bitwarden_desktop_file: "{{ home_dir }}/.local/share/applications/bitwarden.desktop"
+bitwarden_icon_dir: "{{ home_dir }}/.local/share/icons/hicolor/256x256/apps"
+
+# Upstream's own desktop entry launches with --no-sandbox, because Ubuntu 24.04+
+# blocks the unprivileged user namespaces Chromium's sandbox needs.
+# Set to true to keep the Chromium sandbox: the role then installs an AppArmor
+# profile granting userns to this AppImage path and drops --no-sandbox.
+bitwarden_chromium_sandbox: false

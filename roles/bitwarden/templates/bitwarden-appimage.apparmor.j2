@@ -1,0 +1,12 @@
+# Managed by Ansible (roles/bitwarden).
+# Grants unprivileged user namespaces to the Bitwarden AppImage so Chromium's
+# sandbox works on Ubuntu 24.04+. Same pattern Ubuntu ships for other apps
+# in /etc/apparmor.d (unconfined + userns).
+abi <abi/4.0>,
+include <tunables/global>
+
+profile bitwarden-appimage {{ bitwarden_bin }} flags=(unconfined) {
+  userns,
+
+  include if exists <local/bitwarden-appimage>
+}
