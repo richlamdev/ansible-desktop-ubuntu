@@ -1,0 +1,249 @@
+---
+# Shared install logic for Zig - imported by zig.yml and zig-upgrade.yml.
+#
+# Upstream tarballs from https://ziglang.org/download/ (there is no apt
+# package).  The release index lists every release with a tarball URL and
+# sha256 per platform, so both come from the index rather than being
+# constructed here - upstream renamed the tarballs in 0.14.0
+# (zig-linux-x86_64-* -> zig-x86_64-linux-*).
+#
+# Tarballs are verified twice: the sha256 from the index (catches corrupt or
+# truncated downloads), then the minisign signature against the pinned
+# zig_minisign_pubkey (catches a tampered tarball *and* index, since the
+# signing key is not on the web server).  The "file:" field in the signed
+# trusted comment must match the requested tarball, which blocks a downgrade
+# to an older, validly signed release.
+#
+# Everything installs under the local user's home, no become:
+#   {{ zig_install_root }}/<version>/   full tree (zig needs its lib/ dir)
+#   {{ zig_bin_link }}                  symlink -> <version>/zig
+#
+# _zig_allow_upgrade (set by the importing file):
+#   false - install only if zig is missing, or a pinned zig_version differs
+#   true  - also move an existing install to the newest stable release
+- name: "Install/Update Zig"
+  block:
+    # Check current installation
+    - name: "Check if Zig is installed"
+      command: "{{ zig_bin_link }} version"
+      register: _zig_current
+      failed_when: false
+      changed_when: false
+      become: false
+
+    # Set unconditionally: this file is imported twice per play when both
+    # zig tags run, and a conditional set_fact would leave the first pass's
+    # value behind.
+    - name: "Extract installed version"
+      set_fact:
+        zig_current_version: "{{ (_zig_current.stdout | trim) if _zig_current.rc == 0 else '' }}"
+
+    # Determine target version
+    - name: "Get release index from ziglang.org"
+      uri:
+        url: "{{ zig_index_url }}"
+        return_content: yes
+      register: _zig_index
+      become: false
+
+    # Highest X.Y.Z key in the index; "master" and any other non-release
+    # keys are dropped before comparing.
+    - name: "Set target version"
+      set_fact:
+        zig_target_version: >-
+          {%- if zig_version != 'latest' -%}
+          {{ zig_version }}
+          {%- else -%}
+          {%- set ns = namespace(v='') -%}
+          {%- for k in _zig_index.json.keys() | select('match', '^[0-9]+\.[0-9]+\.[0-9]+$') -%}
+          {%- if ns.v == '' or k is version(ns.v, '>') -%}{%- set ns.v = k -%}{%- endif -%}
+          {%- endfor -%}
+          {{ ns.v }}
+          {%- endif -%}
+
+    - name: "Fail if version could not be determined"
+      fail:
+        msg: >-
+          Could not determine a Zig release for {{ zig_platform }}
+          (zig_version={{ zig_version }})
+      when: >-
+        zig_target_version == '' or
+        zig_target_version not in _zig_index.json or
+        zig_platform not in _zig_index.json[zig_target_version]
+
+    - name: "Set Zig release details"
+      set_fact:
+        zig_tarball_url: "{{ _zig_index.json[zig_target_version][zig_platform].tarball }}"
+        zig_tarball_sha256: "{{ _zig_index.json[zig_target_version][zig_platform].shasum }}"
+        zig_archive: "{{ _zig_index.json[zig_target_version][zig_platform].tarball | basename }}"
+        zig_version_dir: "{{ zig_install_root }}/{{ zig_target_version }}"
+
+    # Determine if installation/update is needed.  A pinned version is always
+    # enforced; "latest" only moves forward when invoked via the upgrade tag.
+    - name: "Check if install/update is needed"
+      set_fact:
+        zig_needs_install: >-
+          {{ zig_current_version == '' or
+             (zig_current_version != zig_target_version and
+              (zig_version != 'latest' or _zig_allow_upgrade | bool)) }}
+
+    - name: "Display installation status"
+      debug:
+        msg: >-
+          Zig {{ 'will be installed (' + zig_target_version + ')' if zig_current_version == ''
+          else ('will be updated from ' + zig_current_version + ' to ' + zig_target_version) if zig_needs_install | bool
+          else ('is installed (' + zig_current_version + '); ' + zig_target_version + ' is available via the upgrade tag')
+          if zig_current_version != zig_target_version
+          else 'is already up to date (' + zig_current_version + ')' }}
+
+    # minisign comes from apt via dev-tools.yml, which only runs under the
+    # dev-tools tag - fail clearly if `--tags zig` is run on a fresh machine.
+    - name: "Check minisign is available"
+      command: minisign -v
+      register: _zig_minisign
+      failed_when: false
+      changed_when: false
+      when: zig_needs_install | bool
+
+    - name: "Fail if minisign is missing"
+      fail:
+        msg: >-
+          minisign is required to verify the Zig tarball. Install it with
+          `sudo apt install minisign` or run the playbook with --tags dev-tools.
+      when:
+        - zig_needs_install | bool
+        - _zig_minisign.rc != 0
+
+    # Download and install
+    - name: "Download Zig {{ zig_target_version }}"
+      get_url:
+        url: "{{ zig_tarball_url }}"
+        dest: "/tmp/{{ zig_archive }}"
+        checksum: "sha256:{{ zig_tarball_sha256 }}"
+        mode: "0644"
+      become: false
+      when: zig_needs_install | bool
+
+    - name: "Download Zig {{ zig_target_version }} signature"
+      get_url:
+        url: "{{ zig_tarball_url }}.minisig"
+        dest: "/tmp/{{ zig_archive }}.minisig"
+        mode: "0644"
+        force: yes
+      become: false
+      when: zig_needs_install | bool
+
+    # -Q prints only the trusted comment, e.g.
+    #   timestamp:1744...  file:zig-x86_64-linux-0.16.0.tar.xz  hashed
+    - name: "Verify Zig {{ zig_target_version }} signature"
+      command: >-
+        minisign -V -Q
+        -P {{ zig_minisign_pubkey | quote }}
+        -m /tmp/{{ zig_archive }}
+        -x /tmp/{{ zig_archive }}.minisig
+      register: _zig_sig
+      changed_when: false
+      become: false
+      when: zig_needs_install | bool
+
+    - name: "Check signature is for {{ zig_archive }}"
+      assert:
+        that:
+          - (_zig_sig.stdout | regex_search('(?:^|\\s)file:(\\S+)', '\\1') | first) == zig_archive
+        fail_msg: >-
+          Signature is valid but was issued for a different file
+          ({{ _zig_sig.stdout | trim }}), expected {{ zig_archive }} - refusing
+          to install (possible downgrade attack).
+        success_msg: "Signature verified: {{ _zig_sig.stdout | trim }}"
+        quiet: true
+      when: zig_needs_install | bool
+
+    # Extract into a fresh versioned directory so a half-finished run never
+    # leaves a mixed tree behind the symlink.
+    - name: "Remove partial Zig {{ zig_target_version }} directory"
+      file:
+        path: "{{ zig_version_dir }}"
+        state: absent
+      become: false
+      when: zig_needs_install | bool
+
+    - name: "Create Zig install directory"
+      file:
+        path: "{{ zig_version_dir }}"
+        state: directory
+        mode: "0755"
+      become: false
+      when: zig_needs_install | bool
+
+    # The tarball has a single top-level zig-<platform>-<version>/ directory.
+    - name: "Install Zig"
+      unarchive:
+        src: "/tmp/{{ zig_archive }}"
+        dest: "{{ zig_version_dir }}"
+        remote_src: yes
+        extra_opts: ["--strip-components=1"]
+      become: false
+      when: zig_needs_install | bool
+
+    - name: "Ensure {{ zig_bin_link | dirname }} exists"
+      file:
+        path: "{{ zig_bin_link | dirname }}"
+        state: directory
+        mode: "0755"
+      become: false
+
+    - name: "Link zig into {{ zig_bin_link | dirname }}"
+      file:
+        src: "{{ zig_version_dir }}/zig"
+        dest: "{{ zig_bin_link }}"
+        state: link
+        force: yes
+      become: false
+      when: zig_needs_install | bool
+
+    - name: "Verify installation"
+      command: "{{ zig_bin_link }} version"
+      register: _zig_verify
+      changed_when: false
+      failed_when: (_zig_verify.stdout | trim) != zig_target_version
+      become: false
+      when: zig_needs_install | bool
+
+    - name: "Display installed version"
+      debug:
+        msg: "Zig {{ zig_target_version }} installed successfully"
+      when: zig_needs_install | bool
+
+    # Keep only the version the symlink points at.
+    - name: "Find previous Zig versions"
+      find:
+        paths: "{{ zig_install_root }}"
+        file_type: directory
+        excludes: "{{ zig_target_version }}"
+      register: _zig_old_versions
+      become: false
+      when: zig_needs_install | bool
+
+    - name: "Remove previous Zig versions"
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ _zig_old_versions.files | default([]) }}"
+      loop_control:
+        label: "{{ item.path | basename }}"
+      become: false
+      when: zig_needs_install | bool
+
+  always:
+    # Cleanup temporary files
+    - name: "Clean up temporary files"
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/{{ zig_archive }}"
+        - "/tmp/{{ zig_archive }}.minisig"
+      become: false
+      when:
+        - zig_archive is defined
+        - zig_needs_install is defined and zig_needs_install | bool

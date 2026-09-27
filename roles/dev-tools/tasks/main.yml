@@ -31,3 +31,9 @@
 
 - import_tasks: uv-upgrade.yml
   tags: ['dev-tools', 'uv', 'upgrade']
+
+- import_tasks: zig.yml
+  tags: ['dev-tools', 'zig']
+
+- import_tasks: zig-upgrade.yml
+  tags: ['dev-tools', 'zig', 'upgrade']
