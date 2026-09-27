@@ -1,0 +1,7 @@
+---
+# Move Zig to the newest stable release on ziglang.org (or to the pinned
+# zig_version).  Safe to run repeatedly: a second run in a row reports no
+# changes - same convention as rust-upgrade.yml/uv-upgrade.yml.
+- import_tasks: zig-install.yml
+  vars:
+    _zig_allow_upgrade: true

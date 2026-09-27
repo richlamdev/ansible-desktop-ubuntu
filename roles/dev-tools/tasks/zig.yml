@@ -1,0 +1,7 @@
+---
+# Install Zig for the local user if it is missing (or if a pinned zig_version
+# differs from what is installed).  An existing "latest" install is left
+# alone here - moving it to a newer release is zig-upgrade.yml's job.
+- import_tasks: zig-install.yml
+  vars:
+    _zig_allow_upgrade: false

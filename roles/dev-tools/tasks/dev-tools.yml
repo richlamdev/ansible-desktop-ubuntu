@@ -11,6 +11,7 @@
       - jq
       - make
       - miller
+      - minisign
       - pipx
       - python3-venv
       - shellcheck

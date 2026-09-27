@@ -85,3 +85,34 @@ rust_profile: default
 # Set to false if PATH management is handled elsewhere (e.g. custom_bash.sh
 # via the env role) and pass --no-modify-path instead.
 rust_modify_path: true
+
+# Zig toolchain, installed from the upstream tarballs at
+# https://ziglang.org/download/ for the local user (no apt package, no become).
+# "latest" tracks the newest stable X.Y.Z release in the index - dev/master
+# builds are never selected.  Pin an explicit version (e.g. "0.15.2") to hold
+# a release; a pinned version is enforced on every run.
+zig_version: "latest"
+
+# Release index: every release with a tarball URL and sha256 per platform.
+zig_index_url: https://ziglang.org/download/index.json
+
+# Each release unpacks to its own directory under zig_install_root; zig needs
+# its lib/ directory next to the binary, so the whole tree is kept and the
+# binary is symlinked into ~/.local/bin (on PATH via Ubuntu's ~/.profile, same
+# as uv).  Only the linked version is kept after an install/upgrade.
+zig_install_root: "{{ home_dir }}/.local/share/zig"
+zig_bin_link: "{{ home_dir }}/.local/bin/zig"
+
+# Zig Software Foundation minisign public key, pinned here rather than fetched
+# at run time so a compromised ziglang.org cannot swap it along with the
+# tarball.  Source: https://ziglang.org/download/ (matches
+# github.com/ziglang/www.ziglang.org content/en-US/download.smd).
+# Every tarball is verified against it; minisign is installed by dev-tools.yml.
+zig_minisign_pubkey: "RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti+JO/wCYvhbAb/U"
+
+zig_arch_map:
+  x86_64: x86_64
+  amd64: x86_64
+  aarch64: aarch64
+  arm64: aarch64
+zig_platform: "{{ zig_arch_map[ansible_facts['architecture']] | default('x86_64') }}-linux"
