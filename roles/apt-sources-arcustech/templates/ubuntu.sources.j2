@@ -1,24 +1,27 @@
+{% set rel = ansible_facts['distribution_release'] %}
+{% if use_arcus_mirror | default(false) | bool %}
 Types: deb
 URIs: https://mirrors.arcuslayer.com/ubuntu/
-Suites: {{ ansible_facts['distribution_release'] }} {{ ansible_facts['distribution_release'] }}-updates {{ ansible_facts['distribution_release'] }}-backports
+Suites: {{ rel }} {{ rel }}-updates {{ rel }}-backports
 Components: main restricted universe multiverse
 Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
+Types: deb
+URIs: https://mirrors.arcuslayer.com/ubuntu/
+Suites: {{ rel }}-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+{% endif %}
 Types: deb
 URIs: https://archive.ubuntu.com/ubuntu/
-Suites: {{ ansible_facts['distribution_release'] }} {{ ansible_facts['distribution_release'] }}-updates {{ ansible_facts['distribution_release'] }}-backports
-Components: main restricted universe multiverse
-Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-
-Types: deb
-URIs: https://mirrors.arcuslayer.com/ubuntu/
-Suites: {{ ansible_facts['distribution_release'] }}-security
+Suites: {{ rel }} {{ rel }}-updates {{ rel }}-backports
 Components: main restricted universe multiverse
 Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
 Types: deb
 URIs: https://security.ubuntu.com/ubuntu/
-Suites: {{ ansible_facts['distribution_release'] }}-security
+Suites: {{ rel }}-security
 Components: main restricted universe multiverse
 Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
