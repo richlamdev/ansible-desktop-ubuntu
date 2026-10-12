@@ -1,10 +1,26 @@
 ---
 - block:
+    - name: check arcuslayer mirror is reachable
+      ansible.builtin.uri:
+        url: "https://mirrors.arcuslayer.com/ubuntu/dists/{{ ansible_facts['distribution_release'] }}/InRelease"
+        method: HEAD
+        timeout: 10
+        status_code: [200, 301, 302, 403, 404, 523, -1]  # never fail here; we judge below
+      register: arcus_probe
+      failed_when: false
+      changed_when: false
+
+    - name: decide whether to use the mirror
+      ansible.builtin.set_fact:
+        use_arcus_mirror: >-
+          {{ arcus_mirror_enabled | default(true)
+             and (arcus_probe.status | default(-1)) == 200 }}
+
     - name: ensure ubuntu-keyring is installed
       ansible.builtin.apt:
         name: ubuntu-keyring
         state: present
-        update_cache: yes
+        update_cache: no          # sources aren't fixed yet
 
     - name: ensure codename aware and dual-source ubuntu.sources is in place
       ansible.builtin.template:
@@ -16,7 +32,7 @@
         backup: yes
       register: ubuntu_sources
 
-    - name: update apt cache only if sources file change
+    - name: update apt cache only if sources file changed
       ansible.builtin.apt:
         update_cache: yes
       when: ubuntu_sources.changed
