@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=ghostty
+Terminal=false
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+StartupNotify=false
+Name=Ghostty
+Comment=start Ghostty
