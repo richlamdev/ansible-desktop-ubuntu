@@ -5,7 +5,6 @@ IGreen='\[\033[0;92m\]'
 BWhite='\[\033[1;37m\]'
 BGreen='\[\033[1;32m\]'
 BIRed='\[\033[1;91m\]'
-Yellow226='\[\033[01;38;5;226m\]'
 IYellow='\[\033[0;93m\]'
 
 __build_ps1() {
@@ -22,10 +21,18 @@ __build_ps1() {
       git_part="${BWhite}|${head_rev}|${BIRed}{${branch}}${BWhite}|${IYellow}\w${Color_Off}"
     fi
   else
-    git_part="${Yellow226}\w${Color_Off}"
+    git_part="${IYellow}\w${Color_Off}"
   fi
 
-  PS1="${Blue027}\u${IPurple}@${IGreen}\h${Color_Off}${git_part} \$ "
+  # Window title: "Ghostty" + gap + cwd (Ghostty only, Alacritty unaffected)
+  local title=""
+  [[ "$TERM" == xterm-ghostty ]] && title=$'\[\033]0;Ghostty\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\w\007\]'
+
+  PS1="${title}${Blue027}\u${IPurple}@${IGreen}\h${Color_Off}${git_part} \$ "
 }
 
-PROMPT_COMMAND=__build_ps1
+# Add the hook once, so re-sourcing (bload) doesn't stack it
+case ";$PROMPT_COMMAND;" in
+  *";__build_ps1;"* | *";__build_ps1 "*) ;;
+  *) PROMPT_COMMAND="__build_ps1${PROMPT_COMMAND:+;$PROMPT_COMMAND}" ;;
+esac

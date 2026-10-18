@@ -1,9 +1,17 @@
+# ~/.bashrc.d/custom_bash.sh
+
+# ---------------------------------------------------------------------------
+# History
+# ---------------------------------------------------------------------------
 HISTSIZE=100000
 HISTFILESIZE=100000
-HISTFILE=/home/$USER/.bash_history
+HISTFILE="$HOME/.bash_history"
 HISTCONTROL=ignoreboth:erasedups
 HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:pwd:cd *:export AWS_*"
 
+# ---------------------------------------------------------------------------
+# Aliases
+# ---------------------------------------------------------------------------
 alias pbcopy='_clipboard_copy'
 alias pbpaste='_clipboard_paste'
 alias dateu='echo -e "\n\e[32m$(date)\e[0m\n\e[33m$(date -u)\e[0m\n"'
@@ -18,23 +26,29 @@ alias check-unattended='sudo apt update && sudo unattended-upgrade --dry-run'
 alias check-snap='sudo snap refresh --list'
 alias g='git'
 alias tf='terraform'
-alias bedit='cd ~/.bashrc.d && vim custom_bash.sh && cd -'
+alias bedit='(cd ~/.bashrc.d && ${EDITOR:-vim} custom_bash.sh)'
 alias bload='source ~/.bashrc'
 alias open='xdg-open'
 alias lsblk='lsblk -e 7 -o NAME,SIZE,MOUNTPOINT,TYPE,FSTYPE'
 
+# ---------------------------------------------------------------------------
+# Shell options
+# ---------------------------------------------------------------------------
 shopt -s autocd
 shopt -s cdspell
 shopt -s direxpand
 shopt -s dirspell
 
+# ---------------------------------------------------------------------------
+# Clipboard helpers (Wayland / X11)
+# ---------------------------------------------------------------------------
 _clipboard_copy() {
   if [ -n "$WAYLAND_DISPLAY" ]; then
     wl-copy
   elif [ -n "$DISPLAY" ]; then
     xclip -sel clip
   else
-    echo "cbc: no display server detected" >&2
+    echo "pbcopy: no display server detected" >&2
     return 1
   fi
 }
@@ -45,16 +59,34 @@ _clipboard_paste() {
   elif [ -n "$DISPLAY" ]; then
     xclip -sel clip -o
   else
-    echo "cbp: no display server detected" >&2
+    echo "pbpaste: no display server detected" >&2
     return 1
   fi
 }
 
-# google search from the command line
+# ---------------------------------------------------------------------------
+# Small helpers
+# ---------------------------------------------------------------------------
+
+# google search from the command line (URL-encodes the query)
 google() {
-  xdg-open "https://www.google.com/search?q=$*" >/dev/null 2>&1 &
+  local query
+  query=$(python3 -c 'import sys, urllib.parse; print(urllib.parse.quote_plus(" ".join(sys.argv[1:])))' "$@")
+  xdg-open "https://www.google.com/search?q=${query}" >/dev/null 2>&1 &
 }
 
+# pretty-print CSV files
+pretty_csv() {
+  perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' "$@" | column -t -s, | batcat -S
+}
+
+mkcd() {
+  mkdir -p -- "$1" && cd -P -- "$1" && pwd
+}
+
+# ---------------------------------------------------------------------------
+# AWS sandbox credentials
+# ---------------------------------------------------------------------------
 acg() {
   . ~/.local/bin/$USER/sandbox-creds.sh
   sts
@@ -65,81 +97,36 @@ acg-clear() {
   sts
 }
 
-# Function to pretty-print CSV files
-pretty_csv() {
-  perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' "$@" | column -t -s, | batcat -S
-}
-
-mkcd() {
-  mkdir -p -- "$1" && cd -P -- "$1" && pwd
-}
-
-# minikube autocomplete
-#source <(minikube completion bash)
-
-# kubectl autocomplete
-source <(kubectl completion bash)
-alias k='kubectl'
-complete -o default -F __start_kubectl k
-
-# aws autocomplete
-complete -C '/usr/local/bin/aws_completer' aws
-
-# terraform autocomplete
-complete -C /usr/bin/terraform terraform
-
-# vagrant command completion (start)
-# . /opt/vagrant/embedded/gems/gems/vagrant-2.4.6/contrib/bash/completion.sh
-VAGRANT_COMPLETION=$(find /opt/vagrant/embedded/gems/gems/ -type f -path "*/vagrant-*/contrib/bash/completion.sh" | sort -V | tail -n 1)
-
-if [ -f "$VAGRANT_COMPLETION" ]; then
-  . "$VAGRANT_COMPLETION"
-fi
-
-# pipx autocomplete
-eval "$(register-python-argcomplete pipx)"
-
-# zoxid autocomplete
-eval "$(zoxide init bash)"
-
-# fnm (fast node manager) - node version switching + autocomplete
-if command -v fnm >/dev/null 2>&1; then
-  eval "$(fnm env --use-on-cd --shell bash)"
-  eval "$(fnm completions --shell bash)"
-fi
-
-# go toolchain installed from https://go.dev/dl/ by the dev-tools role
-if [ -x /usr/local/go/bin/go ]; then
-  export PATH="/usr/local/go/bin:$PATH"
-  export GOPATH="${GOPATH:-$HOME/go}"
-  export PATH="$PATH:$GOPATH/bin"
-fi
-
+# Show AWS-related env vars and the current identity.
+# Only the access key ID is partially shown; secrets are reported as "(set)".
 sts() {
-  local sensitive_vars="AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN"
+  local var value
   local has_env_creds=false
 
   echo ""
 
-  # Check for credential env vars first (they override profile)
-  for var in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN; do
-    local value=$(eval echo \$${var})
+  # Credential env vars override the profile, so flag them first
+  for var in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SECURITY_TOKEN; do
+    value="${!var}"
     if [ -n "$value" ]; then
       has_env_creds=true
-      echo -e "\e[31m⚠ $var: \e[90m${value:0:5}...\e[0m"
+      if [ "$var" = AWS_ACCESS_KEY_ID ]; then
+        echo -e "\e[31m⚠ $var: \e[90m${value:0:5}...\e[0m"
+      else
+        echo -e "\e[31m⚠ $var: \e[90m(set)\e[0m"
+      fi
     fi
   done
 
-  # Show other AWS env vars
+  # Other AWS env vars (credentials and AWS_PROFILE are handled separately)
   for var in $(env | grep '^AWS_' | cut -d= -f1 | sort); do
-    # Skip the sensitive ones and AWS_PROFILE (we handle those separately)
-    if ! echo "AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE" | grep -qw "$var"; then
-      local value=$(eval echo \$${var})
-      echo -e "\e[33m$var: \e[36m${value}\e[0m"
-    fi
+    case "$var" in
+      AWS_ACCESS_KEY_ID | AWS_SECRET_ACCESS_KEY | AWS_SESSION_TOKEN | AWS_SECURITY_TOKEN | AWS_PROFILE) continue ;;
+    esac
+    echo -e "\e[33m$var: \e[36m${!var}\e[0m"
   done
 
-  # Show profile (but warn if env creds will override it)
+  # Show profile, and warn if env creds will override it
   if [ -n "$AWS_PROFILE" ]; then
     if [ "$has_env_creds" = true ]; then
       echo -e "\e[33mAWS_PROFILE: \e[90m$AWS_PROFILE \e[31m(overridden by env vars above)\e[0m"
@@ -152,6 +139,64 @@ sts() {
   aws sts get-caller-identity
 }
 
+# ---------------------------------------------------------------------------
+# Completions (each is skipped if the tool isn't installed)
+# ---------------------------------------------------------------------------
+
+# minikube autocomplete
+#source <(minikube completion bash)
+
+# kubectl autocomplete
+if command -v kubectl >/dev/null 2>&1; then
+  source <(kubectl completion bash)
+  alias k='kubectl'
+  complete -o default -F __start_kubectl k
+fi
+
+# aws autocomplete
+[ -x /usr/local/bin/aws_completer ] && complete -C '/usr/local/bin/aws_completer' aws
+
+# terraform autocomplete
+[ -x /usr/bin/terraform ] && complete -C /usr/bin/terraform terraform
+
+# vagrant command completion
+if [ -d /opt/vagrant/embedded/gems/gems ]; then
+  VAGRANT_COMPLETION=$(find /opt/vagrant/embedded/gems/gems/ -type f -path "*/vagrant-*/contrib/bash/completion.sh" 2>/dev/null | sort -V | tail -n 1)
+  [ -f "$VAGRANT_COMPLETION" ] && . "$VAGRANT_COMPLETION"
+fi
+
+# pipx autocomplete
+command -v register-python-argcomplete >/dev/null 2>&1 && eval "$(register-python-argcomplete pipx)"
+
+# ---------------------------------------------------------------------------
+# Tool integrations
+# ---------------------------------------------------------------------------
+
+# zoxide (smarter cd)
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)"
+
+# fnm (fast node manager) - node version switching + autocomplete
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd --shell bash)"
+  eval "$(fnm completions --shell bash)"
+fi
+
+# go toolchain installed from https://go.dev/dl/ by the dev-tools role
+if [ -x /usr/local/go/bin/go ]; then
+  case ":$PATH:" in
+    *":/usr/local/go/bin:"*) ;;
+    *) export PATH="/usr/local/go/bin:$PATH" ;;
+  esac
+  export GOPATH="${GOPATH:-$HOME/go}"
+  case ":$PATH:" in
+    *":$GOPATH/bin:"*) ;;
+    *) export PATH="$PATH:$GOPATH/bin" ;;
+  esac
+fi
+
+# ---------------------------------------------------------------------------
+# Show all aliases and functions defined in ~/.bashrc and ~/.bashrc.d
+# ---------------------------------------------------------------------------
 bshow() {
   local files=("$HOME/.bashrc")
 
