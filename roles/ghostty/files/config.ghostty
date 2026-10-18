@@ -1,0 +1,57 @@
+# Font settings
+font-family = "Ubuntu Mono"
+font-size = 18
+font-style = Regular
+freetype-load-flags = no-hinting
+bold-is-bright = true
+alpha-blending = native
+
+# Colors (matches Alacritty's GNOME Terminal palette)
+background = #171421
+foreground = #d0cfcc
+cursor-color = #d0cfcc
+cursor-text = #171421
+minimum-contrast = 1.0
+window-colorspace = srgb
+
+palette = 0=#171421
+palette = 1=#c01c28
+palette = 2=#26a269
+palette = 3=#a2734c
+palette = 4=#12488b
+palette = 5=#a347ba
+palette = 6=#2aa1b3
+palette = 7=#d0cfcc
+palette = 8=#5e5c64
+palette = 9=#f66151
+palette = 10=#33d17a
+palette = 11=#e9ad0c
+palette = 12=#2a7bde
+palette = 13=#c061cb
+palette = 14=#33c7de
+palette = 15=#ffffff
+
+# Window appearance
+background-opacity = 1
+background-blur-radius = 20
+
+# Window padding
+window-padding-x = 10
+window-padding-y = 15, 10
+
+# Window size
+window-width = 90
+window-height = 40
+
+# Cursor
+cursor-style = block
+
+# Shell behavior
+shell-integration = none
+confirm-close-surface = true
+
+# macOS options (ignored on Ubuntu)
+macos-option-as-alt = true
+macos-titlebar-style = native
+
+# vim: set ft=dosini commentstring=#\ %s :
