@@ -7,6 +7,21 @@ BGreen='\[\033[1;32m\]'
 BIRed='\[\033[1;91m\]'
 IYellow='\[\033[0;93m\]'
 
+# Detect which terminal this is (once per shell, not on every prompt)
+__term_name=""
+case "$TERM" in
+  xterm-ghostty) __term_name=Ghostty ;;
+  alacritty*) __term_name=Alacritty ;;
+  *)
+    if [[ -n $PTYXIS_VERSION ]]; then
+      __term_name=Ptyxis
+    elif [[ -n $ALACRITTY_WINDOW_ID ]]; then
+      __term_name=Alacritty
+    fi
+    ;;
+esac
+__title_gap=$'\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0'
+
 __build_ps1() {
   local git_part=""
 
@@ -24,9 +39,9 @@ __build_ps1() {
     git_part="${IYellow}\w${Color_Off}"
   fi
 
-  # Window title: "Ghostty" + gap + cwd (Ghostty only, Alacritty unaffected)
+  # Window title: "<Terminal>" + gap + cwd
   local title=""
-  [[ "$TERM" == xterm-ghostty ]] && title=$'\[\033]0;Ghostty\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\w\007\]'
+  [[ -n $__term_name ]] && title='\[\033]0;'"${__term_name}${__title_gap}"'\w\007\]'
 
   PS1="${title}${Blue027}\u${IPurple}@${IGreen}\h${Color_Off}${git_part} \$ "
 }
