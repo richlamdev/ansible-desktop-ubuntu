@@ -2,7 +2,7 @@
 
 [window]
 padding = { x = 8, y = 8 }
-dimensions = { columns = 90, lines = 45 }
+dimensions = { columns = 90, lines = 40 }
 decorations = "full"
 dynamic_title = true
 startup_mode = "Windowed"
@@ -85,7 +85,10 @@ bindings = [
   { key = "F", mods = "Control|Shift", action = "SearchForward" },
   { key = "B", mods = "Control|Shift", action = "SearchBackward" },
 
-  { key = "K", mods = "Control|Shift", action = "ClearHistory" }
+  { key = "K", mods = "Control|Shift", action = "ClearHistory" },
+
+  { key = "C", mods = "Super", action = "Copy" },
+  { key = "V", mods = "Super", action = "Paste" }
 ]
 
 

@@ -33,7 +33,6 @@ palette = 15=#ffffff
 
 # Window appearance
 background-opacity = 1
-background-blur-radius = 20
 
 # Window padding
 window-padding-x = 10
@@ -54,6 +53,12 @@ confirm-close-surface = true
 macos-option-as-alt = true
 macos-titlebar-style = native
 
+# copy options
 copy-on-select = clipboard
+app-notifications = clipboard-copy
+
+# keybindings
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
 
 # vim: set ft=dosini commentstring=#\ %s :
