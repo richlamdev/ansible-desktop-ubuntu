@@ -54,4 +54,6 @@ confirm-close-surface = true
 macos-option-as-alt = true
 macos-titlebar-style = native
 
+copy-on-select = clipboard
+
 # vim: set ft=dosini commentstring=#\ %s :
