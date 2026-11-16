@@ -30,3 +30,29 @@
       Categories=Utility;Security;
       MimeType=application/x-keepass2;
   become: false
+
+- name: KeePassXC | Check whether KeePassXC is running
+  ansible.builtin.command: pgrep -x -u {{ lookup('env', 'USER') }} keepassxc
+  register: keepassxc_running
+  changed_when: false
+  failed_when: false
+  become: false
+
+- name: KeePassXC | Warn if running (it rewrites its config on exit)
+  ansible.builtin.debug:
+    msg: "KeePassXC is running. Quit it before this play, or it will overwrite the deployed keepassxc.ini on exit."
+  when: keepassxc_running.rc == 0
+
+- name: KeePassXC | Ensure config directory exists
+  ansible.builtin.file:
+    path: "{{ keepassxc_config_dir }}"
+    state: directory
+    mode: "0700"
+  become: false
+
+- name: KeePassXC | Deploy keepassxc.ini
+  ansible.builtin.copy:
+    src: keepassxc.ini
+    dest: "{{ keepassxc_config_dir }}/keepassxc.ini"
+    mode: "0600"
+  become: false
