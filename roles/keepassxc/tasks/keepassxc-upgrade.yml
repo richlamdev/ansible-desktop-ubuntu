@@ -1,0 +1,75 @@
+---
+- name: KeePassXC | Ensure install and bin directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ keepassxc_install_dir }}"
+    - "{{ keepassxc_bin_dir }}"
+
+- name: KeePassXC | Check for existing symlink
+  ansible.builtin.stat:
+    path: "{{ keepassxc_bin_dir }}/keepassxc"
+  register: keepassxc_link
+
+- name: KeePassXC | Determine installed version
+  ansible.builtin.set_fact:
+    keepassxc_installed_version: >-
+      {{ ((keepassxc_link.stat.lnk_source | default('') | basename
+           | regex_search('KeePassXC-(.+)-' ~ keepassxc_arch ~ '\.AppImage', '\1')) or [''])
+         | first }}
+
+- name: KeePassXC | Query GitHub for latest release
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/{{ keepassxc_github_repo }}/releases/latest"
+    headers:
+      Accept: application/vnd.github+json
+    return_content: true
+  register: keepassxc_release
+
+- name: KeePassXC | Set latest version facts
+  ansible.builtin.set_fact:
+    keepassxc_latest_version: "{{ keepassxc_release.json.tag_name | regex_replace('^v', '') }}"
+
+- name: KeePassXC | Set asset facts
+  ansible.builtin.set_fact:
+    keepassxc_asset_name: "KeePassXC-{{ keepassxc_latest_version }}-{{ keepassxc_arch }}.AppImage"
+    keepassxc_asset_url: "https://github.com/{{ keepassxc_github_repo }}/releases/download/{{ keepassxc_release.json.tag_name }}/KeePassXC-{{ keepassxc_latest_version }}-{{ keepassxc_arch }}.AppImage"
+
+- name: KeePassXC | Report versions
+  ansible.builtin.debug:
+    msg: "installed: '{{ keepassxc_installed_version | default('none', true) }}' / latest: '{{ keepassxc_latest_version }}'"
+
+- name: KeePassXC | Download and activate new version
+  when: keepassxc_installed_version != keepassxc_latest_version
+  block:
+    - name: KeePassXC | Download AppImage (sha256 verified against .DIGEST)
+      ansible.builtin.get_url:
+        url: "{{ keepassxc_asset_url }}"
+        dest: "{{ keepassxc_install_dir }}/{{ keepassxc_asset_name }}"
+        checksum: "sha256:{{ keepassxc_asset_url }}.DIGEST"
+        mode: "0755"
+
+    - name: KeePassXC | Point symlink at new version
+      ansible.builtin.file:
+        src: "{{ keepassxc_install_dir }}/{{ keepassxc_asset_name }}"
+        dest: "{{ keepassxc_bin_dir }}/keepassxc"
+        state: link
+        force: true
+
+    - name: KeePassXC | Find old AppImages
+      ansible.builtin.find:
+        paths: "{{ keepassxc_install_dir }}"
+        patterns: "KeePassXC-*.AppImage"
+        excludes:
+          - "{{ keepassxc_asset_name }}"
+      register: keepassxc_old_versions
+
+    - name: KeePassXC | Remove old AppImages
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ keepassxc_old_versions.files }}"
+      loop_control:
+        label: "{{ item.path | basename }}"

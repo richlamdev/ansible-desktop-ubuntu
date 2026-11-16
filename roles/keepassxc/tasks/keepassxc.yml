@@ -1,0 +1,32 @@
+---
+- name: KeePassXC | Install FUSE 2 (required to run AppImages)
+  ansible.builtin.apt:
+    name: "{{ keepassxc_fuse_package }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
+- name: KeePassXC | Ensure applications directory exists
+  ansible.builtin.file:
+    path: "{{ keepassxc_applications_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: KeePassXC | Install desktop entry
+  ansible.builtin.copy:
+    dest: "{{ keepassxc_applications_dir }}/keepassxc.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Type=Application
+      Name=KeePassXC
+      GenericName=Password Manager
+      Comment=Community-driven port of the Windows application KeePass
+      Exec={{ keepassxc_bin_dir }}/keepassxc %f
+      Icon=keepassxc
+      Terminal=false
+      Categories=Utility;Security;
+      MimeType=application/x-keepass2;
+  become: false
