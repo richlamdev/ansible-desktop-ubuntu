@@ -1,4 +1,8 @@
 ---
-# home_dir: "{{ ansible_env['PWD'] }}"
-# local_user: "{{ ansible_user }}"
-#local_user_primary_group: "{{ lookup('pipe', 'id -gn ' + ansible_env.SUDO_USER) }}"
+keepassxc_github_repo: keepassxreboot/keepassxc
+keepassxc_arch: x86_64
+keepassxc_user_home: "{{ lookup('env', 'HOME') }}"
+keepassxc_install_dir: "{{ keepassxc_user_home }}/.local/opt/keepassxc"
+keepassxc_bin_dir: "{{ keepassxc_user_home }}/.local/bin"
+keepassxc_applications_dir: "{{ keepassxc_user_home }}/.local/share/applications"
+keepassxc_fuse_package: "{{ 'libfuse2t64' if ansible_facts['distribution_version'] is version('24.04', '>=') else 'libfuse2' }}"
